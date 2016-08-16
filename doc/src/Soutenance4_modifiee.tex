@@ -1,0 +1,2064 @@
+\documentclass[a4paper,11pt]{amsart}
+
+\usepackage[francais]{babel}
+%\usepackage[pdftex]{graphicx}
+%\uspackage{pstricks}
+\usepackage{graphicx}
+\newtheorem{remarque}{Remarque} \newcommand{\AAA}{{\mathcal A}}
+\newcommand{\BB}{{\mathcal B}} \newcommand{\CC}{{\mathcal C}}
+\newcommand{\DD}{{\mathcal D}} \newcommand{\EE}{{\mathcal E}}
+\newcommand{\FF}{{\mathcal F}} \newcommand{\GG}{{\mathcal G}}
+\newcommand{\HH}{{\mathcal H}} \newcommand{\II}{{\mathcal I}}
+\newcommand{\JJ}{{\mathcal J}} \newcommand{\KK}{{\mathcal K}}
+\newcommand{\LL}{{\mathcal L}} \newcommand{\MM}{{\mathcal M}}
+\newcommand{\NN}{{\mathcal N}} \newcommand{\OO}{{\mathcal O}}
+\newcommand{\PP}{{\mathcal P}} \newcommand{\QQ}{{\mathcal Q}}
+\newcommand{\RR}{{\mathcal R}} \newcommand{\SSS}{{\mathcal S}}
+\newcommand{\TT}{{\mathcal T}} \newcommand{\UU}{{\mathcal U}}
+\newcommand{\VV}{{\mathcal V}} \newcommand{\WW}{{\mathcal W}}
+\newcommand{\XX}{{\mathcal X}} \newcommand{\ZZ}{{\mathcal Z}}
+\newcommand{\bbR}{{\mathbb R}} \newcommand{\bbD}{{\mathbb D}}
+\newcommand{\bbO}{{\mathbb O}} \newcommand{\bbS}{{\mathbb S}}
+\newcommand{\bbE}{{\mathbb E}} \newcommand{\bbN}{{\mathbb N}}
+\newcommand{\bbM}{{\mathbb M}} \newcommand{\bbV}{{\mathbb V}}
+\newcommand{\bbC}{{\mathbb K}} \newcommand{\bbF}{{\mathbb F}}
+\newcommand{\bbP}{{\mathbb P}}
+
+
+%\newcommand{\zigzag}[2]{\hspace*{#1cm}
+%\begin{picture}(0,0)
+%    \put(0,.1){\pszigzag[linewidth=.2mm,
+%                         coilwidth=.2cm,
+%                         coilheight=.9,
+%                         coilarm=0cm](#2,0)}
+%\end{picture}}
+         
+
+\newcommand{\dessin}[4]{
+\begin{figure}[htb]
+\centering
+\includegraphics[scale= #2]{#1}
+\caption{#3}
+\label{#4}
+\end{figure}}
+
+\newcommand{\dessinsscaption}[2]{
+\begin{figure}[htb]
+\centering
+\includegraphics[scale= #2]{#1}
+\end{figure}}
+\begin{document}
+
+\title{ECSTASY OF AGONY}
+
+Info-SUP~: $\text{A}_2$, Promo 2007\\
+\vspace{1cm}
+\begin{center}
+\hrule \vspace{0.5cm}
+  \textbf{\huge{ECSTASY OF AGONY}}\\
+\vspace{0.5cm}\hrule
+  \vspace{1cm}
+  \textbf{Quatri\`eme Soutenance} \\
+  \vspace{2cm}
+  \dessinsscaption{pont}{0.41}
+  \vspace{2cm}
+
+\textsc{Quadrat Quentin}, quadra\_q\\
+\textsc{Kadiri Anass}, kadiri\_a\\
+
+\end{center}
+\newpage
+\maketitle
+
+\tableofcontents
+\newpage
+
+\section{Introduction}
+
+Ecstasy est un projet r\'ealis\'e en OpenGl et Delphi. Il comprend
+deux parties : -- la premi\`ere partie \`a pour but de simuler le plus
+pr\'ecisement possible la dynamique d'une voiture, -- la deuxi\`eme de
+repr\'esenter en 3D la circulation automobile d'une ville de type
+am\'ericaine (c'est \`a dire ayant une forme g\'eom\'etrique
+r\'eguli\`ere).
+
+Cette id\'ee a \'et\'e inspir\'ee par des jeux tels que GTA ou
+Midtowm Madness et un projet scientifique appel\'e STARDUST \cite{STARDUST}
+(Towards Sustainable Town Development : A Research on Deployment of
+Urban Sustainable Transport)
+%\\footnote{ Pour plus d'informations,
+ %voir le site : {\tt http://www.soton.ac.uk/~trawww/stardust}.}.
+dont l'objectif est de simuler une ville et ses v\'ehicules,
+pour  en \'etudier les probl\`emes de circulation.
+
+
+\section{Cahier des charges}
+
+Voici, le cahier des charges avec tous ses objectifs que nous nous
+\'etions fix\'es. On peut remarquer, que presque tous 
+ont \'et\'e respect\'es (sachant qu'une personne a abandonn\'e ce projet en cours
+de route).
+
+\subsection{Objet de l'\'etude}
+Ce projet a plusieurs objectifs.
+%\begin{itemize}
+
+%\item
+
+Le premier objectif est d'apprendre \`a travailler en groupe,
+et \`a transmettre nos id\'ees de fa\c{c}on
+claire. Un groupe anarchique, o\`u il y aurait quatre
+chefs au lieu d'un, est un groupe qui ne survit g\'en\'eralement pas
+longtemps. Il faudra apprendre \`a concillier les attentes et les
+d\'esirs de chacun et donc d'apprendre \`a g\'erer au mieux les
+capacit\'es de chacun.
+
+%\item
+
+Le deuxi\`eme objectif est d'apprendre sous Delphi, le langage Pascal, la
+manipulation de la 3D sous OpenGL et 3D Studio Max et le son avec Fmod. Aussi,
+sous Emacs, nous utiliserons \LaTeX\ pour r\'ediger les cahiers de soutenance.
+Enfin, il faudra cr\'eer notre prope page WEB gr\^ace \`a DreamWeaver.
+
+\subsection{D\'ecoupage du projet}
+Le projet se d\'ecoupe en quatre grandes parties :
+\begin{itemize}
+\item Construction d'un univers 3D (terrain, ville).
+\item
+R\'ealisation d'une dynamique des voitures la plus r\'ealiste
+possible.
+\item  R\'ealisation d'une logique des voitures ennemies
+et neutres.
+\item  Finalisation du jeu pour une meilleure
+jouabilit\'e (effets sp\'eciaux, sons, menus).
+\end{itemize}
+
+Dans un premier temps, la cr\'eation d'une base de donn\'ees des
+diff\'erentes voitures et immeubles,
+pr\'ealablement dessin\'es sous 3DStudio Max, vont permettre la
+cr\'eation d'un univers plus complexe au fur et \`a
+mesure des soutenances.  Dans un premier
+temps, gr\^ace \`a la dynamique du v\'ehicule, la voiture du joueur pourra
+joyeuseument 'gambader' sur les terrains caillouteux pour tester
+ses nouvelles suspensions et faire de joyeuses embard\'ees pour
+s'encastrer dans le d\'ecor. Dans un second temps, de nombreuses voitures
+neutres vont parcourir les  routes caboss\'ees sur lesquelles
+des
+voitures ennemies-amies vont se poursuivre par des champs
+attractifs/r\'epulsifs. On tentera d'\'egayer le jeu par
+des tirs, des effets sp\'eciaux gr\^ace \`a OpenGL et des effets sonores
+gr\^ace \`a Fmod. On  y int\'egrera un menu cr\'e\'e par Delphi
+permettant de lancer le jeu et de le configurer.
+
+En r\'esum\'e, nous avons :
+
+\begin{itemize}
+
+\item  \emph{Construction d'un monde al\'eatoire :}
+
+Cr\'eation d'un terrain al\'eatoire, construction d'une ville
+avec des blocs d'immeubles et des routes. Le tout g\'en\'er\'e
+par programmation.
+
+El\`eve responsable du bon fonctionnement de cette partie : Kadiri Anass
+
+\item  \emph{Dynamique des v\'ehicules :}
+
+Mise en place de la dynamique des voitures, c'est-\`a-dire de
+l'acc\'el\'e\-ration, des vitesses, des frottements, des suspensions des roues
+par rapport \`a la hauteur du terrain et des rotations des roues (avant,
+arri\`ere, gauche, droite). Collisions entre les v\'ehicules et le d\'ecor
+ainsi que des voitures entre elles.
+
+El\`eve responsable du bon fonctionnement de cette partie : Quadrat Quentin.
+
+\item  \emph{Sc\'enarisation et logique des voitures :}
+
+Mise en place d'un sc\'enario : comment les voitures ennemies et
+amies vont se poursuivre (champs attractifs, r\'epulsifs, tirs,
+d\'eplacement des voitures neutres).
+
+El\`eve responsable du bon fonctionnement de cette partie : Ngombe Jessica.
+
+\item  \emph{Finalisation du projet :}
+
+Cr\'eation des menus (fen\^etres Delphi), mise en place des sons,
+mod\'eli\-sations des voitures et des immeubles, effets sp\'eciaux avec
+OpenGl (tirs, explosions ...).
+
+El\`eve responsable du bon fonctionnement de cette partie : tout le monde.
+\end{itemize}
+
+\subsection{Premi\`ere soutenance}
+
+Cr\'eation d'un exportateur de fichier ASCII de 3DStudio Max
+utilisable pour OpenGl.  Chacun va se sp\'ecialiser dans un domaine :
+chaque personne va concevoir des objets \'el\'ementaires (une personne
+pour cr\'eer des batiments, une autre pour les blocs de voitures et
+les blocs de paysages pour la derni\`ere).  Ceci va c\'eer notre base
+de donn\'ee d'objets.  Dans un deuxi\`eme temps, tout le monde va
+apprendre \`a utiliser 3DStudio Max en fonction du loader fraichement
+cr\'eer, puis apprendre \`a programmer OpenGl et Pascal avec le
+loader.
+
+\vspace{0.5 cm}
+\begin{tabular}{|c||c|c|c|}
+\hline
+Actions & Quadrat & Kadiri & N'gombe \\ \hline \hline
+Loader ASE vers Opengl & X & - & -  \\ \hline
+Apprendre la syntaxe Pascal & - & X & X \\ \hline
+Premiers exemples en Delphi& - & X & X \\ \hline
+Apprendre Opengl & X  & X & X  \\ \hline
+Premiers exemples en OpenGl & X & X & X \\ \hline
+HTML et \LaTeX\ & X & X & X \\  \hline
+\end{tabular}
+\vspace{0.5 cm}
+
+\subsection{Deuxi\`eme soutenance}
+
+Assemblage de la ville par programmation. Une personne s'occupe de
+l'assemblage des bouts de batiments pour donner au final des blocs de
+batiments. Une autre pour cr\'eer des voitures et une derniere pour
+cr\'eer des paysages 3D.  La premi\`ere voiture articul\'ee va \^etre
+cr\'e\'ee. Mais, il n'y aura pas encore de d\'eplacement.
+
+\vspace{0.5 cm}
+\begin{tabular}{|c||c|c|c|}
+\hline
+Actions & Quadrat & Kadiri & N'gombe \\ \hline \hline
+Articulation des voitures & X & - & - \\  \hline
+Cr\'eation des voitures & X & - & - \\  \hline
+Cr\'eation d'une ville simple & - & X & - \\  \hline
+Cr\'eation de routes simples & - & - & X \\  \hline
+Cr\'eation de paysages & - & - & -  \\  \hline
+HTML et \LaTeX\ & X & X & X  \\  \hline
+\end{tabular}
+\vspace{0.5 cm}
+
+\subsection{Troisi\`eme soutenance}
+
+Au moins une voiture articul\'ee se d\'eplace dans la ville.
+Cr\'eation de la logique des voitures (strat\'egie, poursuites) sur un plan 2D.
+Sons, menus, effets sp\'eciaux.
+
+\vspace{0.5 cm}
+\begin{tabular}{|c||c|c|c|}
+\hline
+Actions & Quadrat & Kadiri & N'gombe  \\ \hline \hline
+D\'eplacement d'une voiture & X & - & - \\  \hline
+Logique des voitures neutres & X & X & - \\  \hline
+Logique des voitures ennemies  & - & - & X \\  \hline
+Effets sp\'eciaux avec OpenGl & X & X & X \\ \hline
+Cr\'eation de menus & - & - & X \\ \hline
+Sauvegarde et chargements & - & - & X \\ \hline
+Sons & - & X & - \\ \hline
+HTML et \LaTeX\ & - & - & X \\  \hline
+\end{tabular}
+\vspace{0.5 cm}
+
+\subsection{Quatri\`eme soutenance}
+
+Strat\'egie finie, assemblage de tous les \'el\'ements. Tirs, explosions. Finiolage, am\'elioration de la
+beaut\'e du jeu et relecture des bogues. Cr\'eation du CD, site web, version light, install Shield.
+
+\vspace{0.5 cm}
+\begin{tabular}{|c||c|c|c|}
+\hline
+Actions & Quadrat & Kadiri & N'gombe \\ \hline \hline
+Introduction AVI & - & - & X \\ \hline
+D\'eplacements des voitures & X & X & - \\  \hline
+Tirs & X & X & -  \\  \hline
+Pauffinage du jeu & X & X & X \\  \hline
+D\'eboggage & X & X & X \\  \hline
+Am\'eliorations des dessins & X & X & X \\  \hline
+Install Schield  & - & - & X \\  \hline
+CD, pochette, web, papiers  & - & - & X \\  \hline
+\end{tabular}
+\vspace{0.5 cm}
+
+\begin{tabular}{|c|c|}
+\hline Actions \\ \hline \hline
+Loader ASE vers Opengl \\ \hline
+D\'eplacement du joueur \\  \hline
+Gestions des collisions \\  \hline
+Cr\'eation du terrain 3D \\ \hline
+Cr\'eation des blocs d'immeubles dans l'espace \\
+\hline
+Cr\'eation des routes dans l'espace \\ \hline
+Animation des ennmis \\  \hline
+Animation des neutres \\  \hline
+Animation des armes \\\hline
+Menus, parametrages, introduction \\  \hline
+Sauvegarde, chargement du jeu \\\hline
+Cr\'eation du terrain \\  \hline
+Touches et sons \\ \hline
+Dessins et bibliot\'eque d'objets
+Effets sp\'eciaux avec OpenGl \\
+\hline
+\end{tabular}
+\vspace{0.5 cm}
+
+\subsection{Conclusion du projet}
+
+Ce projet va permettre pour la plupart d'entre nous de d\'ebuter en
+informatique et de concevoir un jeu vid\'eo. Ceci va nous contraindre \`a des
+d\'emarches personelles pour apprendre un nouveau langage de programation
+qu'est le Pascal, et la mod\'eli\-sation 3D gr\^{a}ce \`a OpenGL et 3D Studio Max. Ce
+projet nous permettra donc d'acq\'erir de l'\'exp\'erience au niveau de la
+programmation et d'appliquer efficacement nos cours re\c{c}us en classe.
+
+\section{Ce qui a \'et\'e r\'ealis\'e dans ce projet}
+\subsection{La voiture}
+Lors de la premi\`ere soutenance, notre voiture (mod\'elis\'ee en deux
+dimensions) \'etait constitu\'ee d'une masse ponctuelle \`a laquelle
+\'etait accroch\'ee une roue par un ressort (cf section \ref{dyna2}).
+
+Pour la deuxi\`eme soutenance, elle \'etait mod\'elis\'ee par une
+barre de masse ponctuelle, plac\'ee en son centre, aux extr\'emit\'es
+de laquelle \'etaient accroch\'ees deux roues par des ressorts. Les
+roues poss\'edaient des pneus ayant un comportement \'elastique. Seul
+le mouvement vertical de la voiture \'etait visualis\'e (cf section
+\ref{dyna3}).
+
+Pour la troisi\`eme soutenance la voiture command\'ee par le joueur
+pouvait se d\'eplacer dans la ville en 3D . Le fonctionnement de la
+suspension est visible lors des changements de pentes des routes.
+Seul le tangage (cf section \ref{dyna4}) avait un sens m\'ecanique.
+
+Pour la quatri\`eme soutenance  la dynamique du mouvement horizontal 
+a \'et\'e r\'ealis\'ee.  Pour faire avancer la voiture, le
+joueur donne des consignes de direction et de puissance du moteur,
+une dynamique du mouvement horizontal d'une voiture est simul\'ee
+de fa\c{c}on tr\`es simplifi\'ee (cf section \ref{dyna4}). En particulier
+l'inertie de rotation est repr\'esent\'e, par contre les frottements avec
+le sol sont tr\`es simplifi\'es.
+
+\subsection{La structure de la ville}
+L'\'elaboration de la ville n'a commenc\'ee que pour la deuxi\`eme
+soutenance. La structure de la ville constitu\'ee de blocs,
+eux-m\^emes constitu\'es de batiments (tir\'es au hasard) et de routes
+a \'et\'e d\'efinie (cf section \ref{ville}).  Les routes ne
+poss\'edaient pas de textures et les immeubles \'etaient repr\'esent\'es
+par des cubes de tailles enti\`eres entre 1 et $n$.
+
+Le travail pour la troisi\`eme soutenance a permis d'achever
+l'infrastructure de la ville : -- textures au format bmp, tga ou jpeg
+des diff\'erentes routes, -- am\'elioration de la structure des
+immeubles (dessins, positionnements, tailles), -- ajout du fleuve et
+des ponts, -- ajout de la signalisation des routes, -- ajout d'effets
+de lumi\`eres (brume, \'eclairage) (cf section
+\,\ref{fog},\,\ref{blend},\, \ref{Lumieres}). Les immeubles sont tir\'es au
+hasard dans un sous ensemble de la biblioth\'eque (choisie en fonction
+de la place disponible) jusqu'\`a remplir totalement la rang\'ee (ce
+qui est possible \`a cause de la pr\'esence obligatoire d'un immeuble
+de taille un).
+
+Le travail pour la derni\`ere soutenance, a \'et\'e d'am\'eliorer les
+bords de la ville.  On l'a rendu sans bord en la mettant sur un tore
+2D. La ville peut donc \^etre vue comme de taille infini mais
+p\'eriodique (cf section \ref{ville}).  L'aspect des immeubles a
+\'et\'e am\'elior\'e en rajoutant des textures pour le jour et pour la
+nuit. Les particules des feux tricolores ont \'et\'e arrang\'ees, car
+lors de la deuxi\`eme soutenance car elles ne s'affichaient pas
+correctement. Les plans de feux ont \'et\'e mis
+en place.
+
+
+\subsection{La circulation}
+La circulation n'a \'et\'e impl\'ement\'ee que pour la derni\`ere
+soutenance . La ville est d\'ecoup\'ee en blocs r\'eguliers.  Chaque
+bloc poss\`ede 2 routes \`a 4 voies. A chaque voie est associ\'e la
+file de voiture qu'elle contient . Les voitures se d\'eplacent et
+s'arr\^etent aux feux rouges (cf section section \ref{circulation}).
+Chaque voiture est simul\'ee par un syst\`eme de onze \'equations
+diff\'erentielles.  Le jeu a fonctionn\'e avec 432 voitures dans une
+viile de 36 blocs \`a 18 images 1600x1200 par seconde sur un PC Athlon
+1.8Ghz pss\'edant un carte graphique Radeon 8500.
+
+\subsection{Utilisation de OpenGL}
+Un chargeur pour OpenGL d'objets 3D --- cr\'e\'e dans 3D Studio Max
+(ASE) --- a \'et\'e r\'ealis\'e pour la premi\`ere soutenance. Cela a
+permis la cr\'eation de carcasses de voitures sophistiqu\'ees (cf
+section \ref{ASE}).
+
+Pour la deuxi\`eme soutenance une d\'ebauche de cr\'eation
+de terrains 3D en fil de fer (plus couramment appel\'e height map) a \'et\'e faite.
+ Cette structure n'a pas \'et\'e utilis\'ee dans la suite
+par manque de temps (cf section de \ref{terrain}).
+
+Pour la troisi\`eme soutenance, on a \'etudi\'e comment mettre en
+place les lumi\`eres, la brume et la transparence dans notre ville (cf
+section de \ref{Lumieres} \ref{blend}, \ref{fog}). 
+Ensuite, on a impl\'ement\'e un petit syst\`eme de particules
+pour simuler les eclaboussures.
+
+\subsection{Utilitaires}
+Pour la deuxi\`eme soutenance, on a cr\'e\'e un menu en Delphi pour
+prendre en compte des diff\'erents param\`etres du jeu. Pour la
+troisi\`eme soutenance, on a mis en place la vid\'eo d'introduction et
+le son avec FMod puis DirectSound.
+
+Pour la derni\`ere soutenance, on a d\'ebogu\'e, nettoyer et commenter
+nos codes sources . On a fait ainsi de gros gains de temps de
+calcul. On a \'egalement \'etudi\'e la notion
+d'h\'eritage des objets et on a am\'elir\'e les autorisations d'acc\'es aux champs  des objets.
+
+
+\section{La ville}
+\subsection{Introduction}
+Notre ville est de type am\'ericaine, c'est \`a dire qu'elle est
+constitu\'ee de blocs r\'eguliers s\'epar\'es par des routes nord-sud
+et est-ouest. Pour \'eviter la description du comportement du bord de
+la ville, elle a \'et\'e plac\'ee sur un tore 2D. Ce qui signifie
+qu'elle est infinie et p\'eriodique. Dans cette ville, circulent des
+voitures dans les deux sens sur les art\`eres nord-sud et est-ouest,
+munies de feux de circulation. Une voiture guid\'ee par le joueur se
+d\'eplace dans la ville. Le comportement m\'ecanique de chaque voiture
+est d\'ecrite par un syst\`eme de onze \'equations diff\'erentielles.
+
+
+\dessin{structure}{0.4}{Le squelette du projet}{structure}
+
+
+\subsection{Le bloc}\label{ville}
+La ville est un tableau $n \times n$ de blocs.  Chaque bloc de la
+ville, figure \ref{bloc}, est une classe Delphi compos\'ee de :
+\begin{itemize}
+\item un bloc de maisons tir\'ees au hasard dans une biblioth\`eque
+  --- r\'ealis\'ee dans 3DSMax et import\'ee gr\^ace au chargeur ASE.
+  Il est compos\'e de quatre alignements de maisons de
+  tailles diff\'erentes autour d'une cour int\'erieure. 
+\item deux routes de quatre voies qui ne sont pas horizontales;
+\item un carrefour horizontal avec une altitude et sa signalisation
+  constitu\'e de quatre feux;
+\item deux tableaux de quatre files de voitures contenant des pointeurs
+  vers les voitures circulant sur les routes du bloc.
+\end{itemize}
+
+Il est affich\'e au moyen d'une liste d'affichage OpenGL.
+
+\dessin{ville}{0.9}{Mod\`ele d'un bloc  de la ville}{bloc}
+ 
+Une maison est une classe  qui contient sa taille, sa position et un
+num\'ero d'indentification d'une maison import\'ee de 3D studio Max. 
+
+Une route est un enregistrement qui contient les coordonn\'ees de ses
+quatre sommets. 
+
+Le type carrefour est constitu\'e d'un type route et de quatre feux
+tricolores.  Une fonction r\'ealise le plan de feux du blocs et
+affichent des textures color\'ees (rouge, jaune ou verte). Ces
+textures sont particuli\`eres puisqu'elles utilisent la transparence
+d'OpenGL (conf\'ere section \ref{blend}).
+
+Chaque listes chain\'ees de type TFile est associ\'e \`a une voie de
+circulation. Chaque rue \`a quatre voies est \`a deux sens. Dans
+l\'etat actuel du jeu, les voitures autres que le joueur restent sur
+leur voie mais s'arr\^etent aux feux (cf section \ref{circulation}).
+
+Cette structure r\'eguli\`ere est tr\'es utile pour l'optimisation de
+la vitesse du jeu. 
+On peut savoir facilement la case dans laquelle se trouve une voiture.
+Il suffit de faire la division enti\`ere de sa position
+par la taille du bloc pour obtenir le num\'ero de la case.
+  
+%Pour tester les collisions du joueur avec les immeubles, il suffit
+%simplement de tester l'appartenance de la voiture au rectangle, form\'e
+%par les quatres rang\'ees de batiments, du bloc dans lequel se trouve la
+%voiture, plut\^ot que de tester l'appartenance \`a un immeuble
+%quelconque de la ville enti\`ere.
+
+
+Le fait que les voitures soient attach\'ees au bloc permet des gains
+de temps d'affichage. En effet, dans le pire des cas, seul neuf blocs
+sont affich\'es : le bloc du joueur et les huit connexes en
+utilisant un algorithme permettant d'\'eviter de calculer les objets
+n'appartenant pas au c\^one de vision (cf section \ref{frustum}).
+
+
+
+% Dans la ville, la voiture \'etait repr\'esent\'ee par un rep\`ere, ne
+% pouvait tourner sur elle-m\^eme et restait dans le plan horizontal.
+% Actuellement, elle est modelis\'ee en 3D par une carcasse et quatre roues
+% ind\'ependantes et une dynamique repr\'esentant le tangage de la
+% voiture par un syt\`eme de trois \'equations diff\'erentielles. Le
+% mouvement horizontal de la voiture et command\'ee par le clavier
+% (vitesse et direction). La simulation d'une chute \'eventuelle de la
+% voiture dans le canal a \'et\'e impl\'eement\'e.
+
+
+\section{La dynamique des voitures}\label{Voitures}
+La partie la plus difficile th\'eoriquement est la mod\'elisation
+de la m\'ecanique de la voiture incluant une suspension
+simplifi\'ee. Le tangage et le mouvement horizontal ont \'et\'e
+mod\'elis\'es. Le roulis a \'et\'e n\'eglig\'e.
+
+\dessin{suspension}{0.4}{Une Audi Monster}{monster}
+
+% Lors de la premi\`ere et deuxi\`eme soutenace, la dynamique \'etait
+% visualis\'ee par des courbes.
+
+% Lors de la deuxi\`eme soutenace, Dans la ville 3D, la voiture \'etait
+% mod\'elis\'ee par un rep\`ere, ne pouvait tourner sur elle-m\^eme et
+% restait dans le plan horizontal.  
+
+% Depuis la soutenance trois, elle est modelis\'ee en 3D par une
+% carcasse et quatre roues ind\'ependantes et une dynamique
+% repr\'esentant le tangage de la voiture par un syt\`eme de trois
+% \'equations diff\'erentielles du second ordre. Le mouvement horizontal
+% de la voiture du joueur et command\'ee par le clavier (vitesse et
+% direction). La simulation d'une chute \'eventuelle de la voiture dans
+% le canal a \'et\'e impl\'ement\'ee. La voiture pouvait tourner autour
+% de son centre de gravit\'e de fa\c{c}on arbitraire.
+
+% Maintenant, pour faire avancer sa voiture, le joueur doit tourner le
+% volant et donner la puissance du moteur (avec la souris ou au clavier)
+% ce qui modifie l'angle les deux roues de devant et donne
+% l'acc\'el\'eration de la voiture. La carcasse d\'ecrit un mouvemen
+% tenant compte de sa masse et son moment inertie autour de la verticale
+% et en tangage.  Elle est devenue difficile \`a piloter et toutes les
+% voitures n'ont pas le m\^eme comportement.
+
+% Enfin, bien que les voitures autres que celle du joueur ont des
+% trajectoires simples, dans l'\'tat actuel du jeu, elles sont
+% mod\'elis\'ees m\'ecaniquement de le m\^eme fa\c{c}on.
+
+\subsection{Principe de la moindre action}\label{dyna1}
+
+\subsubsection{D\'efinition}
+On appelle action $\AAA$ d'un syst\`eme m\'ecanique l'int\'egrale
+le long du mouvement de la diff\'erence de son \'energie cin\'etique et
+de son \'energie potentielle:
+$$\AAA(x()) = \int (\EE_c(x(t)) - \EE_p(x(t))dt\;,$$
+o\`u  $\EE_c(x(t))$ designe l'\'energie cin\'etique, $\EE_p(x(t))$
+l'\'energie potentielle et $t\mapsto x(t)$ la trajectoire du syst\`eme.
+
+Le principe de la moindre action nous dit que la trajectoire
+du syst\`eme est celle qui minimise l'action.
+
+Pour trouver cette trajectoire on calcule la variation de
+l'action $\delta \AAA$ associ\'ee \`a la variation de la trajectoire
+$\delta x$ et on d\'etermine les conditions qui assurent que
+$\delta \AAA$ soit nul quelque soit $\delta x$.
+
+\subsubsection{Exemple d'application}
+Prenons le cas de deux masses, de poids respectifs $m_1$ et $m_2$,
+accroch\'ees l'une \`a l'autre par un ressort de force $F =
+-kl$ ou $l$ d\'esigne l'allongement du ressort ($|x_1(t)-x_2(t)|$)
+avec  $x_1(t)$ et $x_2(t)$ les positions \`a l'instant $t$ des deux masses.
+
+\begin{align*}
+\delta \AAA =& 1/2\int (m_1(\dot{x_1}+\delta \dot{x}_1)^2+
+ m_2( \dot{x}_2+\delta \dot{x}_2)^2-
+ k(x_2+\delta x_2-x_1-\delta x_1)^2) dt\\
+ &-1/2\int (m_1\dot{x}_1^2+m_2\dot{x}_2^2-k(x_2-x_1)^2)dt \;,
+\end{align*}
+$$\delta \AAA = \int m_1\dot{x}_1\delta \dot{x}_1+m_2\dot{x}_2 \delta
+\dot{x}_2-k(x_2-x_1) (\delta x_2-\delta x_1)+o(\| x_1-x_2\|)\;,$$
+
+Par int\'egration par partie on obtient :
+$$\delta \AAA = \int -m_1\ddot{x_1}\delta x_1 -m_2\ddot{x_2}\delta x_2
+- k(x_2-x_1)(\delta x_2-\delta x_1) + o(\| x_1-x_2\|)\;,$$
+car on
+suppose que les variations des trajectoires sont nulles aux
+extr\'emites.
+
+Finalement on trouve :
+$$\delta \AAA =\int (-m_1\ddot{x_1}+k(x_2-x_1))\delta x_1 + \int
+(-m_2\ddot{x_2}+k(x_1-x_2))\delta x_2 + o(\| x_1-x_2\|)\;.$$
+
+L'action doit \^etre minimale c.a.d. $$\delta A = 0,\quad\forall
+\delta x_1,\;\forall \delta x_2,$$
+
+donc :
+$$-m_1\ddot{x_1}+k(x_2-x_1) = 0,\quad-m_2\ddot{x_2}+k(x_1-x_2) = 0\;.$$
+
+On obtient les m\^emes \'equations que celles en appliquant la loi
+fondamentale de la dynamique $m\vec{\gamma} = \vec{F}$.
+
+\subsection{Mouvement vertical d'un monocycle}\label{dyna2}
+
+\subsubsection{Pr\'esentation du mod\'ele}
+Le v\'ehicule est mod\'elis\'e en 2D, par une carcasse de masse
+ponctuelle $M_v$ accroch\'ee \`a une roue (de rayon $r$ et de masse
+$M_r$) par un ressort. On note $u(t)$ la l'altitude du sol par rapport
+\`a au rep\'ere, $y(t)$ est l'altitude de la carcasse, $z(t)$
+l'alongement du ressort, et $y(t)+z(t)$, l'altitude de la roue. On
+note $g$ la gravit\'e (figure \ref{dyna}).
+
+\dessin{dynavoit}{0.6}{Le monocycle}{dyna}
+
+\subsubsection{Calcul des \'equations du mouvement}
+Les forces qui sont en jeux sont : la pesanteur des masses (roue et
+carcasse), la r\'epulsion du sol sur la roue et la force du ressort.
+
+L'\'energie cin\'etique de la roue (not\'ee $\EE_r^c$) est :
+$\EE_r^c = 1/2M_r(\dot{y}+\dot{z})^2\;.$
+
+L'\'energie cin\'etique de la voiture (not\'ee $\EE_v^c$) est :
+$\EE_v^c = 1/2M_v\dot{y}^2\;.$
+
+L'\'energie ressort (not\'ee $\EE_r$) est :
+$\EE_r = 1/2kz^2;.$
+
+L'\'energie potentiel de la voiture (not\'ee $\EE_v^p$) est :
+$\EE_v^p = M_vgy\;.$
+
+L'\'energie potentiel de la roue (not\'ee $\EE_r^p$) est :
+$\EE_r^p = M_rg(y+z)\;.$
+
+L'\'energie de reaction du sol (not\'ee $\EE_s$) est : $\EE_s =
+1/2((u-(y+z-r))^+)^2\;,$ c'est \`a dire que $\EE_s$ vaut $1/2(u-(y+z-r))^2$
+quand $u-(y+z-r) > 0$, sinon il vaut $0$.
+
+\begin{align*}
+\AAA(x()) =& \int (\;1/2M_r(\dot{y}+\dot{z})^2 + 1/2M_v\dot{y}^2 -1/2kz^2 -M_vgy - M_rg(y+z)\\
+&- 1/2(u-(y+z-r))^+)^2\;)dt\;
+\end{align*}
+
+Comme dans la sous-section pr\'ec\'edente expliquant le principe de la
+moindre action, on trouve un syst\`eme d'\'equation diff\'erentielle
+o\`u les inconnues sont l'altitude de la roue et de la carcasse :
+\begin{align}
+  &(\ddot{z}+\ddot{y})M_r+\ddot{y}M_v + g(M_v+M_r) - (u-(y+z-r))^+ = 0\;,\label{e1}\\
+  &(\ddot{z}+\ddot{y})M_r+M_rg+kz-(u-(y+z-r))^+ = 0\;.\label{e2}
+\end{align}
+En notant : $w=y+z$, (\ref{e1})-(\ref{e2}) donne :
+$$\ddot{y}M_v+gM_v-k(w-y)=0.$$
+(\ref{e2}) donne :
+$$\ddot{w}M_r+gM_r+k(w-y)-(u-(w-r))^+ = 0$$
+
+\subsubsection{Discr\'etisation des \'equations diff\'erentielles}
+Pour calculer les trajectoires des deux corps, nous pouvons approximer
+les \'equations diff\'erentielles (\ref{e1}) et (\ref{e2}) par les
+\'equations r\'ecurrentes, o\`u $h$ d\'esigne le pas de discr\'etisation~:
+
+\begin{align*}
+& y(t+h)=2y(t)-y(t-h)+gh^2-\frac{k(w-y)h^2}{M_v}\;,\\
+& w(t+h)=2w(t)-w(t-h)+\frac{h^2}{M_r}(u(t)-w(t)+r)^+-\frac{h^2k(w(t)-y(t))}{M_r}-h^2g\;.
+\end{align*}
+
+\subsection{Mouvement vertical d'une moto (tangage)}\label{dyna3}
+
+\subsubsection{Pr\'esentation du mod\'ele}
+Le v\'ehicule est mod\'elis\'e en 2D, par une carcasse repr\'esent\'e
+par une barre de demi longueur $l$ et de masse ponctuelle $M$ \`a
+laquelle sont accroch\'ees deux roues (de rayon $R$ et de masse $m$)
+par des ressorts. On note $u(t)$ la l'altitude du sol, $y(t)$ est
+l'altitude de la carcasse, $y_1(t)$ et $y_2(t)$ les allongements des
+deux ressorts, $\theta$ le degr\'e d'inclinaison du v\'ehicule.  On
+note $g$ la gravit\'e, $\theta$ le degr\'e de penchement du v\'ehicule
+(figure \ref{dyna}).
+
+\dessin{dyna}{0.5}{Mod\'elisation de la voiture}{dyna}
+
+\subsubsection{Calcul des \'equations du mouvement}
+Les forces qui sont en jeux sont : la pesanteur des masses (roue et
+carcasse), la r\'epulsion du sol sur les roues et la force des ressorts.
+
+L'\'energie cin\'etique de la voiture est : $$\frac{M\dot{y}^2}{2}\;.$$
+
+L'\'energie potentielle de la voiture  est : $$Mgy\;.$$
+
+L'\'energie cin\'etique verticale de la roue de devant est
+$(\dot{y_2}+l\cos\theta\dot{\theta}+\dot{y})^2\;, $
+%On approximera ($\theta$ petit) l'\'energie cin\'etique verticale de la roue de devant par:
+que l'on approxime en faisant l'hypoth\'ese $\theta$ petit par :
+$$1/2m(\dot{y}_1+\dot{y}+l\dot{\theta})^2\;.$$
+
+De m\^eme, l'\'energie cin\'etique verticale de la roue de derri\`ere est :
+$$1/2m(\dot{y}_2+\dot{y}-l\dot{\theta})^2\;.$$
+
+
+L'\'energie potentielle due \`a la pesanteur des deux roues est :
+$$mg(2y+y_2+y_1)\;.$$
+
+L'\'energie potentielle du ressort de la roue avant est :
+$$1/2ky_1^2\;.$$
+
+
+L'\'energie potentielle du ressort de la roue arri\`ere est :
+$$1/2ky_2^2\;.$$
+
+L'\'energie potentielle de r\'eaction du sol sur la roue de devant est
+:
+$$1/2([u(x+l)-(y_1+y+l\theta-R)]^+)^2\;,$$
+o\`u $A^+$ d\'esigne la partie positive de $A$.
+
+L'\'energie potentielle de r\'eaction du sol sur la roue de derri\`ere est :
+$$1/2([u(x-l)-(y_2+y-l\theta-R)]^+)^2\;.$$
+
+
+L'action \`a minimiser vaut donc :
+\begin{align*}
+\AAA=1/2\int &\big\{ M\dot{y}^2+m(\dot{y}_1+\dot{y}+l\dot{\theta})^2+
+m(\dot{y}_2+\dot{y}-l\dot{\theta})^2 \\
+&-ky_1^2-ky_2^2-2Mgy-2mg(2y+y_2+y_1) \\
+&-([u(x+l)-(y_1+y+l\theta-R)]^+)^2\\
+&-([u(x-l)-(y_2+y-l\theta-R)]^+)^2 \big\} dt\;
+\end{align*}
+
+On trouve un syst\`eme
+d'\'equation diff\'erentielle o\`u les inconnues sont : trois
+altitudes (une pour la carcasse, une pour chaque roue)
+et enfin l'inclinaison de la carcasse ($\theta$).
+
+On note :
+$$R_1 =[u(x+l)-(y_1+y+l\theta-R)]^+\;,$$
+$$R_2 =[u(x-l)-(y_2+y-l\theta-R)]^+\;,$$
+
+On a :
+\begin{align}
+(M+2m)\ddot{y}+m\ddot{y}_1+m\ddot{y}_2 & = -2g(2m+M)+R_1+R_2\label{eqy}\;,\\
+m(\ddot{y}_1+\ddot{y}+l\ddot{\theta}) &  = -ky_1-gm+R_1\label{eq1}\;,\\
+m(\ddot{y}_2+\ddot{y}-l\ddot{\theta}) & = -ky_2-gm+R_2\label{eq2}\;,\\
+m(\ddot{y}_1-\ddot{y}_2+2l\ddot{\theta}) & = R_1-R_2\label{eqo}\;.
+\end{align}
+
+En faisant  (\ref{eqo}) plus (\ref{eq2}) moins (\ref{eq1}) on obtient
+$0 =k(y_1-y_2)$
+et donc $y_1=y_2.$
+
+En faisant  (\ref{eqy}) moins (\ref{eq1}) moins (\ref{eq2}) on obtient :
+\begin{equation}
+M\ddot{y}=-gM+2ky_1\;.\label{eqyy}
+\end{equation}
+
+L'equation (\ref{eqo}) donne alors :
+\begin{equation}
+2ml\ddot{\theta}= R_1-R_2\;. \label{eqoo}
+\end{equation}
+
+Puis, (\ref{eq1}) moins $\frac{m}{M}$(\ref{eqyy}) moins $\frac{1}{2}$(\ref{eqoo})
+donne :
+\begin{equation}
+m\ddot{y}_1 = -ky_1(1+\frac{2m}{M})+\frac{R_1+R_2}{2}\;.
+\end{equation}
+
+%Enfin, (\ref{eq2}) moins $\frac{m}{M}$(\ref{eqyy}) moins $\frac{1}{4}$(\ref{eqoo})
+%donne :
+%\begin{equation}
+%m\ddot{y}_2 = \frac{k(y_1-y_2)}{2}+R_2+\frac{mg(2m+M)}{M}\;.
+%\end{equation}
+
+Finalement, on obtient, le syst\`eme alg\'ebriquo-dif\'erentiel suivant :
+\begin{align*}
+%M\ddot{y} &=-gM+2ky_1\;,\\
+%m\ddot{y}_1 &= -ky_1(1+\frac{2m}{M})+\frac{R_1+R_2}{2}\;,\\
+%m\ddot{y}_2 &= -ky_2(1+\frac{2m}{M})+\frac{R_1+R_2}{2}\;,\\
+%2ml\ddot{\theta} &= (R_1+R_2)\;.
+\ddot{y} &=-2g+\frac{2ky_1}{M}\;,\\
+\ddot{y}_1 &= -ky_1(\frac{1}{m}+\frac{2}{M})+\frac{R_1+R_2}{2m}\;,\\
+y_2 &= y_1\;,\\
+\ddot{\theta} &= \frac{R_1+R_2}{2ml}\;.
+\end{align*}
+
+%En notant :
+%$$P=\begin{bmatrix}
+%M+2m & m & m & 0 \\
+%m & m & 0 & ml \\
+%m & 0 & m & -ml \\
+%0 & m & -m & 2ml \\
+%\end{bmatrix}\;,$$
+%le syst\`eme differentiel s'\'ecrit :
+%$$\begin{bmatrix}
+%\ddot{y} \\ \ddot{y_1} \\ \ddot{y_2} \\ \ddot{\theta}
+%\end{bmatrix}
+%= P^{-1}
+%\begin{bmatrix}
+%-g(2m+M) + R_1+R_2 \\
+%-gm -ky_1+R_1\\
+
+%-gm -ky_2+R_2\\
+%R_1+R_2\\
+%\end{bmatrix}\;.
+%$$
+%\subsection{Discr\'etisation des \'equations differentielles}
+
+\subsubsection{Discr\'etisation des \'equations diff\'erentielles}
+Pour calculer les trajectoires des corps, nous pouvons approximer
+les \'equations diff\'erentielles par des
+\'equations r\'ecurrentes, o\`u $h$ d\'esigne le pas de discr\'etisation en temps~:
+
+\begin{align*}
+y(t+h) &=2y(t)-y(t-h)+h^2\left(-2g+\frac{2ky_1}{M}\right)\;,\\
+y_1(t+h) &=2y_1(t)-y_1(t-h)+h^2\left(-ky_1(\frac{1}{m}+\frac{2}{M})+\frac{R_1+R_2}{2m}\right)\;,\\
+\theta(t+h) &=2\theta(t)-\theta(t-h)+h^2\left(\frac{R_1+R_2}{2ml}\right)\;.
+\end{align*}
+
+\subsection{Mouvement vertical d'une voiture}
+\subsubsection{Pr\'esentation du mod\'ele}
+On veut \'etudier le mouvement vertical d'une voiture dont le 
+mouvement horizontal est donn\'e par le triplet $(x(t),y(t),\phi 
+(t))$, o\`u $\phi (t)$ est la direction du v\'ehicule. Celui-ci est
+mod\'elis\'e en 3D, par une carcasse repr\'esent\'ee
+par une plaque (de longueur $2L$, de largeur $2l$, de masse
+ponctuelle $M$ et de moment d'inertie $I_{\theta}$ et $I_{\alpha}$)
+\`a laquelle sont accroch\'ees quatre roues (de rayon
+$r$ et de masse $m$) par des ressorts (de rigidit\'e $k$).
+
+On note  $I_{\alpha}$ le moment
+d'inertie par rapport \`a l'axe longitudinal de la voiture (roulis),
+$I_{\theta}$ le moment d'inertie
+par rapport \`a l'axe transversal de la voiture (tangage), $g$ la gravit\'e,
+$u(x,y)$ l'altitude du sol, $z(t)$ l'altitude du centre de gravit\'e
+de la carcasse, $z_1(t) \ldots z_4(t)$ les
+allongements des quatre ressorts de la suspension de la voiture, $\theta$
+l'angle de tangage et $\alpha$ l'angle de roulis (conf\`ere \ref{imagevoit}).
+
+\subsubsection{Calcul des \'energies cin\'etiques}
+De la premi\`ere roue :
+$ 1/2m(\dot{z}+L\dot{\theta}+\dot{z}_1+l\dot{\alpha})^2 \;.$
+
+De la deuxi\`eme roue :
+$ 1/2m(\dot{z}+L\dot{\theta}+\dot{z}_2-l\dot{\alpha})^2 \;.$
+
+De la troisi\`eme roue :
+$ 1/2m(\dot{z}-L\dot{\theta}+\dot{z}_3-l\dot{\alpha})^2 \;.$
+
+De la quatri\`eme roue :
+$ 1/2m(\dot{z}-L\dot{\theta}+\dot{z}_4+l\dot{\alpha})^2 \;.$
+
+De la caracasse :
+$1/2(M\dot{z}^2 +I_{\theta}\dot{\theta}^2 +I_{\alpha}\dot{\alpha}^2)\;.$
+
+
+\subsubsection{Calcul des \'energies potentielles}
+Des quatre roues :
+$ mg(4z+z_1+z_2+z_3+z_4)\;.$
+
+Des quatre ressorts :
+$ 1/2k(z^2_1+z^2_2+z^2_3+z^2_4)\;.$
+
+De la caracasse :
+$ Mgz\;.$
+
+Soit :
+\begin{align*} 
+R_1 &= (u(x+L\cos\phi+l\sin\phi,y+L\sin\phi-l\cos\phi)-(z+z_1+L\theta+l\alpha-r))^+\;;\\
+R_2 &= (u(x+L\cos\phi-l\sin\phi,y+L\sin\phi+l\cos\phi)-(z+z_2+L\theta-l\alpha-r))^+\;;\\
+R_3 &= (u(x-L\cos\phi-l\sin\phi,y-L\sin\phi+l\cos\phi)-(z+z_3-L\theta-l\alpha-r))^+\;;\\
+R_4 &= (u(x-L\cos\phi+l\sin\phi,y-L\sin\phi-l\cos\phi)-(z+z_4-L\theta+l\alpha-r))^+\;.
+\end{align*}
+
+L'\'en\'ergie de la r\'eaction du sol sur la premi\`eme roue est alors
+de $1/2R_1^2\;,$ celle de la deuxi\`eme roue : $1/2R_2^2\;,$ celle de
+la troisi\`eme : $1/2R_3^2\,$ et enfin la quatri\`eme : $1/2R_4^2\;.$
+
+\dessin{Voiture}{0.65}{Mod\'elisation de la voiture}{imagevoit}
+
+\subsubsection{Calcul des \'equations des trajectoires}
+
+On trouve :
+\begin{align*}
+\delta\AAA = \int &
+                      M\dot{z}\delta \dot{z}
+                      + I_{\theta}\dot{\theta}\delta\dot{\theta} +
+                        I_{\alpha}\dot{\alpha}\delta\dot{\alpha} -2Mg\delta z \\
+                  &   -2mg(4\delta z + \delta z_{1} + \delta z_{2}
+                          +\delta z_{3} + \delta z_{4}) \\
+                  &   -k(z_{1}\delta z_{1} + z_{2}\delta z_{2}
+                      +z_{3}\delta z_{3} + z_{4}\delta z_{4}) \\
+                  &   +m(\dot{z}+\dot{z}_1+L\dot{\theta}+l\dot{\alpha})
+                      (\delta\dot{z}+\delta\dot{z}_1+L\delta\dot{\theta}+l\delta\dot{\alpha})
+                      \\
+                  &   +m(\dot{z}+\dot{z}_2+L\dot{\theta}-l\dot{\alpha})
+                      (\delta\dot{z}+\delta\dot{z}_2+L\delta\dot{\theta}-l\delta\dot{\alpha})
+                      \\
+                  &   +m(\dot{z}+\dot{z}_3-L\dot{\theta}-l\dot{\alpha})
+                      (\delta\dot{z}+\delta\dot{z}_3-L\delta\dot{\theta}-l\delta\dot{\alpha})
+                      \\
+                  &   +m(\dot{z}+\dot{z}_4-L\dot{\theta}+l\dot{\alpha})
+                      (\delta\dot{z}+\delta\dot{z}_4-L\delta\dot{\theta}+l\delta\dot{\alpha})\\
+                  &   +R_1(\delta z+\delta z_1+L\delta\theta+l\delta\alpha-r)\\
+                  &   +R_2(\delta y+\delta y_2+L\delta\theta-l\delta\alpha-r)\\
+                  &   +R_3(\delta y+\delta y_3-L\delta\theta-l\delta\alpha-r)\\
+                  &   +R_4(\delta y+\delta y_4-L\delta\theta+l\delta\alpha-r)
+\end{align*}
+
+La variation de l'action apr\'es int\'egration par partie vaut :
+\begin{align*}
+\delta\AAA = \int &
+                      -M\ddot{z}\delta z
+                      - I_{\theta}\ddot{\theta}\delta\theta -
+                        I_{\alpha}\ddot{\alpha}\delta\alpha -2Mg\delta z \\
+                  &   -2mg(4\delta z + \delta z_{1} + \delta z_{2}
+                          +\delta z_{3} + \delta z_{4}) \\
+                  &   -kz_{1}\delta z_{1} -kz_{2}\delta z_{2}
+                      -kz_{3}\delta z_{3} -kz_{4}\delta z_{4} \\
+%avant de faire l'IPP
+%                     &  +4m\dot{z}\delta\dot{z} + m\dot{z}(\delta\dot{z}_1
+%                                                + \delta\dot{z}_2
+%                                                + \delta\dot{z}_3
+%                                                + \delta\dot{z}_4)
+%                                                \\
+%                    &   + m(\dot{z}_1\delta\dot{z}_1
+%                        + \dot{z}_2\delta\dot{z}_2
+%                        + \dot{z}_3\delta\dot{z}_3
+%                        + \dot{z}_4\delta\dot{z}_4)\\
+%                    &   + (\dot{z}_1 + \dot{z}_2 + \dot{z}_3 + \dot{z}_4
+%                          ) m\delta\dot{z}\\
+%                    &   + (\dot{z}_1+\dot{z}_2-\dot{z}_3-\dot{z}_4)
+%                          mL\delta\dot{\theta} \\
+%                    &   + (\dot{z}_1-\dot{z}_2-\dot{z}_3+\dot{z}_4)
+%                          ml\delta\dot{\alpha} \\
+%                    &   + (\delta\dot{z}_1+\delta\dot{z}_2
+%                          -\delta\dot{z}_3-\delta\dot{z}_4)
+%                                                mL\dot{\theta}\\
+%                    &   +4mL^2\dot{\theta}\delta\dot{\theta}
+%                        +4ml^2\dot{\alpha}\delta\dot{\alpha}\\
+%                    &   +(\delta\dot{z}_1-\delta\dot{z}_2
+%                        -\delta\dot{z}_3+\delta\dot{z}_4)
+%                        ml\dot{\alpha}\\
+%END
+                    &   -4m\ddot{z}\delta z - m\ddot{z}(\delta z_1
+                                               +\delta z_2
+                                               +\delta z_3
+                                               +\delta z_4)
+                                               \\
+                   &   - m\ddot{z}_1\delta z_1
+                       - m\ddot{z}_2\delta z_2
+                       - m\ddot{z}_3\delta z_3
+                       - m\ddot{z}_4\delta z_4\\
+                   &   - (\ddot{z}_1 + \ddot{z}_2 + \ddot{z}_3 + \ddot{z}_4
+                         ) m\delta z\\
+                   &   - (\ddot{z}_1+\ddot{z}_2-\ddot{z}_3-\ddot{z}_4)
+                         mL\delta\theta \\
+                   &   - (\ddot{z}_1-\ddot{z}_2-\ddot{z}_3+\ddot{z}_4)
+                         ml\delta\alpha \\
+                   &   - (\delta z_1+\delta z_2
+                         -\delta z_3-\delta z_4) mL\ddot{\theta}\\
+                   &   -4mL^2\ddot{\theta}\delta \theta
+                       -4ml^2\ddot{\alpha}\delta \alpha\\
+                   &   -(\delta z_1-\delta z_2
+                       -\delta z_3+\delta z_4) ml\ddot{\alpha}\\
+                   &   +R_1(\delta z + \delta z_1 + L\delta\theta +
+                                               l\delta\alpha)\\
+                   &   +R_2(\delta z + \delta z_2 + L\delta\theta -
+                                               l\delta\alpha)\\
+                   &   +R_3(\delta z + \delta z_3 - L\delta\theta -
+                                               l\delta\alpha)\\
+                   &   +R_4(\delta z + \delta z_4 - L\delta\theta + l\delta\alpha)\;.
+\end{align*}
+
+On trouve un syst\`eme d'\'equation diff\'erentielle :
+\begin{align}
+\label{eqv01} \ddot{z}+\frac{m(\ddot{z}_1+\ddot{z}_2+\ddot{z}_3+\ddot{z}_4)}{M+4m} & = \frac{R_1+R_2+R_3+R_4}{M+4m}-2g\;. \\
+\label{eqv02} kz_1+m(\ddot{z}_1+\ddot{z}+L\ddot{\theta}+l\ddot{\alpha}) & = -2mg +
+R_1 \;. \\
+\label{eqv03} kz_2+m(\ddot{z}_2+\ddot{z}+L\ddot{\theta}-l\ddot{\alpha}) & = -2mg +
+R_2 \;. \\
+\label{eqv04} kz_3+m(\ddot{z}_3+\ddot{z}-L\ddot{\theta}-l\ddot{\alpha}) & = -2mg +
+R_3 \;. \\
+\label{eqv05} kz_4+m(\ddot{z}_4+\ddot{z}-L\ddot{\theta}+l\ddot{\alpha}) & = -2mg +
+R_4 \;. \\
+\label{eqv06} m(\ddot{z}_1+\ddot{z}_2-\ddot{z}_3-\ddot{z}_4+4L\ddot{\theta})+\frac{I_{\theta}\ddot{\theta}}{L} 
+& = R_1+R_2-R_3-R_4\;.\\
+\label{eqv07}m(\ddot{z}_1-\ddot{z}_2-\ddot{z}_3+\ddot{z}_4+4l\ddot{\alpha})+\frac{I_{\alpha} \ddot{\alpha}}{l}
+& = R_1-R_2-R_3+R_4 \;.
+\end{align}
+
+En faisant (\ref{eqv02}) plus (\ref{eqv03}) moins
+(\ref{eqv04}) moins (\ref{eqv05}) moins (\ref{eqv06}), on obtient~:
+\begin{align}
+\label{eqv08} I_{\theta}\ddot{\theta} = Lk(z_1+z_2-z_3-z_4)\;.
+\end{align}
+
+En faisant (\ref{eqv02}) plus (\ref{eqv06}) moins
+(\ref{eqv03}) moins (\ref{eqv04}) moins (\ref{eqv07}), on obtient~:
+\begin{align}
+\label{eqv09} I_{\alpha}\ddot{\alpha} = lk(z_1-z_2-z_3+z_4)\;.
+\end{align}
+
+En faisant (\ref{eqv01}) moins (\ref{eqv02}) moins (\ref{eqv03}) moins
+(\ref{eqv04}) moins (\ref{eqv05}), on obtient~:
+\begin{align}
+\label{eqv10} M\ddot{z}=-2Mg+k(z_1+z_2+z_3+z_4)\;.
+\end{align}
+
+%En faisant (\ref{eqv04}) moins (\ref{eqv05}) on obtient~:
+%$$\ddot{z}_3-\ddot{z}_4=\frac{R_3-R_4+k(z_4-z_3)}{m}+2l\ddot{\alpha}\;.$$
+
+Soit :
+$$F_1=\frac{k(z_1+z_2+z_3+z_4)}{M}\;,$$
+$$F_2=\frac{L^2k(z_1+z_2-z_3-z_4)}{I_{\theta}}\;,$$
+$$F_3=\frac{l^2k(z_1-z_2-z_3+z_4)}{I_{\alpha}}$$
+
+En utilisant les \'equations (\ref{eqv08}), (\ref{eqv09}) et
+(\ref{eqv10}); (\ref{eqv02})
+s'\'ecrit :
+$$\ddot{z}_1 =
+\frac{R_1-kz_1}{m}-F_1-F_2-F_3\;.$$
+
+De m\^eme, on trouve :
+\begin{align*}
+\ddot{z}_2 &=
+\frac{R_2-kz_2}{m}-F_1-F_2+F_3\;,\\
+\ddot{z}_3 &=
+\frac{R_3-kz_3}{m}-F_{1}+F_2+F_3\;,\\
+\ddot{z}_4 &=
+\frac{R_4-kz_4}{m}-F_1+F_2-F_3\;.
+\end{align*}
+
+\subsubsection{Discr\'etrisation des \'equations}
+
+Pour calculer les trajectoires des corps, nous pouvons approximer
+les \'equations diff\'erentielles par des
+\'equations r\'ecurrentes, o\`u $h$ d\'esigne le pas de discr\'etisation en temps~:
+
+\begin{align*}
+z_1(t+h) &= 2z_1(t)-z_1(t-h)+h^2\left
+(\frac{R_1-kz_1(t)}{m}-F_1(t)-F_2(t)-F_3(t) \right ) \;,\\
+z_2(t+h) &= 2z_2(t)-z_2(t-h)+h^2\left
+(\frac{R_2-kz_2}{m}-F_1(t)-F_2(t)+F_3(t)  \right )\;,\\
+z_3(t+h) &= 2z_3(t)-z_3(t-h)+h^2\left
+(\frac{R_3-kz_3(t)}{m}-F_1(t)+F_2(t)+F_3(t)  \right )\;,\\
+z_4(t+h) &= 2z_4(t)-z_4(t-h)+h^2\left
+(\frac{R_4-kz_4(t)}{m}-F_1(t)+F_2(t)-F_3(t)  \right )\;,\\
+z(t+h) &= 2z(t)-z(t-h)+h^2\left (
+F_1(t)-2g\right )\;,\\
+\alpha (t+h) &= 2\alpha (t)-\alpha (t-h)+ \frac{h^2 F_3(t)}{l}\;,\\
+\theta (t+h) &= 2\theta (t)-\theta (t-h)+ \frac{h^2 F_2(t)}{L}\;.
+\end{align*}
+
+
+\subsection{Mouvement horizontal}\label{dyna4}
+
+\subsubsection{Mouvement horizontal}
+
+Pour mod\'eliser les d\'eplacements du v\'ehicule dans le plan
+horizontal, on repr\'esente le v\'ehicule par une barre de demi
+longueur $l$ et de masse ponctuelle $M$ \`a laquelle sont accroch\'ees
+deux roues de masse $m$.  Dans un rep\`ere fixe $(Oxy)$ (voir figure
+\ref{direction}), on note~:
+\begin{itemize}
+\item $x(t)$ et $y(t)$ la position du centre de gravit\'e de la voiture,
+\item $\phi(t)$ l'angle de la carcasse de la carcasse avec l'axe $(Ox)$,
+\item $\psi(t)$ l'angle des roues avec l'axe $(Ox)$.
+\end{itemize}
+
+\dessin{direction}{0.6}{Mod\'elisation de la voiture (vue de dessus)}{direction}
+
+On note :
+\begin{itemize}
+\item $a(t)$ acc\'el\'eration donn\'ee par le joueur \`a la voiture
+(la puissance du moteur),
+\item $\xi(t)$ le changement de direction donn\'e par le joueur au v\'ehicule.
+\end{itemize}
+
+%L'\'energie cin\'etique de la voiture vaut alors : $$\frac{1}{2}(2m+M)(\dot{x}^2+\dot{y}^2)+ml\dot{\phi}^2\;.$$
+%
+%L'\'energie potentielle du moteur vaut : $$-a\cos \phi\ x - a\sin \phi\ y\;.$$
+%
+%L'\'energie potentielle de d\'eformation des pneus lors d'un changement de direction est don\'e par: $$-\frac{\xi^2}{2}\;.$$
+%
+%L'action \`a minimiser est donc :
+%$$\AAA=1/2\int \left(\frac{1}{2}(2m+M)(\dot{x}^2+\dot{y}^2)+ml\dot{\phi}^2 +
+%a\cos \phi\ x + a\sin \phi\ y -\frac{k(\psi-\phi)^2}{2}\right) dt $$
+
+La vitesse de rotation du v\'ehicule autour de son centre de gravite est proportionnelle au changement de direction $\xi$ indiqu\'ee.
+%Le moteur exerce une force d'intensit\'e $a$ choisie par le joueur
+%dans la direction $\phi$.
+On suppose que lors d'un changement de direction, l'\'elasticit\'e des pneus --- adh\'erents sur le sol --- produit un couple de rotation proportionel \`a $\xi$.
+
+En n\'egligeant les frottements de l'air, on obtient les \'equations du mouvement en appliquant le principe fondamental de la dynamique :
+$$(2m+M)\ddot{x} = a\cos\phi\;,$$
+$$(2m+M)\ddot{y} = a\sin\phi\;,$$
+$$\dot{\phi} = \xi\;.$$
+
+
+\subsubsection{Discr\'etisation des \'equations diff\'erentielles}
+On peut discr\'etiser ces \'equations diff\'erentielles~:
+$$x(t+h) = 2x(t)-x(t-h)+h^2\left(\frac{a(t)\cos\phi(t)}{2m+M}\right)\,$$
+$$y(t+h) = 2y(t)-y(t-h)+h^2\left(\frac{a(t)\sin\phi(t)}{2m+M}\right)\,$$
+$$\phi(t+h) = \phi(t)+h\xi$$
+o\`u $h$ d\'esigne le pas de discr\'etisation en temps.
+
+\section{La circulation}\label{circulation}
+
+\dessin{feu}{0.4}{La pomme est mure}{feurouge}
+
+La circulation de la ville comprend, trois \'el\'ements : -- les feux
+de signalisation, -- le joueur, -- les voitures dans les rues. 
+
+Le plan de feux de chaque carrefour est simple : il est donn\'e par les
+deux diagrames de la figure \ref{feux}.
+
+\dessin{feux}{0.5}{Plan de feux}{feux}
+
+Le joueur est une voiture particuli\`ere command\'ee au clavier ou \`a
+la souris, en acc\'el\'eration et direction. Les touches DOWN et UP
+donnent l'acc\'el\'eration et LEFT et RIGHT la direction.  Au joueur,
+est associ\'e trois cam\'eras permettant de visualiser les trois
+sc\`enes suivantes~: -- vue a\`erienne sur plusieurs blocs, -- vue de
+la voiture du joueur, -- vue de la place du conducteur du joueur. La
+commande F1 permet de passer de l'une \`a l'autre.  Les comportements
+dynamiques des voitures d\'ependent du mod\'ele. La voiture n'est pas
+contrainte \`a rester sur les routes, ce qui conduit \`a des
+comportements sp\'ectaculaire lorsqu'on veut monter sur un immeuble ou
+entrer et sortir du fleuve.
+
+
+Les voitures circulent toujours sur la m\^eme voie, mais s'arr\^etent
+aux feux. La vitesse des voitures est r\'egie par trois facteurs : --
+une vitesse d\'esir\'ee de la voiture fluctuant avec le temps de fa\c
+con al\'atoire, -- la vitesse du v\'ehicule pr\'ec\'edent -- la
+distance au feu si le feu est au rouge. Une voiture \'etant associ\'ee
+\`a un bloc, il faut g\'erer cette appartenance lors des changements
+de blocs.
+
+Le type TVoiture est une classe Delphi qui contient l'\'etat de la
+voiture constitu\'e des onze param\`etres d\'efinissant l\'etat de sa
+dynamique.  TVoiture descend de TObject, elle h\'erite donc de ses
+m\'ethodes. A cela, s'ajoute de nouvelles proc\'edures qui
+initialisent, actualisent la dynamique et dessinent le v\'ehicule.
+ 
+A partir de TVoiture deux nouvelles classes ont \'et\'e cr\'e\'ees~:
+TJoueur et TGoodies. La premi\`ere est la voiture contr\^ol\'ee par le
+joueur, la deuxi\`eme est une voiture circulant dans la ville.
+
+Les m\'ecanismes d'h\'eritages des classes de Delphi ont utilis\'es
+comme la propri\'et\'e {\tt inherited}.  TJoueur poss\'ede de
+nouvelles m\'ethodes~: les pro\'edures qui actualisent le son et la
+cam\'era.
+
+TGoodies est une TVoiture qui poss\`ede en plus deux pointeurs sur la
+voiture pr\'ec\'edente et suivante. Des m\'ethodes permettent de faire
+les changements de blocs des voitures.
+
+Les TGoodies sont enchain\'ees sous forme de file associ\'ee \`a une
+voie d'un bloc et constitue un objet TCirculation.  A chaque bloc, est
+associ\'e un tableau de huit TCirculation.
+
+\section{Le chargeur ASE}\label{ASE}
+\subsection{Introduction}
+
+Notre projet comprendra deux types d'objets : des objets statiques
+comme la ville, le terrain... et des objets dynamiques comme les
+voitures. Nous les afficherons gr\^ace \`a OpenGl, mais comme il est
+imposible de dessiner une maison ou un v\'ehicule triangles par
+triangles \`a la main (bien que OpenGl ne comprenne que \c ca),
+nous devons utiliser un logiciel sp\'ecialis\'e dans la cr\'eation
+3D~: Studio Max. Il permet d'exporter une sc\`ene 3D sous un format
+ASCII~: c'est le format ASE (....).
+
+Une sc\`ene de Studio Max, not\'ee $S$, est un ensemble d'objets $O_i$
+tels que des plans, des tores, des th\'ei\`eres, etc. Donc $S =
+\{O_0,O_1, ..., O_n\}.$ Chaque objet $O_i$ est compos\'e d'un
+ensemble de triangles $t$ : $O_i = \{t_0, t_1, ..., t_m\}$.  Nous
+appelons triangle, une surface (color\'ee) d\'efinie par trois sommets :
+$t = (p_1,p_2,p_3)$ o\`u chaque sommet est d\'efini par trois
+coordonn\'ees : $p_i =(x_i,y_i,z_i)$.  Enfin de compte une sc\`ene
+n'est qu'un ensemble de triangles.
+
+\subsection{Les objets 3D avec Studio Max}
+
+Voici comment est repr\'esent\'e une sc\`ene compos\'ee de deux plans,
+seul l'essentiel a \'et\'e pris.
+
+\begin{verbatim}
+*GEOMOBJECT {
+        *NODE_NAME "Plan01"
+        *MESH {
+                *MESH_NUMVERTEX 4
+                *MESH_NUMFACES 2
+                *MESH_VERTEX_LIST {
+                        *MESH_VERTEX 0 -50.0   -50.0   0.0
+                        *MESH_VERTEX 1   0.0   -50.0   0.0
+                        *MESH_VERTEX 2 -50.0     0.0   0.0
+                        *MESH_VERTEX 3   0.0     0.0   0.0
+                }
+                *MESH_FACE_LIST {
+                        *MESH_FACE 0:  A: 2   B: 0   C: 3
+                        *MESH_FACE 1:  A: 1   B: 3   C: 0
+                }
+        }
+}
+*GEOMOBJECT {
+        *NODE_NAME "Plan02"
+        *MESH {
+                *MESH_NUMVERTEX 4
+                *MESH_NUMFACES 2
+                *MESH_VERTEX_LIST {
+                        *MESH_VERTEX 0  0.0    0.0   0.0
+                        *MESH_VERTEX 1 45.0    0.0   0.0
+                        *MESH_VERTEX 2  0.0   30.0   0.0
+                        *MESH_VERTEX 3 45.0   30.0   0.0
+                }
+                *MESH_FACE_LIST {
+                        *MESH_FACE 0:  A: 2   B: 0   C: 3
+                        *MESH_FACE 1:  A: 1   B: 3   C: 0
+                }
+        }
+}
+\end{verbatim}
+
+Chaque objet est repr\'esent\'e par le mot cl\'e {\tt GEOMOBJECT}. Son
+nom (ici c'est un plan) est d\'esign\'e par {\tt NODE\_NAME}.  {\tt
+  MESH\_NUMVERTEX} et {\tt MESH\_NUMFACES} sont respectivement le nombre de
+sommets et de triangles de notre objet.  {\tt MESH\_VERTEX\_LIST} est
+la liste des sommets. Chaque sommet est d\'efini par le mot cl\'e
+{\tt MESH\_VERTEX} et quatre param\`etres : un entier et trois
+r\'eels.  L'entier est le num\'ero d'indentification du sommet, les
+r\'eels repr\'esentent une position dans l'espace.  Par exemple :
+\begin{verbatim}
+*MESH_VERTEX 0 -50.0   -50.0   0.0
+\end{verbatim}
+est le premier sommet de position $(-50,-50,0)$ et s'\'ecrit :
+$p_0 =(-50,-50,0)$.
+
+{\tt MESH\_FACE\_LIST} est la liste des triangles de notre objet. Chaque
+triangle est d\'efini par le mot cl\'e {\tt MESH\_FACE} et sept
+param\`etres. Par exemple :
+\begin{verbatim}
+*MESH_FACE 0:  A: 2   B: 0   C: 3
+\end{verbatim}
+
+Le $0:$ est le numero d'identification du triangle. Le {\tt A:} est le
+premier sommet du triangle, le {\tt B:} le second et enfin le {\tt C:} le
+troisi\`eme. Le $2$ de {\tt A: 2} est un pointeur vers le troisi\`eme
+sommet de la liste des sommets. Il pointe sur~:
+
+\begin{verbatim}
+*MESH_VERTEX 2 -50.0   0.0   0.0
+\end{verbatim}
+Le principe est le m\^eme pour le $0$ de B: $0\;$, il pointe sur~:
+\begin{verbatim}
+*MESH_VERTEX 0 -50.0   -50.0   0.0
+\end{verbatim}
+et enfin le $3$ de C: $3\;$, pointe sur :
+\begin{verbatim}
+*MESH_VERTEX 3 0.0   0.0   0.0
+\end{verbatim}
+En d\'efinitive, nous avons : $t_0 = (p_2,p_0,p_3).$
+
+\subsection{Les objets 3D avec OpenGl}
+
+Une sc\`ene avec Opengl est elle aussi un ensemble de triangles.
+Voici comment est repr\'esent\'ee la m\^eme sc\`ene toujours
+compos\'ee de deux plans.
+
+\begin{verbatim}
+glBegin(GL_TRIANGLES);
+// Premier triangle du premier plan
+   glVertex3f(-50.0,0.0,0.0);
+   glVertex3f(-50.0,-50.0,0.0);
+   glVertex3f(0.0,0.0,0.0);
+
+// Deuxieme triangle du premier plan
+   glVertex3f(0.0,-50.0,0.0);
+   glVertex3f(0.0,0.0,0.0);
+   glVertex3f(-50.0,-50.0,0.0);
+
+// Premier triangle du deuxieme plan
+   glVertex3f(0.0,30.0,0.0);
+   glVertex3f(0.0,0.0,0.0);
+   glVertex3f(45.0,30.0,0.0);
+
+// Deuxieme triangle du deuxieme plan
+   glVertex3f(45.0,0.0,0.0);
+   glVertex3f(45.0,30.0,0.0);
+   glVertex3f(0.0,0.0,0.0);
+glEnd;
+\end{verbatim}
+
+Le probl\`eme principal du chargeur est de stocker correctement la
+sc\`ene, pour qu'elle prenne le moins de place m\'emoire.
+L'utilisation de liste chain\'ee est plus astucieuse que celle d'un
+tableau, car nous ne connaissons pas \`a l'avance le nombre exact
+d'objets ou de triangles. On cr\'ee alors une liste de liste. La
+premi\`ere contient tous les objets. Dans chaqu'une de ses cases on
+stocke la liste de triangles propre \`a chaque objet.
+
+Une remarque importante est que la ligne suivante n'est pas compl\'ete :
+\begin{verbatim}
+*MESH_FACE 0:  A: 2   B: 0   C: 3
+\end{verbatim}
+Elle s'\'ecrit, en faite :
+\begin{verbatim}
+*MESH_FACE 0: A: 2 B: 0 C: 3 AB: 1 BC: 0 CA: 1 *MESH_SMOOTHING 1 
+ *MESH_MTLID 0
+\end{verbatim}
+
+Les valeurs de {\tt AB:}, {\tt BC:} et {\tt CA:} sont des bool\'eens repr\'esent\'es
+sous la forme de $1$ ou de $0$. Ce sont des drapeaux d'arr\^ete (Edge
+Flag), \`a savoir des bascules qui permetent de n'afficher que
+certaines arr\^etes d'un polygone. {\tt glEdgeFlag} est une proc\'edure
+OpenGl qui prend en param\`etre un bool\'een. Seules les ar\^etes sur
+{\tt TRUE} seront affich\'ees. Ceci n'a d'int\'er\^et que pour un affichage
+en mode fil de fer.
+
+\subsection{Textures et mat\'eriaux avec Studio Max}
+
+Maintenant que nous pouvons exporter n'importe qu'elle sc\`ene, nous
+allons l'\'egayer en appliquant une texture \`a nos triangles. Le
+placage de texture est une technique permettant d'accro\^itre le
+r\'ealisme d'un rendu 3D. Il consiste \`a coller une image sur un
+objet 3D \`a la mani\`ere d'une tapisserie.
+
+Voici comment est repr\'esent\'e une sc\`ene compos\'ee de d'un seul
+plan \`a quatre triangles et d'une texture appel\'ee camouflage.bmp.
+Elle se trouve dans le chemin~: {\tt
+  "C\!\!:$\backslash$camouflage.bmp"} (seul l'essentiel a \'et\'e
+pris).
+
+\begin{verbatim}
+*MATERIAL_LIST {
+        *MATERIAL_COUNT 1
+        *MATERIAL 0 {
+                *MATERIAL_NAME "Materiau #1"
+                *MATERIAL_AMBIENT 0.2 0.1 0.1
+                *MATERIAL_DIFFUSE 0.5 0.2 0.2
+                *MATERIAL_SPECULAR 0.9 0.9 0.9
+                *MATERIAL_SHINE 0.2
+                *MATERIAL_SHINESTRENGTH 0.05
+                *MATERIAL_TRANSPARENCY 0.0
+                *MAP_DIFFUSE {
+                        *MAP_NAME "Texture01"
+                        *MAP_CLASS "Bitmap"
+                        *BITMAP "C:\camouflage.bmp"
+                        *UVW_U_OFFSET 0.0
+                        *UVW_V_OFFSET 0.0
+                }
+        }
+}
+*GEOMOBJECT {
+        *NODE_NAME "Plan01"
+        *MESH {
+                *MESH_NUMTVERTEX 8
+                *MESH_TVERTLIST {
+                        *MESH_TVERT 0 0.0 0.0 0.0
+                        *MESH_TVERT 1 1.0 0.0 0.0
+                        *MESH_TVERT 2 0.0 0.0 0.0
+                        *MESH_TVERT 3 1.0 0.0 0.0
+                        *MESH_TVERT 4 0.0 0.0 0.0
+                        *MESH_TVERT 5 1.0 0.0 0.0
+                        *MESH_TVERT 6 0.0 1.0 0.0
+                        *MESH_TVERT 7 1.0 1.0 0.0
+                }
+                *MESH_NUMTVFACES 2
+                *MESH_TFACELIST {
+                        *MESH_TFACE 0 6 4 7
+                        *MESH_TFACE 1 5 7 4
+                }
+        }
+        *MATERIAL_REF 0
+}
+\end{verbatim}
+
+Pour cr\'eer une texture sur un triangle, Studio Max d\'efinit d'abord
+les caract\'eristiques du mat\'eriau, ensuite il calcule les sommets
+et dans un dernier temps, il d\'efinit le triangle gr\^ace \`a la
+liste de sommet et au num\'ero d'identification du bitmap.
+
+Notre liste de mat\'eriau est appel\'ee par le mot cl\'e :
+{\tt MATERIAL\_LIST}. Ici, nous en n'avons qu'un seul ({\tt MATERIAL\_COUNT 1}),
+appel\'e Materiau $01$.  Les mots cl\'es suivants : de
+{\tt MATERIAL\_AMBIENT} \`a {\tt MATERIAL\_TRAN\-SPARENCY} ne sont utiles que pour
+la r\'eflection de la lumi\`ere (ambiante, sp\'eculaire, diffuse) et
+la transparence de l'objet.
+
+Mais ce qui nous int\'eresse le plus est le chemin du bitmap ({\tt
+  BITMAP "C\!\!:$\backslash$camouflage.bmp"}) et le d\'ecalage de la texture sur
+l'axe $u$ et $v$ (d\'efinis respectivement par {\tt UVW\_U\_OFFSET} et
+{\tt UVW\_V\_OFFSET}). En effet, pour positionner une texture sur un
+polygone, on parle de 'UV mapping'. Le principe est simple~: on
+affecte un syst\`eme de coordonn\'ees $(u,v)$ \`a la texture suivant
+l'illustration. Positionner la texture consiste \`a affecter \`a
+chaque sommet d'un polygone la coordonn\'ee de la texture en ce point.
+Dans notre cas, notre plan se divise en triangles, les coordonn\'ees
+aux sommets des points des faces sont : $(0,0), (1,0), (1,1)$ et
+$(0,0), (0,1), (1,1)$.
+
+\dessin{texture}{0.8}{Coordonn\'ees d'un mat\'eriau sur un objet carr\'e}{texture}
+
+Une fois que la d\'efinition de notre texture finie, nous allons
+cr\'eer notre liste de triangles de texture. Le principe est
+exactement le m\^eme que dans la section pr\'ec\'edente. Chaque
+texture est d\'efinie par le mot cl\'e {\tt MESH\_TVERT}, un entier et trois
+r\'eels.  L'entier est le num\'ero d' indentification de la texture, les
+r\'eels d\'efinissent la position dans l'espace. Par exemple :
+\begin{verbatim}
+*MESH_TVERT 0 0.0 0.0 0.0
+\end{verbatim}
+est le premier sommet $p_0 = (0,0,0).$
+
+{\tt MESH\_TFACELIST} est notre listre de texture. Chaque texture est
+appel\'ee par {\tt MESH\_FACE\_LIST} et quatre param\`etres (quatre entiers)
+: un numero d'indentification et trois pointeurs vers un {\tt MESH\_TVERT}.
+Par exemple : $t_0 = (p_6,p_4,p_7).$ est appel\'e par :
+\begin{verbatim}
+*MESH_TFACE 0 6 4 7
+\end{verbatim}
+
+Pour l'instant, nous ne savons pas quelle texture utilis\'ee (bien
+qu'il n'y en ait qu'une ici). C'est {\tt MATERIAL\_REF} qui nous l'indique.
+L'entier qu'il prend en param\`etre est un pointeur sur le num\'ero du
+mat\'eriau. Par exemple {\tt MATERIAL\_REF 0} pointe sur {\tt MATERIAL 0}.
+
+\subsection{Les textures d'OpenGl}
+
+Le code est en Pascal. Chaque texture doit obligatoirement \^etre
+charg\'ee par la fonction {\tt ChargerTexture} (il existe des
+proc\'edures plus complexes, mais celle-ci est la plus simple). Une
+texture est d\'efinie par un entier OpenGL, ou Gluint, c'est en
+quelque sorte son nom. La proc\'edure {\tt ChargerTexture} prend deux
+param\` etre : le num\'ero de la texture et son chemin dans
+l'arborescence du syst\`eme d'exploitation (ici Windows).
+
+\begin{verbatim}
+procedure ChargerTexture(NumeroTexture : gluint;
+                         Chemin : string);
+var texture1: PTAUX_RGBImageRec;
+begin
+//Chargement de la texture avec glaux
+  texture1 := auxDIBImageLoadA(Pchar(Chemin));
+
+//Initialisation de la texture
+  glGenTextures(1, NumeroTexture);
+  glBindTexture(GL_TEXTURE_2D, NumeroTexture);
+  glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,
+                  GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,
+                  GL_LINEAR);
+  glTexImage2D(GL_TEXTURE_2D, 0, 3, texture1^.sizeX,
+               texture1^.sizeY,0,GL_RGB,
+               GL_UNSIGNED_BYTE, texture1^.data);
+end;
+
+procedure AfficherUnTrangle(NumeroTexture : gluint);
+begin
+//Plaquage de la texture 'NumeroTexture'
+  glBindTexture(GL_TEXTURE_2D,NumeroTexture);
+
+//Affichage
+  glBegin(GL_TRIANGLES);
+     glTexCoord3f(1.0,0.0,0.0); glVertex3f(50.0,0.0,0.0);
+     glTexCoord3f(1.0,1.0,0.0); glVertex3f(50.0,10.0,0.0);
+     glTexCoord3f(0.0,0.0,0.0); glVertex3f(0.0,0.0,0.0);
+  glEnd;
+end;
+\end{verbatim}
+
+Par rapport \`a la section 'Les objets 3D avec OpenGL', dans la
+proc\'edure {\tt AfficherUnTriangle} on a ajout\'e \`a chaque ligne un
+{\tt glTexCoord3f}.  Il permet d'indiquer les sommets de la texture.
+{\tt glBindTexture} demande \`a OpenGL d'appliquer la texture sur le
+triangle (sinon le triangle prend une couleur monochrome par
+d\'efaut).
+
+
+\subsection{Cam\'era cible}
+
+Voici comment est repr\'esent\'ee une cam\'era cible sous Studio
+Max (seul l'essentiel a \'et\'e pris) :
+
+\begin{verbatim}
+*CAMERAOBJECT {
+        *NODE_NAME "Camera01"
+        *CAMERA_TYPE Target
+        *NODE_TM {
+                *NODE_NAME "Camera01"
+                *TM_POS 100.0 100.0 100.0
+        }
+        *NODE_TM {
+                *NODE_NAME "Camera01.Target"
+                *TM_POS 1.0 1.0 1.0
+       }
+}
+\end{verbatim}
+
+Voici comment Opengl g\'ere une cam\'era :
+\begin{verbatim}
+  gluLookAt(100.0,100.0,100.0,
+            1.0,1.0,1.0,
+            0.0,1.0,0.0)
+\end{verbatim}
+
+Une cam\'era cible est d\'efinie par une position $p$ dans l'espace
+$p=(p_x,p_y,p_z)$, un point qu'elle cible $c=(c_x,c_y,c_z)$ et un
+vecteur d'orientation (normale) $o=(o_x,o_y,o_z)$ car touner une
+cam\'era d'un angle quelconque sur l'axe du vecteur position--cible
+modifie l'orientatio de l'image (par exemple, on voit diff\'erament
+notre environnement selon qu'on a la t\^ete \`a l'envers ou pas).
+Dans notre exemple, nous avons : $p=(100.0,100.0,100.0)$,
+$c=(1.0,1.0,1.0)$ et $o=(0.0,1.0,0.0)$.
+
+\section{Effets sp\'eciaux}
+\subsection{Les liste d'affichage d'OGL  \cite{LM33}} 
+Les listes d'affichage contribuent \`a l'am\'elioration des perfomances
+graphiques parce qu'elles permettent de stocker des commandes OpenGL
+pour une utilisation future. L'utilit\'e la plus \'evidente est
+l'enregistrement d'objets d'utilisation fr\'equente. Par exemple pour dessiner une
+salle de classe, il suffit d'enregistrer l'objet chaise dans une liste
+d'affichage, que l'on appelle autant de fois que l'on a de chaises
+dans la salle.  Une fois la liste d'affichage cr\'e\'ee, il n'est plus
+possible de la modifier, sinon les performances s'en trouveraient
+affect\'ees par le sondage de la liste et la gestion de la m\'emoire
+(fragmentation de la m\'emoire). Elles permettent notamment
+d'optimiser les op\'erations matricielles, les lumi\`eres, mat\'eriaux
+et les textures. Voici, comment elles fonctionnent.
+
+\begin{verbatim}
+function GlGenLists(n : GLsizei) : Gluint;
+\end{verbatim}
+avec $n$ le nombre de listes que l'on souhaite cr\'eer. 
+La fonction renvoie un bloc de $n$ identifiants.
+\begin{verbatim} 
+procedure glNewList(liste Gluint, mode GLenum);
+\end{verbatim}
+avec liste doit \^etre un entier retourn\'e par glGenLists();. mode
+peut prendre les valeurs {\tt GL\_COMPILE} et {\tt
+  GL\_COMPILE\_AND\_EXECUTE}.  La derni\`ere enregistre et ex\'ecute
+immediatement. Si on utilise {\tt GL\_COMPILE}, les instructions ne
+sont pas ex\'ecut\'ees lors de l'enregistrement.
+
+Les instructions OpenGl qui suivent l'appel de {\tt glNewList} sont
+m\'emoris\'ees dans la liste d'affichage jus'qu\`a l'instruction qui
+marque la fin de l'enregistrement.
+\begin{verbatim}
+procedure glEndList();
+\end{verbatim}
+
+Pour ex\'ecuter une liste d'affichage, il suffit d'appeler : 
+\begin{verbatim}
+procedure glCallList(liste : Gluint);
+\end{verbatim}
+o\`u liste est l'inditifiant de la liste. Il est \'egalement possible
+d'\'effacer une liste d'affichage avec :
+\begin{verbatim}
+procedure glDeleteLists(liste : Gluint; n : GLsizei);
+\end{verbatim}
+o\`u $n$ d\'esigne le nombre de liste \`a \'effacer (le m\^eme nombre de
+liste r\'eserv\'ees par {\tt glGenLists()}).
+
+\subsection{Les lumi\`eres  \cite{LM30}}\label{Lumieres}
+\subsubsection{Sources lumineuses}
+La lumi\`ere \'emise par une source est form\'ee de trois composantes.
+La plus importante, la composante diffuse, est r\'efl\'echie par un
+objet dans toutes les directions. La composante sp\'eculaire
+correspond \`a la lumi\`ere qui est r\'efl\'echie dans une direction
+privil\'egi\'ee (et qui est donc \`a l'origine de l'effet de
+brillance). La composante ambiante d'une sc\`ene est une lumi\`ere non
+directionnelle, que l'on peut consid\'erer comme issue des multiples
+r\'eflexions de rayons lumineux.
+
+Pour des raisons d'efficacit\'e, OpenGL ne calcule pas la couleur de
+chaque pixel d'un polygone :  -- soit il remplit chaque polygone avec une
+couleur unie (model de remplissage \emph{Flat}),  -- soit il utilise un
+algorithme de Gouraud (mode \emph{Smooth})\footnote{Le principe de l'algorithme de
+Gouraud est le suivant : pour un polygone donn\'e, la couleur de chacun des sommets
+est calcul\'ee et le polygone est rempli avec un d\'egrad\'e entre ces
+differentes couleurs}. Pour calculer correctement la r\'eflexion des
+rayons lumineux en un point OpenGL a besoin de conna\^itre la
+perpendiculaire \`a la surface de l'objet au point donn\'e (c'est la
+normale).
+
+\subsubsection{Impl\'ementation avec OpenGL}
+La phase d'initialisation de l'\'eclairage commence par la sp\'eci\-fication
+du mode de remplissage des polygones avec :
+
+\begin{verbatim}
+  glShadeModel(GL_SMOOTH);
+\end{verbatim}
+
+Ensuite, on indique \`a OpenGL qu'on souhaite utiliser le calcul
+d'\'eclairage, en activant la variable d'\'etat {\tt GL\_LIGHTING}~:
+
+\begin{verbatim}
+  glEnable(GL_LIGHTING);
+\end{verbatim}
+
+OpenGL permet d'utiliser jusqu'\`a huit sources de lumi\`ere. Ces huit
+lampes sont index\'ees par les constantes {\tt GL\_LIGHT0} \`a {\tt GL\_LIGHT7}. Il faut
+activer chacunes des sources qu'on souhaite utiliser (une dans notre
+cas)~:
+
+\begin{verbatim}
+  glEnable(GL_LIGHT0);
+\end{verbatim}
+
+Vient ensuite le param\`etrage des lampes. Il se fait avec une unique
+fonction, {\tt glLightfv()}, dont le prototype est le suivant :
+\begin{verbatim}
+  procedure glLightfv( lampe    : Glenum; 
+                       nomparam : Glenum; 
+                       param    : GLType );
+\end{verbatim}
+ \emph{lampe} d\'esigne la lampe dont on veut modifier une propri\'et\'e. 
+ \emph{nomparam} est le nom du param\`etre \`a modifier. Il s'agit d'une des dix
+propri\'et\'es de source lumineuses
+( {\tt GL\_DIFFUSE}, {\tt GL\_AMPBIANTE}, {\tt GL\_SPECULAR}, {\tt GL\_POSITION}, etc ).   \emph{param}
+d\'esigne la valeur \`a affecter au param\`etre choisi (les param\`etres sont
+pass\'es sous forme de tableaux).
+
+\subsection{Param\`etres de mat\'eriaux}
+Dans la r\'ealit\'e, un rayon lumineux est constitu\'e d'un ensemble
+d'ondes de longueurs diff\'erentes. A chaque longueur d'onde correspond
+une couleur. Un objet frapp\'e par un rayon lumineux va absorber
+certaines longueurs d'onde et r\'efl\'echir les autres selon  les
+caract\'eristiques de ce mat\'eriau.
+
+Lorsqu'un polygone est d\'ecrit, il
+se voit affecter le mat\'eriau courant.  La modification du mat\'eriau
+courant se fait avec la fonction {\tt GlMaterialfv()} :
+\begin{verbatim}
+  procedure glMaterialfv( face     : Glenum; 
+                          nomparam : Glenum;
+                          param   : GlType );
+\end{verbatim}
+ \emph{face} indique la face (avant ou arri\`ere) dont on souhaite modifier
+les param\`etres.  \emph{nomparam} d\'esigne la propri\'et\'e qu'on souhaite
+changer, et \emph{param} est un tableau contenant la nouvelle valeur \`a
+affecter \`a  \emph{nomparam}. Les valeurs de  \emph{nomparam} possibles sont~:
+{\tt GL\_AMBIENT}, {\tt GL\_DIFFUSE}, {\tt GL\_SPECULAR}, {\tt GL\_SHININESS} (i.e. coefficient de
+brillance).
+
+\subsection{La transparence}\label{blend}
+\subsubsection{Fusionnement des couleurs} 
+Le quatri\`eme param\`etre de la commande {\tt glColor4f}, appel\'e
+\emph{alpha}, sert \`a sp\'ecifier la couleur d'un objet 
+et est utilis\'e pour sp\'ecifier le taux de transparence
+d'un objet.
+
+Plus la valeur alpha sera forte (le maximum \'etant de $1$) plus la
+primitive sera opaque.  Inversement, plus la valeur sera faible (le
+minimum est $0$) plus la transparence sera forte.
+
+Si on prend un cube ayant la valeur alpha \`a $1$ et que l'on place
+devant une sph\`ere avec une valeur alpha de $0.15$, le cube ne
+laissera passer aucune couleur (mais ce n'est pas grave car il est
+situ\'e \`a l'arri\`ere de la sph\`ere), par contre, la sph\`ere
+laisse passer $15$ pourcent de transparence. Logiquement, si on
+regarde la sph\`ere, on devrait voir le cube. Si le blending n'est pas
+activ\'e et que les deux objets sont dessin\'es l'un par dessus
+l'autre, OpenGL les dessinera comme \'etant deux objets opaques. En
+effet lorsque le deuxi\`eme objet est affich\'e, OpenGL \'ecrase
+chaque valeur chromatique du cube pour les remplacer par celle de la
+sph\`ere.  Par contre, si le blending est activ\'e, alors OpenGL
+conserve celles du cube et les accouple \`a celles de la sph\`ere.
+ 
+La sph\`ere joue le r\^ole de la \emph{source}, car ses valeurs
+chromatiques seront affect\'ees \`a ceux du cube. Le cube joue le
+r\^ole de la \emph{destination} car il est le r\'esultat de
+l'accouplement de ses valeurs chromatiques avec celles de la sph\`ere.
+
+\subsubsection{Impl\'ementation}
+L'activation de la transparence, se fait gr\^ace \`a la commande~:
+{\tt glEnable(GL\_BLENDING)} et pour la d\'esactiver :
+{\tt glDisable( GL\_BLENDING)}.
+
+Pour voir les diff\'erents types d'accouplement entre la source et la
+destination, conf\'ere le livre de
+ref\'erence OpenGL~:
+\begin{verbatim}
+  glBlendFunc(Source : GLenum; Destination :  GLenum);
+\end{verbatim}
+
+Prenons un exemple (le blending est activ\'e):
+\begin{verbatim}
+  glBlendFunc(GL_ONE, GL_ZERO);
+\end{verbatim}
+
+Si l'on dessine une primitive en utilisant le blending de
+cette fa\c con, cela n'aura aucun effet de transparence (on
+obtiendra les m\^emes r\'esultats que si le blending \'etait
+d\'esactiv\'e). Parce que les valeur chromatiques
+de la source sont multipli\'ees par $1$, ce qui ne change
+rien aux valeurs chromatiques de la source. Par contre les
+valeurs chromatiques de la destination sont \'ecras\'ees car elles sont
+multipli\'ees par $0$.
+
+\subsection{La brume}\label{fog}
+\subsubsection{Utilit\'e}
+La brume (ou fog en anglais) est utile pour apporter du r\'ealisme aux
+sc\`enes 3D (par exemple pour dessiner des montagnes).  Sur des gros
+programmes en 3D, la brume peut am\'eliorer les performances en
+\'eliminant les objets dont la distance est trop grande pour \^etre
+per\c cue par la cam\'era.
+
+Pour notre projet, il permet d'\'eviter l'apparition brutale des 
+immeubles dans le c\^one de vision lorsqu'on ne les visualise
+ pas tous  (voir section \ref{frustum}).
+
+
+\subsubsection{Impl\'ementation}
+Voici l'impl\'ementation de la brume avec OpenGL :
+\begin{verbatim}
+  (1) FogCouleur : Array[0..3] of GLFloat = (0.5,0.5,0.5,1.0); 
+  (2) glFogf(GL_FOG_MODE, GL_LINEAR);
+  (3) glFogf(GL_FOG_DENSITY, 0.35); 
+  (4) glFogi(GL_FOG_START, 3.0); 
+  (5) glFogi(GL_FOG_END, 30.0); 
+  (6) glFogfv(GL_FOG_COLOR, @FogCouleur); 
+  (7) glEnable(GL_FOG);
+\end{verbatim}
+
+A la ligne (1), le tableau FogCouleur contient la couleur de la brume
+gr\^ace au quadruplet (R,G,B,A) qui d\'esigne respectivement la
+couleur rouge, verte, bleue et alpha (opacit\'e).  
+
+Ligne (2), on
+d\'etermine le type de brume que l'on souhaite avoir~: plus ou moins
+\'epaisse selon la distance (lin\'eaire ou exponentielle) :
+GL\_LINEAR, GL\_EXP ou GL\_EXP2.  
+
+Ligne (3), on d\'etermine la
+densit\'e de la brume. La plus petite valeur est $0$ et la la plus
+\'elev\'ee est $1$.  
+
+Ligne (4), on d\'etermine la position o\`u la
+brume commence \`a faire effet.  
+
+Ligne (5), on d\'etermine la position
+o\`u la brume perd son effet et par cons\'equent o\`u OpenGL arr\^ete
+de dessiner les primitives car elles sont ``perdues dans la brume''.
+
+Ligne (6), on affecte une couleur \`a la brume, ici la couleur est
+contenue dans notre tableau FogCouleur.  
+
+Enfin, \`a la ligne (7), on
+active la brume.
+\subsection{Moteur de particules}
+
+Dans le troisi\`eme rapport, nous avons fait de tr\`es grossi\`eres
+et impardonnables erreurs de physique. Nous n'avons pas eu le temps de
+les corriger. 
+
+\subsection{Le terrain}\label{terrain}
+\subsubsection{Le principe des heightfields}
+
+Le principe de champs de hauteur est relativement simple \`a
+comprendre. Dans un premier temps, nous allons generer un maillage
+carre dans le plan XY.
+ 
+Le maillage est illustr\'e figure \ref{grille}. Ce n'est ni plus ni moins qu'un
+ensemble de polygones carr\'es (appel\'es patch pour le distinguer du
+maillage complet) coll\'es les uns aux autres. L'op\'eration se
+r\'ealise par deux boucles imbriqu\'ees. Une fois le maillage cr\'ee,
+il n'y a plus qu'\`a affecter aux sommets de chaque patch une
+coordonn\'ee en Z. En fonction de la position du sommet consid\'er\'e dans
+le maillage, on \'etablit une correspondance avec le pixel de l'image en
+niveau de gris. Si le pixel correspondant est noir, l'\'el\'evation du
+sommet sera minimale alors que s'il est blanc, la hauteur sera
+maximale.
+
+\subsubsection{Des polygones qui d\'eg\`enerent  \cite{LM33}}
+En utilisant le principe pr\'ec\' edant, nous
+sommes confront\'e a un probl\`eme : nous allons cr\'eer des polygones
+deg\'en\'er\'es. OpenGL d\'efinit strictement les propri\'et\'es que doit
+respecter un polygone pour obtenir un rendu correct. Les polygones
+doivent etre convexes (c'est \`a dire que toute ligne joignant deux
+points quelconques du ploygone doit \^etre enti\'erement comprise dans le
+polygone), non auto-intersectants et tous les points doivent \^etre sur
+le m\^eme plan. Or, cette derni\`ere condition n'est pas verifi\'ee
+lorsqu'on gen\`ere le terrain puisque les valeurs d'\'el\'evation des
+sommets sont issus d'une image, et il y a peu de chance que les quatre
+sommets de chaque patch soient dans un m\^eme plan. Dans le cas
+d'affichage en mode fil de fer, la d\'eg\'eneration des polygones ne pose
+pas probl\`eme. En revanche, si on \'eclaire la sc\`ene, le rendu des faces
+en mode plein sera faux. Autant prendre les devants et afficher
+quelque chose de correct.
+
+La solution au probl\`eme de d\'eg\'en\'eration est simple : il suffit de
+d\'ecomposer chacun de nos patchs en deux triangles. Notre maillage
+global ressemble donc \`a la figure \ref{grille}.  L'arrete transversale est
+disgracieuse. Nous allons nous en d\'ebarasser gr\^ace en utilisant la
+fonction glEdgeFlag d'OpenGL qui permet de n'afficher que certaines
+arr\^etes d'un polygone. Le prototype de glEdgeFlag est le suivant :
+\begin{verbatim}
+procedure glEdgeFlag(valeur : boolean);
+\end{verbatim}
+valeur peut valoir TRUE ou FALSE. les arr\^etes dont le premier sommet est
+d\'efini lorsque le drapeau est sur TRUE seront affich\'ees. En revanche,
+si le drapeau est sur FALSE, l'arr\^ete n'est pas affich\'ee. Bien sur
+ceci n'a d'int\'erer que lors d'un affichage en mode de fer.
+
+\subsubsection{Le format RAW}
+C'est avec des textures au format RAW que l'on va calculer la hauteur
+de chaque sommet du patch, car c'est un format permettant de lire une
+image comme un tableau de nombres entiers compris entre 0 et 255. Il
+est donc tr\`es utile pour passer d'une image \`a un tableau de calcul
+et r\'eciproquement. Pour ce faire nous avons besoin d'utiliser la
+fonction blockread qui lit un ou plusieurs enregistrements d'un
+fichier ouvert et les place dans une variable.  Voici comment
+fonctionne cette fonction :
+\begin{verbatim}
+procedure BlockRead( var Fichier : File; 
+                     var Tampon; 
+                     compte : Integer 
+                    [;var Transfere : Integer]
+                   );
+\end{verbatim}
+BlockRead lit au moins Compte enregistrements \`a partir du fichier
+Fichier et les transf\`ere en m\'emoire en partant de l'octet occup\'e
+par Tampon.  Le nombre r\'eel d'enregistrements entiers lus (inférieur
+ou \'egal à Compte) est renvoy\'e dans Transfere.  On utilisera aussi
+la fonction SizeOf(X) qui renvoie le nombre d'octets occup\'es par une
+variable ou un type (ici X).
+
+En un mot, pour calculer la hauteur de
+
+On cr\'eait la procedure LoadRawFile qui utilise le tableau de byte appel\'e
+Relief et une constante de type chaine, Chemin, qui indique le chemin de 
+la texture.
+\begin{verbatim}      
+CONST Chaine = 'C:\MaTexture.raw'; 
+VAR {parametre global}
+    Relief : array [0..1023,0..1023] of byte;
+
+procedure LoadRawFile();
+begin    
+{ Ouverture du fichier RAW,  Attention : on supose que le 
+ fichier existe
+}
+    AssignFile(Fichier, chemin);
+    BlockRead(F,image,sizeof(image));
+    CloseFile(Fichier);
+end; {LoadRawFile} 
+\end{verbatim}
+
+\subsubsection{La cr\'eation du terrain \cite{LM33}}
+Le terrain est de dimension fixe : il sagit d'un carr\'e dans le plan
+XY dont les extr\'emit\'es sont les points
+$(-1,-1,),(-1,1),(1,-1),(1,)$. La densit\'e du maillage on utilise une
+constante NB\_SUBDIVISION qui repr\'esente le nombre de subdivisions
+sur chaque axe. Les tableaux P1,P2,P3 et P4 ont chacun quatre cases qui
+contiennent une alititude.
+
+\dessin{terr}{0.8}{Maillage avec les faces transversales}{grille}
+
+\begin{verbatim}
+CONST NB_SUBDIVISIO = 4;
+for i := 0 to NB_SUBDIVISION do
+begin
+    for j := 0 to NB_SUBDIVISION do
+    begin
+       P1[0] := -1+i*pas; P1[1] := -1+j*pas;
+       P1[2] := Relief(i,j);
+        
+       P2[0] := -1+(i+1)*pas; P2[1] := -1+j*pas;
+       P2[2] :=  Relief(i+1,j);
+
+       P3[0] := -1+(i+1)*pas; P3[1] := -1+(j+1)*pas;
+       P3[2] := Relief(i+1,j+1);
+
+       P4[0] := -1+i*pas; P4[1] := -1+(j+1)*pas;
+       P4[2] := Relief(i,j+1);
+    end;
+end;
+\end{verbatim}
+
+\section{Utilitaires}
+
+\subsection{Importation de voiture}
+
+Si un joueur veut d\'efinir lui-m\^eme sa propre voiture dans 3DS. Il peut
+facilement l'importer dans le jeu de la fa\c con suivante~:
+\begin{itemize}
+\item cr\'eer un nouveau dossier avec le nom de la voiture;
+\item dessiner une carcasse de voiture avec 3D Studio Max et l'exporter sous 
+\emph{Carcasse.ase} dans le dossier;
+\item dessiner \'egalement une roue (la gauche) et l'exporter sous  \emph{Roue.ase}
+toujours dans le m\^eme dossier;
+\item prendre une photo de la voiture \emph{photo.jpg};
+\item cr\'eer un fichier \emph{info.txt} et mettre les param\`etres de la voiture 
+(poids de la roue, de la carcasse, raideur des ressort, position des roues etc);
+\item lancer le programme, s\'electionner la nouvelle voiture et jouer;
+\item si la voiture ne plait pas, alors la supprimer du dossier.
+\end{itemize}
+
+Remarques :
+\begin{itemize}
+\item on peut ajouter ou supprimer une nouvelle voiture et modifier
+  ses param\`etres dans son fichier  \emph{info.txt} en cours de jeu;
+\item modifier les param\`etres de la voiture, sans comprendre ce que
+  l'on fait, peut conduire \`a des probl\`emes num\'eriques; par
+  exemple, si la r\'eaction du sol est trop forte ou le pas en temps
+  est trop grand des instabilit\'es num\'eriques peuvent apparaitre.
+\end{itemize}
+
+La d\'efinition d'une voiture n\'ec\'essitant plusieurs fichiers
+(g\'eom\'etrie de la roue, g\'eom\'etrie de la caracasse, param\`etres
+m\'ecaniques et photo), Delphi ne possedant pas de proc\'edures
+permettant de stocker dans un tableau les noms des dossiers contenus
+dans un dossiers, il a \'et\'e n\'ec\'essaire de faire une proc\'dure
+remplissant cette fonction :
+\begin{verbatim}
+    (1)var sr : TsearchRec;
+    (2)      Liste : Tliste; 
+
+    (4)   FindFirst(GetCurrentDir+'*.*', faDirectory, sr);
+    (5)   while ((FindNext(sr) = 0) and (Liste.long < 10) do
+          begin
+              Liste.long := Liste.long+1;
+    (7)       Liste.elt[Liste.long].Nom := sr.name;
+          end;
+\end{verbatim}
+
+Le type TSearchRec est rempli lors d'un appel aux
+fonctions FindFirst ou FindNext. En particulier, si un fichier est trouv\'e, le 
+champ  \emph{name} de TSearchRec est rempli par le nom du fichier.
+
+Une Tliste est un enregistrement qui poss\'ede deux
+champs. Le premier  \emph{elt} est un tableau de strings
+et le deuxi\`eme  \emph{long} est la position du dernier \'el\'ement.
+
+La fonction FindFirst, 
+\begin{verbatim}
+  function FindFirst( const path : string ; 
+                      attr       : Integer; 
+                      var F      : TSearchRec ): Integer;
+\end{verbatim}
+recherche dans le r\'epertoire sp\'ecifi\'e par
+ \emph{path} le premier fichier qui correspond au nom de fichier
+sp\'ecifi\'e par  \emph{path} et aux attributs sp\'ecifi\'es par le
+param\`etre  \emph{attr}. Le r\'esultat est renvoy\'e dans le param\`etre
+ \emph{F}. FindFirst renvoie $0$ si un fichier a \'et\'e localis\'e avec
+succ\`es; sinon, elle renvoie un code d'erreur Windows.
+
+Le param\`etre constant  \emph{path} correspond \`a un r\'epertoire et un
+masque de fichier qui peut inclure des caract\`eres g\'en\'eriques. Par
+exemple, \emph{c:$\backslash$test$\backslash$*.*} indique tous les
+fichiers du r\'epertoire \emph{C:$\backslash$TEST}).
+
+Outre les fichiers normaux, le param\`etre  \emph{attr} indique les fichiers
+sp\'eciaux \`a prendre en compte. Par exemple : faReadOnly pour les
+fichiers en lecture seule ou faDirectory pour les fichiers
+r\'epertoire, etc. Il est a not\'e que la fonction GetCurrentDir
+retourne le chemin courant. Par d\'efaut, elle retourne le chemin o\`u
+se trouve l'ex\'ecutable.
+
+La fonction FindNext,
+\begin{verbatim}
+  function FindNext( var F : TSearchRec ): Integer;
+\end{verbatim}
+renvoie l'entr\'ee suivante correspondant au nom de fichier et
+\`a l'ensemble des attributs pr\'ealablement d\'efinis lors d'un appel \`a la
+fonction FindFirst. L'enregistrement de recherche doit \^etre identique
+\`a celui transmis \`a la fonction FindFirst. La valeur renvoy\'ee est $0$
+si l'ex\'ecution de la fonction \`a r\'eussi. Sinon, cette valeur est un code
+d'erreur Windows.
+
+A la ligne (6), on ajoute le nom du dossier dans la derni\`ere case du
+tableau.  Remarque : le premier \'el\'ement du tableau est la chaine
+ ''..'', s'il existe un dossier parent.
+
+\subsection{Courbes de Bezier}
+Les courbes de Bezier pourraient servir pour raccorder les routes de
+fa\c{c}on plus lisse. Bien que dans l'impl\'ementation actuelle cela
+n'a pas \'et\'e faite --- pour pouvoir mieux appr\'ecier le
+fonctionnement des suspensions --- donnons une introduction aux
+courbes de Bezier.
+
+Les courbes de Bezier sont des courbes \`a fonctions param\'etriques
+$x(t)$ et $y(t)$ de degr\'e trois, c'est \`a dire qu'elles s\'ecrivent
+sous la forme~: $x(t) = a_0 + b_0t + c_0t^2 + d_0t^3$ et $y(t) = a_1 +
+b_1t + c_1t^2 + d_1t^3$.
+
+Une courbe de Bezier est d\'efinie par ses deux extremit\'es de
+position respectifs $(x_0,y_0) = (x(0),y(0))$ et $(x_1,y_1) =
+(x(1),y(1))$ et ses deux demi-tangentes $(u_0,v_0) = (x'(0), y'(0))$
+et $(u_1,v_1) = (x'(1), y'(1))$. Voir le dessin. Pour calculer les
+coefficients $a_0, b_0, c_0$ et $d_0$, il suffit de r\'esoudre le
+syst\`eme suivant :
+ 
+$$\left\{\begin{array}{ll}
+  x(0)  & = b_0\\
+  x'(0) & = a_0\\
+  x(1)  & = a_0+b_0+c_0+d_0 \\
+  x'(1) & = b_0+2c_0+3d_0 \\
+\end{array} \right. 
+\Longrightarrow 
+\left\{\begin{array}{ll}
+     a_0 & = x_0\\
+     b_0 & = u_0\\
+     c_0 & = 3x_1-3x_0-2u_0-u_1\\
+     d_0 & = u_1-2x_1+2x_0+u_0\\
+\end{array} \right. $$
+
+On fait de m\^eme pour les coefficients de $y(t).$
+
+\dessin{bez}{0.8}{Courbe de Bezier}{Bezier}
+
+\subsection{R\'eduction du nombre d'objets dans le c\^one de vision}\label{frustum}
+Du fait de la r\'egularit\'e de la forme de la ville, on peut
+r\'eduire le nombre d'objets \`a consid\'erer dans la projection de
+visualisation (frustum en anglais). Lors de cette projection, OpenGL
+consid\`ere tous les objets de la sc\`ene. Il est donc dans ce cas
+utile de refaire \`a la main la projection au lieu de laisser faire
+OpenGL. On d\'efinit les objets que l'on veut projeter et on fait la
+projection apr\`es avoir retrouv\'e les param\`etres de la projection
+utilis\'es par OpenGL qui sont les deux matrices : {\tt
+  GL\_PROJECTION\_MATRIX, GL\_MODELVIEW\_MATRIX}.
+
+\subsection{Menu Delphi}
+
+Lors de la deuxi\`eme soutenance, nous avons pr\'esent\'e le menu
+r\'ealis\'e sous Delphi. La fen\^etre comporte trois onglets, dont
+deux principaux.
+\begin{itemize}
+\item Dans le premier, une combobox permet de s\'electionner la
+  voiture du joueur. Le coloris est alors affich\'e sous forme de
+  photo (au format jpeg).
+\item Dans le deuxi\`eme onglet, le joueur modifie les param\`etres du
+  jeu tels que la r\'esolution de l'\'ecran, le nombre de bits, la
+  densit\'e de voitures, la pluie, le jour ou la nuit, l'activation du
+  son, le pourcentage du nombre de terrains par rapport au nombre de
+  batiments et enfin la pente maximale des routes.
+\item Le dernier onglet, sert aux cr\'edits. 
+\end{itemize}
+
+\dessin{menu}{0.4}{Le menu d'Ecstasy}{menu}
+
+\subsection{Sons et video}
+
+L'utilisation de DirectSound permet d'augmenter le r\'ealisme du jeu
+en mettant un bruit de fond de ville.
+
+\subsection{Installation}
+
+L'utilisqtion du logiciel {\tt Setup2Go} a permis de cr\'eer le fichier
+d'installation. Sur le cdrom, on trouve l'executable, les sources, les
+dll, la page web et tous les rapports. L'installation ne pose aucun
+probl\ `eme, il suffit de cliquer sur {\tt setup.exe}.
+
+\section{Web et credits}
+\subsection{Page web}
+On peut t\'el\'echarger ce projet (en version lite et compl\`ete),
+ainsi que ce rapport sur le site {\tt
+  www.epita.fr/$\sim$quadra\_q}.
+
+\subsection{Remerciments}
+
+Quentin remercie :
+\begin{itemize}
+\item son p\`ere, pour lui avoir expliquer le principe de la moindre action, 
+\item la communaut\'e web de Midtown Madness II, pour ses mod\`eles de
+  voitures 3D librement t\'el\'echargeables.
+\end{itemize}
+
+\begin{thebibliography}{50}
+\bibitem{STARDUST} http://www.soton.ac.uk/$\sim$trawww/stardust
+\bibitem{ARNO} V. Arnold, \emph{M\'ethode math\'ematiques de la
+    m\'ecanique classique}, Mir, Moscou, 1974.
+\bibitem{APPEL} P. Appel,\emph{Trait\'e de m\'ecanique rationnelle},
+  Gauthier-Villars, 1921.
+\bibitem{OGL} M. Woo, J. Neider, T. Davis D. Shreiner \emph{OpenGL},
+  Campus Press, 2000.
+\bibitem{LM35} Xavier Michelon, xavier@linuxgraphic.org, \emph{OpenGL
+    : G\'en\'eration de terrain}, Linux Magazine \No 33 --- 34.  
+\bibitem{LM33} Xavier Michelon, xavier@linuxgraphic.org, \emph{OpenGL
+    : G\'en\'eration de terrain}, Linux Magazine \No 33 --- 34.  
+\bibitem{LM31} Xavier Michelon, xavier@linuxgraphic.org, \emph{OpenGL
+    : Placage de textures}, Linux Magazine \No 31 --- 32.  
+\bibitem{LM30} Xavier Michelon, xavier@linuxgraphic.org, \emph{OpenGL
+    : Ecl\'erage et mat\'eriaux}, Linux Magazine \No 30.  
+\bibitem{LM29} Xavier Michelon, xavier@linuxgraphic.org, \emph{OpenGL
+    : Les transformations de visualisation}, Linux Magazine \No 29.  
+\bibitem{LM28} Xavier Michelon, xavier@linuxgraphic.org, \emph{OpenGL
+    : Transformations}, Linux Magazine \No 28.  
+\bibitem{LM26} Xavier Michelon, xavier@linuxgraphic.org, \emph{Programmer avec OpenGL}, Linux Magazine \No 26 --- 27.
+
+\end{thebibliography}
+\end{document}

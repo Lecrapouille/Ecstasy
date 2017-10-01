@@ -2,4 +2,6 @@
 *.~PAS
 *.~dfm
 *.~DFM
+*.dcu
+*.DCU
 *~

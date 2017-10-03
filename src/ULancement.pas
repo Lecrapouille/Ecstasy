@@ -3,7 +3,7 @@
  *
  * Author  : Quentin QUADRAT
  * Email   : lecrapouille@gmail.com
- * Website : www.epita.fr\~epita.fr
+ * Website : https://github.com/Lecrapouille/Ecstasy
  * Date    : 02 Juin 2003
  * Changes : 03 Octobre 2017
  * License: GPL-3.0
@@ -96,7 +96,7 @@ end;
 
 //----------------------------------------------------------------------------//
 procedure loading(id : byte);
-var Texture: GLuint;
+//var Texture: GLuint;
 begin
    glClearColor(0.0, 0.0, 0.0, 0.0);
 

@@ -3,7 +3,7 @@
  *
  * Author  : Quentin QUADRAT
  * Email   : lecrapouille@gmail.com
- * Website : www.epita.fr\~epita.fr
+ * Website : https://github.com/Lecrapouille/Ecstasy
  * Date    : 02 Juin 2003
  * Changes : 03 Octobre 2017
  * License: GPL-3.0
@@ -152,7 +152,7 @@ end;
  *
  *******************************************************************************}
 procedure TGoodies.ChgVitDirect(const i,j,QuelleRoute,QuelleVoie : byte; const Pos : TVecteur; Vit : real);
-var Coef,Ax,Ay,Vxx,Vyy,Dist,W : real;
+var Dist,W : real;
 begin
    if QuelleRoute = ROUTE_1 then
    begin
@@ -448,7 +448,7 @@ end;
  *
  *******************************************************************************}
 procedure TCirculation.Affiche();
-var temp : TPgoodies; Triplet : TTriplet; P : TVecteur;
+var temp : TPgoodies;
 begin
    temp := Tete;
    while temp <> NIL do
@@ -465,7 +465,7 @@ end;
  *
  *******************************************************************************}
 destructor TCirculation.DestroyCirculation();
-var T : TPgoodies;
+//var T : TPgoodies;
 begin
    {while Tete <> NIL do
     begin

@@ -3,7 +3,7 @@
  *
  * Author  : Quentin QUADRAT
  * Email   : lecrapouille@gmail.com
- * Website : www.epita.fr\~epita.fr
+ * Website : https://github.com/Lecrapouille/Ecstasy
  * Date    : 02 Juin 2003
  * Changes : 03 Octobre 2017
  * License: GPL-3.0
@@ -45,7 +45,7 @@ private
                                var liste : TPParticule);
    procedure Affiche(Particule : TPParticule);
    procedure Physique(Particule : TPParticule);
-   procedure Erase(var liste : TPParticule);
+   //procedure Erase(var liste : TPParticule);
 end;
 
 TPluie = class(TSysteme)
@@ -152,7 +152,7 @@ end;
 
 
 procedure TSysteme.Actualise(var liste : TPParticule);
-var temp : TPParticule; i : integer;
+var temp : TPParticule;
 begin
    if liste <> NIL then
    begin
@@ -172,11 +172,10 @@ begin
    end;
 end;
 
-procedure TSysteme.Erase(var liste : TPParticule);
+{procedure TSysteme.Erase(var liste : TPParticule);
 var temp : TPParticule;
 begin
-
-end;
+end;}
 
 constructor TSysteme.create();
 begin
@@ -233,7 +232,7 @@ end;
 
 
 procedure Fumee();
-var i : byte;
+//var i : byte;
 begin
    {for i := 1 to 10 do
     begin

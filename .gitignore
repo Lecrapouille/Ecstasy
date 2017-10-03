@@ -4,4 +4,8 @@
 *.~DFM
 *.dcu
 *.DCU
+*.cfg
+*.CFG
+*.dof
+*.DOF
 *~

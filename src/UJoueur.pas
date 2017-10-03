@@ -3,7 +3,7 @@
  *
  * Author  : Quentin QUADRAT
  * Email   : lecrapouille@gmail.com
- * Website : www.epita.fr\~epita.fr
+ * Website : https://github.com/Lecrapouille/Ecstasy
  * Date    : 02 Juin 2003
  * Changes : 03 Octobre 2017
  * License: GPL-3.0
@@ -150,9 +150,9 @@ end;
 
 {*******************************************************************************}
 procedure TJoueur.Actualise();
-var nbframes : integer;
+//var nbframes : integer;
 begin
-   nbframes:= Round(FPSCount * 1000/FPS_INTERVAL);
+   //nbframes:= Round(FPSCount * 1000/FPS_INTERVAL);
    {Correcteur de trajectoire}
    if Theta > 0.02 then Theta := Theta - 0.01
    else if Theta < -0.02 then Theta := Theta + 0.01

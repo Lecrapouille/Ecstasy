@@ -3,7 +3,7 @@
  *
  * Author  : Quentin QUADRAT
  * Email   : lecrapouille@gmail.com
- * Website : www.epita.fr\~epita.fr
+ * Website : https://github.com/Lecrapouille/Ecstasy
  * Date    : 02 Juin 2003
  * Changes : 03 Octobre 2017
  * License: GPL-3.0
@@ -376,7 +376,7 @@ end;
  *
  * *****************************************************************************}
 function TireUnImmeuble(taille : integer) : integer;
-var i : integer;
+//var i : integer;
 begin
    //i := NB_TYPE_MAISON;
    //while (i >= 0) AND (taille <= ParamMaison[0,i].taille) do i := i-1;
@@ -552,7 +552,6 @@ end;
 
 {************************ FEU TRICOLORE ****************************************}
 procedure TBloc.ActualiseFeu(i,j, id : integer);
-var a : integer;
 begin
    //Actualisation
    if id = ACTUALISE_LES_FEUX then
@@ -762,7 +761,7 @@ end;
 
 
 Procedure DestroyVille();
-var i,j,k : integer;
+var i,j : integer;
 begin
    for i := 0 to NB_BLOC_MAX_X-1 do
    begin

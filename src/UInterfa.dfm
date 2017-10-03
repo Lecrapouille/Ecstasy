@@ -82,7 +82,7 @@ object Form1: TForm1
     Top = 0
     Width = 457
     Height = 409
-    ActivePage = TabSheet3
+    ActivePage = TabSheet1
     TabOrder = 2
     object TabSheet1: TTabSheet
       Caption = '&Configuration du joueur'
@@ -426,10 +426,19 @@ object Form1: TForm1
     object TabSheet4: TTabSheet
       Caption = '&Auteurs'
       ImageIndex = 3
-    end
-    object TabSheet2: TTabSheet
-      Caption = '&Credits'
-      ImageIndex = 4
+      object Memo1: TMemo
+        Left = 0
+        Top = 0
+        Width = 449
+        Height = 377
+        Lines.Strings = (
+          'Quentin Quadrat'
+          'Anass Kadiri'
+          ''
+          'Projet EPITA fait en 2003. Les sources sont disponibles sur:'
+          'https://github.com/Lecrapouille/Ecstasy')
+        TabOrder = 0
+      end
     end
   end
   object Timer1: TTimer

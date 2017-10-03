@@ -315,7 +315,7 @@ end;
 
 begin
    result :=FALSE;
-   GetMem(Image, 0);
+   //GetMem(Image, 0);
    if LoadFromResource then // Load from resource
    begin
       try

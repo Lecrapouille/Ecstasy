@@ -53,7 +53,6 @@ type
       Label35: TLabel;
       CheckBox3: TCheckBox;
       GroupBox5: TGroupBox;
-      TabSheet2: TTabSheet;
       TrackBar1: TTrackBar;
       Label8: TLabel;
       Edit10: TEdit;
@@ -79,6 +78,7 @@ type
       Edit1: TEdit;
       Label5: TLabel;
       Label6: TLabel;
+    Memo1: TMemo;
       procedure Button2Click(Sender: TObject);
       procedure Button1Click(Sender: TObject);
       procedure FormCreate(Sender: TObject);

@@ -1,15 +1,15 @@
 {*******************************************************************************
- *                            UJOUEUR.PAS
+ *                            Ecstasy
  *
  * Author  : Quentin QUADRAT
- * Email   : quadra_q@epita.fr
+ * Email   : lecrapouille@gmail.com
  * Website : www.epita.fr\~epita.fr
  * Date    : 02 Juin 2003
- * Changes : 02 Juin 2003
+ * Changes : 03 Octobre 2017
+ * License: GPL-3.0
  * Description :
  *
  *******************************************************************************}
-
 unit UJoueur;
 
 interface
@@ -35,7 +35,7 @@ uses UVoiture,
  *             - (x,y) : sa position en X et Y.
  *             - ident : un numero d'indentification d'affichage de la voiture
  *             - tab   : les parametres de la voitures (raideur des ressorts,
-                         vitesse, position des roues ...)
+ vitesse, position des roues ...)
  *
  * function Collision() : boolean;
  *             Retourne si une voiture est rentree dans un bloc d'immeuble.
@@ -45,17 +45,17 @@ uses UVoiture,
  *
  ******************************************************************************}
 Type TJoueur = class(TVoiture)
-  public
-     Volant,TableauDeBord : Gluint;
-     MarcheArriere : boolean;
-     procedure   Actualise();  // main
-     constructor Create(x,y : real; ident : integer);
-     procedure AfficheTableauDeBord();
-     procedure CollisionSurImmeubles();
-     procedure CollisionSurVoitures();
-  private
-     procedure CreerTableauDeBord();
-     procedure ActualiseCamera();
+public
+   Volant,TableauDeBord : Gluint;
+   MarcheArriere : boolean;
+   procedure   Actualise();  // main
+   constructor Create(x,y : real; ident : integer);
+   procedure AfficheTableauDeBord();
+   procedure CollisionSurImmeubles();
+   procedure CollisionSurVoitures();
+private
+   procedure CreerTableauDeBord();
+   procedure ActualiseCamera();
 end;
 
 var Joueur : TJoueur;
@@ -66,109 +66,109 @@ uses Ucirculation;
 {*******************************************************************************}
 constructor TJoueur.create(x,y : real; ident : integer);
 begin
-  inherited create(x,y,ident);
-  MarcheArriere := FALSE;
-  ColliImmeuble := FALSE;
-  CreerTableauDeBord();
-  Direction := 0;
-  ActualiseCamera();
+   inherited create(x,y,ident);
+   MarcheArriere := FALSE;
+   ColliImmeuble := FALSE;
+   CreerTableauDeBord();
+   Direction := 0;
+   ActualiseCamera();
 end;
 
 {*******************************************************************************}
 procedure TJoueur.CreerTableauDeBord();
 begin
-  {Tableau de bord}
-  if (glIsList(TableauDeBord)) then glDeleteLists(TableauDeBord,1);
-  TableauDeBord := glGenLists(1);
-  glNewList(TableauDeBord,GL_COMPILE);
+   {Tableau de bord}
+   if (glIsList(TableauDeBord)) then glDeleteLists(TableauDeBord,1);
+   TableauDeBord := glGenLists(1);
+   glNewList(TableauDeBord,GL_COMPILE);
 
-      glpushMatrix();
-        OrthoMode(0,Params.Height,Params.Width,0);
-        glcullface(GL_BACK);
-        glEnable(GL_TEXTURE_2D);
-        gltranslated(params.Width/2,Params.Height*(128/768),0);
-        glscaled(params.Width/2,Params.Height*(128/768),0);
-        glcolor3f(1,1,1);
-        glBindTexture(GL_TEXTURE_2D, TableauDeBord_0);
-        glBegin(GL_QUADS);
-          glTexCoord2f(0.0, 0.0); glVertex2f(-1.1, -1.1);
-          glTexCoord2f(1.0, 0.0); glVertex2f( 1.1, -1.1);
-          glTexCoord2f(1.0, 1.0); glVertex2f( 1.1,  1.1);
-          glTexCoord2f(0.0, 1.0); glVertex2f(-1.1,  1.1);
-        glEnd();
-        glDisable(GL_TEXTURE_2D);
-        glcullface(GL_FRONT);
-        PerspectiveMode;
-      glpopMatrix();
+   glpushMatrix();
+   OrthoMode(0,Params.Height,Params.Width,0);
+   glcullface(GL_BACK);
+   glEnable(GL_TEXTURE_2D);
+   gltranslated(params.Width/2,Params.Height*(128/768),0);
+   glscaled(params.Width/2,Params.Height*(128/768),0);
+   glcolor3f(1,1,1);
+   glBindTexture(GL_TEXTURE_2D, TableauDeBord_0);
+   glBegin(GL_QUADS);
+   glTexCoord2f(0.0, 0.0); glVertex2f(-1.1, -1.1);
+   glTexCoord2f(1.0, 0.0); glVertex2f( 1.1, -1.1);
+   glTexCoord2f(1.0, 1.0); glVertex2f( 1.1,  1.1);
+   glTexCoord2f(0.0, 1.0); glVertex2f(-1.1,  1.1);
+   glEnd();
+   glDisable(GL_TEXTURE_2D);
+   glcullface(GL_FRONT);
+   PerspectiveMode;
+   glpopMatrix();
 
-  glEndList();
+   glEndList();
 
-  {Volant}
-  if (glIsList(Volant)) then glDeleteLists(Volant,1);
-  Volant := glGenLists(1);
-  glNewList(Volant,GL_COMPILE);
+   {Volant}
+   if (glIsList(Volant)) then glDeleteLists(Volant,1);
+   Volant := glGenLists(1);
+   glNewList(Volant,GL_COMPILE);
 
-      glpushMatrix();
-        OrthoMode(0,Params.Height,Params.Width,0);
-        glcullface(GL_BACK);
-        gltranslated(225*Params.Width/1024,30*Params.Height/768,0);
-        glscaled(250*Params.Width/1024,250*Params.Height/768,0);
-        glRotated(RadToDeg(theta), 0.0, 0.0, 1.0 );
-        glcallList(Volant_0);
-        glcullface(GL_FRONT);
-        PerspectiveMode;
-      glpopMatrix();
+   glpushMatrix();
+   OrthoMode(0,Params.Height,Params.Width,0);
+   glcullface(GL_BACK);
+   gltranslated(225*Params.Width/1024,30*Params.Height/768,0);
+   glscaled(250*Params.Width/1024,250*Params.Height/768,0);
+   glRotated(RadToDeg(theta), 0.0, 0.0, 1.0 );
+   glcallList(Volant_0);
+   glcullface(GL_FRONT);
+   PerspectiveMode;
+   glpopMatrix();
 
-  glEndList();
+   glEndList();
 end;
 
 {*******************************************************************************}
 procedure TJoueur.AfficheTableauDeBord();
 begin
-  glCallList(TableauDeBord);
-  glpushMatrix();
-        OrthoMode(0,Params.Height,Params.Width,0);
-        glcullface(GL_BACK);
-        gltranslated(225*Params.Width/1024,30*Params.Height/768,0);
-        glscaled(250*Params.Width/1024,250*Params.Height/768,0);
-        glRotated(RadToDeg(theta), 0.0, 0.0, 1.0 );
-        glcallList(Volant_0);
-        glcullface(GL_FRONT);
-        PerspectiveMode;
-  glpopMatrix();
-  if MarcheArriere then
-  begin
+   glCallList(TableauDeBord);
+   glpushMatrix();
+   OrthoMode(0,Params.Height,Params.Width,0);
+   glcullface(GL_BACK);
+   gltranslated(225*Params.Width/1024,30*Params.Height/768,0);
+   glscaled(250*Params.Width/1024,250*Params.Height/768,0);
+   glRotated(RadToDeg(theta), 0.0, 0.0, 1.0 );
+   glcallList(Volant_0);
+   glcullface(GL_FRONT);
+   PerspectiveMode;
+   glpopMatrix();
+   if MarcheArriere then
+   begin
       GLDisable(GL_DEPTH_TEST);
       GLTexte(200*Params.Width/1024,640*Params.Height/768,1,0,0,'R');
       GLEnable(GL_DEPTH_TEST);
-  end;
+   end;
 
-  GLDisable(GL_DEPTH_TEST);
-  GLTexte(250*Params.Width/1024,640*Params.Height/768,1,0,0,Inttostr(Trunc(Vitesse/2)));
-  GLEnable(GL_DEPTH_TEST);
+   GLDisable(GL_DEPTH_TEST);
+   GLTexte(250*Params.Width/1024,640*Params.Height/768,1,0,0,Inttostr(Trunc(Vitesse/2)));
+   GLEnable(GL_DEPTH_TEST);
 end;
 
 {*******************************************************************************}
 procedure TJoueur.Actualise();
 var nbframes : integer;
 begin
-    nbframes:= Round(FPSCount * 1000/FPS_INTERVAL);
-    {Correcteur de trajectoire}
-    if Theta > 0.02 then Theta := Theta - 0.01
-    else if Theta < -0.02 then Theta := Theta + 0.01
-    else Theta := 0;
+   nbframes:= Round(FPSCount * 1000/FPS_INTERVAL);
+   {Correcteur de trajectoire}
+   if Theta > 0.02 then Theta := Theta - 0.01
+   else if Theta < -0.02 then Theta := Theta + 0.01
+   else Theta := 0;
 
-    CollisionSurVoitures();
-    CollisionSurImmeubles();
-    ActualiseDynamique({max(round(1 / (Param.PAST*nbframes)),1)});
-    ActualiseCamera();
+   CollisionSurVoitures();
+   CollisionSurImmeubles();
+   ActualiseDynamique({max(round(1 / (Param.PAST*nbframes)),1)});
+   ActualiseCamera();
 
-    if (Camera.id <> 1) AND (Camera.id <> 2) then Affiche();
-    
-    if (Camera.position.z < -19) then glFogfv(GL_FOG_COLOR, @FogCouleur_2)
-    else glFogfv( GL_FOG_COLOR, @FogCouleur_1);
+   if (Camera.id <> 1) AND (Camera.id <> 2) then Affiche();
 
-    FaitDuBruit();
+   if (Camera.position.z < -19) then glFogfv(GL_FOG_COLOR, @FogCouleur_2)
+   else glFogfv( GL_FOG_COLOR, @FogCouleur_1);
+
+   FaitDuBruit();
 end;
 
 
@@ -179,57 +179,57 @@ end;
  *******************************************************************************}
 procedure TJoueur.ActualiseCamera();
 begin
-case Camera.id of
-    0 : begin
-          Camera.Position.x := Position.x - (cos(thetaCamera)*vitesse*cos(Direction)-sin(thetaCamera)*vitesse*sin(Direction))/vitesse*DistanceCamera ;
-          Camera.Position.y := Position.y - (sin(thetaCamera)*vitesse*cos(Direction)+cos(thetaCamera)*vitesse*sin(Direction))/vitesse*DistanceCamera ;
-          Camera.Position.z := Position.z+7;
+   case Camera.id of
+      0 : begin
+             Camera.Position.x := Position.x - (cos(thetaCamera)*vitesse*cos(Direction)-sin(thetaCamera)*vitesse*sin(Direction))/vitesse*DistanceCamera ;
+             Camera.Position.y := Position.y - (sin(thetaCamera)*vitesse*cos(Direction)+cos(thetaCamera)*vitesse*sin(Direction))/vitesse*DistanceCamera ;
+             Camera.Position.z := Position.z+7;
 
-          Camera.Target.x := Position.x + (cos(thetaCamera)*vitesse*cos(Direction)-sin(thetaCamera)*vitesse*sin(Direction))/vitesse*100;
-          Camera.Target.y := Position.y + (sin(thetaCamera)*vitesse*cos(Direction)+cos(thetaCamera)*vitesse*sin(Direction))/vitesse*100;
-          Camera.Target.z := Position.z+7;
+             Camera.Target.x := Position.x + (cos(thetaCamera)*vitesse*cos(Direction)-sin(thetaCamera)*vitesse*sin(Direction))/vitesse*100;
+             Camera.Target.y := Position.y + (sin(thetaCamera)*vitesse*cos(Direction)+cos(thetaCamera)*vitesse*sin(Direction))/vitesse*100;
+             Camera.Target.z := Position.z+7;
 
-          Camera.Orientation.x := 0;
-          Camera.Orientation.y := 0;
-          Camera.Orientation.z := 1;
+             Camera.Orientation.x := 0;
+             Camera.Orientation.y := 0;
+             Camera.Orientation.z := 1;
 
-        end;
-    1 : begin
-          Camera.Position := Position;
-          Camera.Position.z := Position.z+Param.Conducteur;
+          end;
+      1 : begin
+             Camera.Position := Position;
+             Camera.Position.z := Position.z+Param.Conducteur;
 
-          Camera.Target.x := Camera.Position.x + cos(Direction);
-          Camera.Target.y := Camera.Position.y + sin(Direction);
-          Camera.Target.z := Camera.Position.z;
+             Camera.Target.x := Camera.Position.x + cos(Direction);
+             Camera.Target.y := Camera.Position.y + sin(Direction);
+             Camera.Target.z := Camera.Position.z;
 
-          Camera.Orientation.x := 0;
-          Camera.Orientation.y := 0;
-          Camera.Orientation.z := 1;
-        end;
-    2 : begin
-          Camera.Position := Position;
-          Camera.Position.z := Position.z+Param.Conducteur;
+             Camera.Orientation.x := 0;
+             Camera.Orientation.y := 0;
+             Camera.Orientation.z := 1;
+          end;
+      2 : begin
+             Camera.Position := Position;
+             Camera.Position.z := Position.z+Param.Conducteur;
 
-          Camera.Target.x := Camera.Position.x + cos(Direction);
-          Camera.Target.y := Camera.Position.y + sin(Direction);
-          Camera.Target.z := Camera.Position.z;
+             Camera.Target.x := Camera.Position.x + cos(Direction);
+             Camera.Target.y := Camera.Position.y + sin(Direction);
+             Camera.Target.z := Camera.Position.z;
 
-          Camera.Orientation.x := 0;
-          Camera.Orientation.y := 0;
-          Camera.Orientation.z := 1;
-        end;
-    3 : begin
-          Camera.Position := Position;
-          Camera.Position.z := ALTITUDE_MAX_CAMERA;
+             Camera.Orientation.x := 0;
+             Camera.Orientation.y := 0;
+             Camera.Orientation.z := 1;
+          end;
+      3 : begin
+             Camera.Position := Position;
+             Camera.Position.z := ALTITUDE_MAX_CAMERA;
 
-          Camera.Target := Position;
-          Camera.Target.z := ALTITUDE_MAX_CAMERA-1;
-          
-          Camera.Orientation.x := 0;
-          Camera.Orientation.y := 1;
-          Camera.Orientation.z := 0;
-        end;
-  end;
+             Camera.Target := Position;
+             Camera.Target.z := ALTITUDE_MAX_CAMERA-1;
+
+             Camera.Orientation.x := 0;
+             Camera.Orientation.y := 1;
+             Camera.Orientation.z := 0;
+          end;
+   end;
 end;
 
 procedure TJoueur.CollisionSurVoitures();
@@ -241,113 +241,113 @@ begin
    Voit := MaVille[couple.x,couple.y].TabCirculation[ROUTE_0,SENS_DIRECT,VOIE_LENTE].Tete;
    while (Voit <> NIL) do
    begin
-     if Distance(Joueur.Position,Voit^.Position) <= Param.Avant
-     then ColliVoiture := TRUE;
+      if Distance(Joueur.Position,Voit^.Position) <= Param.Avant
+      then ColliVoiture := TRUE;
 
-     if ColliVoiture AND (not OldColliVoiture) then
-     begin
-        Voit^.Vitesse := VITESSE_MINIMALE;
-     end;
-     voit := Voit^.next;
+      if ColliVoiture AND (not OldColliVoiture) then
+      begin
+         Voit^.Vitesse := VITESSE_MINIMALE;
+      end;
+      voit := Voit^.next;
    end;
 
    Voit := MaVille[couple.x,couple.y].TabCirculation[ROUTE_1,SENS_DIRECT,VOIE_LENTE].Tete;
    while (Voit <> NIL) do
    begin
-     if Distance(Joueur.Position,Voit^.Position) <= Param.Avant
-     then ColliVoiture := TRUE;
+      if Distance(Joueur.Position,Voit^.Position) <= Param.Avant
+      then ColliVoiture := TRUE;
 
-     if ColliVoiture AND (not OldColliVoiture) then
-     begin
-        Voit^.Vitesse := VITESSE_MINIMALE;
-     end;
-     voit := Voit^.next;
+      if ColliVoiture AND (not OldColliVoiture) then
+      begin
+         Voit^.Vitesse := VITESSE_MINIMALE;
+      end;
+      voit := Voit^.next;
    end;
 
    Voit := MaVille[couple.x,couple.y].TabCirculation[ROUTE_0,SENS_DIRECT,VOIE_RAPIDE].Tete;
    while (Voit <> NIL) do
    begin
-     if Distance(Joueur.Position,Voit^.Position) <= Param.Avant
-     then ColliVoiture := TRUE;
+      if Distance(Joueur.Position,Voit^.Position) <= Param.Avant
+      then ColliVoiture := TRUE;
 
-     if ColliVoiture AND (not OldColliVoiture) then
-     begin
-        Voit^.Vitesse := VITESSE_MINIMALE;
-     end;
-     voit := Voit^.next;
+      if ColliVoiture AND (not OldColliVoiture) then
+      begin
+         Voit^.Vitesse := VITESSE_MINIMALE;
+      end;
+      voit := Voit^.next;
    end;
 
    Voit := MaVille[couple.x,couple.y].TabCirculation[ROUTE_1,SENS_DIRECT,VOIE_RAPIDE].Tete;
    while (Voit <> NIL) do
    begin
-     if Distance(Joueur.Position,Voit^.Position) <= Param.Avant
-     then ColliVoiture := TRUE;
+      if Distance(Joueur.Position,Voit^.Position) <= Param.Avant
+      then ColliVoiture := TRUE;
 
-     if ColliVoiture AND (not OldColliVoiture) then
-     begin
-        Voit^.Vitesse := VITESSE_MINIMALE;
-     end;
-     voit := Voit^.next;
+      if ColliVoiture AND (not OldColliVoiture) then
+      begin
+         Voit^.Vitesse := VITESSE_MINIMALE;
+      end;
+      voit := Voit^.next;
    end;
-//*****
+   //*****
 
    Voit := MaVille[couple.x,couple.y].TabCirculation[ROUTE_0,SENS_INDIRECT,VOIE_LENTE].Tete;
    while (Voit <> NIL) do
    begin
-     if Distance(Joueur.Position,Voit^.Position) <= Param.Avant
-     then ColliVoiture := TRUE;
+      if Distance(Joueur.Position,Voit^.Position) <= Param.Avant
+      then ColliVoiture := TRUE;
 
-     if ColliVoiture AND (not OldColliVoiture) then
-     begin
-        Voit^.Vitesse := VITESSE_MINIMALE;
-     end;
-     voit := Voit^.next;
+      if ColliVoiture AND (not OldColliVoiture) then
+      begin
+         Voit^.Vitesse := VITESSE_MINIMALE;
+      end;
+      voit := Voit^.next;
    end;
 
    Voit := MaVille[couple.x,couple.y].TabCirculation[ROUTE_0,SENS_INDIRECT,VOIE_LENTE].Tete;
    while (Voit <> NIL) do
    begin
-     if Distance(Joueur.Position,Voit^.Position) <= Param.Avant
-     then ColliVoiture := TRUE;
+      if Distance(Joueur.Position,Voit^.Position) <= Param.Avant
+      then ColliVoiture := TRUE;
 
-     if ColliVoiture AND (not OldColliVoiture) then
-     begin
-        Voit^.Vitesse := VITESSE_MINIMALE;
-     end;
-     voit := Voit^.next;
+      if ColliVoiture AND (not OldColliVoiture) then
+      begin
+         Voit^.Vitesse := VITESSE_MINIMALE;
+      end;
+      voit := Voit^.next;
    end;
 
    Voit := MaVille[couple.x,couple.y].TabCirculation[ROUTE_0,SENS_INDIRECT,VOIE_RAPIDE].Tete;
    while (Voit <> NIL) do
    begin
-     if Distance(Joueur.Position,Voit^.Position) <= Param.Avant
-     then ColliVoiture := TRUE;
+      if Distance(Joueur.Position,Voit^.Position) <= Param.Avant
+      then ColliVoiture := TRUE;
 
-     if ColliVoiture AND (not OldColliVoiture) then
-     begin
-        Voit^.Vitesse := VITESSE_MINIMALE;
-     end;
-     voit := Voit^.next;
+      if ColliVoiture AND (not OldColliVoiture) then
+      begin
+         Voit^.Vitesse := VITESSE_MINIMALE;
+      end;
+      voit := Voit^.next;
    end;
 
    Voit := MaVille[couple.x,couple.y].TabCirculation[ROUTE_1,SENS_INDIRECT,VOIE_RAPIDE].Tete;
    while (Voit <> NIL) do
    begin
-     if Distance(Joueur.Position,Voit^.Position) <= Param.Avant
-     then ColliVoiture := TRUE;
+      if Distance(Joueur.Position,Voit^.Position) <= Param.Avant
+      then ColliVoiture := TRUE;
 
-     if ColliVoiture AND (not OldColliVoiture) then
-     begin
-        Voit^.Vitesse := VITESSE_MINIMALE;
-     end;
-     voit := Voit^.next;
+      if ColliVoiture AND (not OldColliVoiture) then
+      begin
+         Voit^.Vitesse := VITESSE_MINIMALE;
+      end;
+      voit := Voit^.next;
    end;
 end;
 
 procedure TJoueur.CollisionSurImmeubles();
 var resultat_0,resultat_1,
-    resultat_2,resultat_3 : TTriplet;
-    P : TVecteur2D;
+resultat_2,resultat_3 : TTriplet;
+P : TVecteur2D;
 
 begin
    ColliImmeuble := FALSE;
@@ -374,9 +374,9 @@ begin
    resultat_3 := QuelleRoute(P.x,P.y);
 
    if ((resultat_0.z = MAISONS) AND (MaVille[Resultat_0.x,Resultat_0.y].TypeDuBloc = EST_UN_BLOC) AND (Resultat_0.y <> RANGEE_DU_FLEUVE))
-   OR ((resultat_1.z = MAISONS) AND (MaVille[Resultat_1.x,Resultat_1.y].TypeDuBloc = EST_UN_BLOC) AND (Resultat_1.y <> RANGEE_DU_FLEUVE))
-   OR ((resultat_2.z = MAISONS) AND (MaVille[Resultat_2.x,Resultat_2.y].TypeDuBloc = EST_UN_BLOC) AND (Resultat_2.y <> RANGEE_DU_FLEUVE))
-   OR ((resultat_3.z = MAISONS) AND (MaVille[Resultat_3.x,Resultat_3.y].TypeDuBloc = EST_UN_BLOC) AND (Resultat_3.y <> RANGEE_DU_FLEUVE))
+      OR ((resultat_1.z = MAISONS) AND (MaVille[Resultat_1.x,Resultat_1.y].TypeDuBloc = EST_UN_BLOC) AND (Resultat_1.y <> RANGEE_DU_FLEUVE))
+      OR ((resultat_2.z = MAISONS) AND (MaVille[Resultat_2.x,Resultat_2.y].TypeDuBloc = EST_UN_BLOC) AND (Resultat_2.y <> RANGEE_DU_FLEUVE))
+      OR ((resultat_3.z = MAISONS) AND (MaVille[Resultat_3.x,Resultat_3.y].TypeDuBloc = EST_UN_BLOC) AND (Resultat_3.y <> RANGEE_DU_FLEUVE))
    then ColliImmeuble := TRUE;
    if ColliImmeuble AND (not OldColliImmeuble) then
    begin

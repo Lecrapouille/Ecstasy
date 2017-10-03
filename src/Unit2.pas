@@ -1,23 +1,35 @@
+{*******************************************************************************
+ *                            Ecstasy
+ *
+ * Author  : Quentin QUADRAT
+ * Email   : lecrapouille@gmail.com
+ * Website : www.epita.fr\~epita.fr
+ * Date    : 02 Juin 2003
+ * Changes : 03 Octobre 2017
+ * License: GPL-3.0
+ * Description :
+ *
+ *******************************************************************************}
 unit Unit2;
 
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  ExtCtrls;
+   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+   ExtCtrls;
 
 type
-  TSplashForm = class(TForm)
-    Image1: TImage;
-  private
-    { Déclarations privées }
-  public
-    { Déclarations publiques }
-    procedure Init();
-  end;
+   TSplashForm = class(TForm)
+      Image1: TImage;
+   private
+      { Déclarations privées }
+   public
+      { Déclarations publiques }
+      procedure Init();
+   end;
 
 var
-  SplashForm: TSplashForm;
+   SplashForm: TSplashForm;
 
 implementation
 

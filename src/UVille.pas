@@ -563,9 +563,9 @@ begin
          LesFPS1 := LesFPS;
       end;
 
-      if TimerFeux < Duree_feu_vert then EtatFeux := 0
-      else if TimerFeux < Duree_feu_rouge then EtatFeux := 1
-      else if TimerFeux < (Duree_feu_vert+Duree_feu_rouge) then EtatFeux := 2
+      if TimerFeux < Duree_feu_vert then EtatFeux := 0 {1er feu: vert}
+      else if TimerFeux < Duree_feu_rouge then EtatFeux := 1 {1er feu: orange}
+      else if TimerFeux < (Duree_feu_vert+Duree_feu_rouge) then EtatFeux := 2 {1er feu: rouge}
       else EtatFeux := 3;
    end;
 
@@ -580,28 +580,28 @@ begin
 
       case EtatFeux of
          0 : begin
-                glcallList(TabPart[0]);
-                glcallList(TabPart[3]);
-                glcallList(TabPart[11]);
-                glcallList(TabPart[8]);
+                glcallList(TabPart[0]);  {1er  feu: vert}
+                glcallList(TabPart[3]);  {2eme feu: vert}
+                glcallList(TabPart[8]);  {3eme feu: rouge}
+                glcallList(TabPart[11]); {4eme feu: rouge}
              end;
          1 : begin
-                glcallList(TabPart[1]);
-                glcallList(TabPart[4]);
-                glcallList(TabPart[8]);
-                glcallList(TabPart[11]);
+                glcallList(TabPart[1]);  {1er  feu: orange}
+                glcallList(TabPart[4]);  {2eme feu: vert}
+                glcallList(TabPart[8]);  {3eme feu: rouge}
+                glcallList(TabPart[11]); {4eme feu: rouge}
              end;
          2 : begin
-                glcallList(TabPart[6]);
-                glcallList(TabPart[2]);
-                glcallList(TabPart[9]);
-                glcallList(TabPart[5]);
+                glcallList(TabPart[2]);  {1er  feu: rouge}
+                glcallList(TabPart[5]);  {2eme feu: rouge}
+                glcallList(TabPart[6]);  {3eme feu: vert}
+                glcallList(TabPart[9]);  {4eme feu: vert}
              end;
          3 : begin
-                glcallList(TabPart[2]);
-                glcallList(TabPart[5]);
-                glcallList(TabPart[7]);
-                glcallList(TabPart[10]);
+                glcallList(TabPart[2]);  {1er  feu: rouge}
+                glcallList(TabPart[5]);  {2eme feu: rouge}
+                glcallList(TabPart[7]);  {3eme feu: orange}
+                glcallList(TabPart[10]); {4eme feu: orange}
              end;
       end;
       glDepthMask(GL_TRUE);

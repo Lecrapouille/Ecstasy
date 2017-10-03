@@ -237,7 +237,7 @@ begin
    glPopMatrix();
    GlEndList();
 
-   {Lumiere rouge esur le troisieme feu}
+   {Lumiere rouge sur le troisieme feu}
    if (glIsList(TabPart[8])) then glDeleteLists(TabPart[8],1);
    TabPart[8] := glGenLists(1);
    glNewList(TabPart[8],GL_COMPILE);

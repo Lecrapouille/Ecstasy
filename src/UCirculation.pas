@@ -31,7 +31,7 @@ uses UVoiture,
 Type TPGoodies = ^TGoodies;
 TGoodies = class(TVoiture)
 public
-   VitesseVoulue : real;
+   VitesseMaximale : real;
    next : TPGoodies; {Pointeur sur la voiture suivante}
    Prec : TPGoodies; {Pointeur sur la voiture precedente}
 private
@@ -128,13 +128,13 @@ begin
 
    if LeSens = SENS_DIRECT then
    begin
-      VitesseVoulue := Param.VitesseMax;
+      VitesseMaximale := Param.VitesseMax;
       Vx := Vitesse;
       Vy := 0;
       Direction := 0;
    end else
    begin
-      VitesseVoulue := Param.VitesseMax;
+      VitesseMaximale := Param.VitesseMax;
       Vx := -Vitesse;
       Vy := 0;
       Direction := PI;
@@ -163,10 +163,10 @@ begin
       if Dist > 0 then W := Vitesse+ACCELERATION else
          if Vit < Vitesse then W := Vit else W := Vitesse;
 
-      {si lee feu est a l'orange ou au rouge, la voiture ralentit}
+      {si le feu est a l'orange ou au rouge, la voiture ralentit}
       if (Maville[i,(j+1) mod NB_BLOC_MAX_Y].EtatFeux = 2)
-      then Vy := Min(VitesseVoulue,W)
-      else Vy := Max(VITESSE_MINIMALE,Min(Min(VitesseVoulue,W),2*((j+1)*TAILLE_BLOC_Y-1.5*LONG_VOIT-Position.y)));
+      then Vy := Min(VitesseMaximale,W)
+      else Vy := Max(VITESSE_MINIMALE,Min(Min(VitesseMaximale,W),2*((j+1)*TAILLE_BLOC_Y-1.5*LONG_VOIT-Position.y)));
 
       Vx := 0;
       Vitesse := Vy;
@@ -174,8 +174,8 @@ begin
 
       {Calcul de la vitesse voulue}
       if QuelleVoie = VOIE_RAPIDE
-      then VitesseVoulue := min(VITTESSE_VOIE_RAPIDE,max(VitesseVoulue + (random(ACCELERATION+1)-ACCELERATION*5),3*VITTESSE_VOIE_RAPIDE/4))
-      else VitesseVoulue := min(VITTESSE_VOIE_LENTE,max(VitesseVoulue + (random(ACCELERATION+1)-ACCELERATION*5),3*VITTESSE_VOIE_LENTE/4));
+      then VitesseMaximale := min(VITTESSE_VOIE_RAPIDE,max(VitesseMaximale + (random(ACCELERATION+1)-ACCELERATION*5),3*VITTESSE_VOIE_RAPIDE/4))
+      else VitesseMaximale := min(VITTESSE_VOIE_LENTE,max(VitesseMaximale + (random(ACCELERATION+1)-ACCELERATION*5),3*VITTESSE_VOIE_LENTE/4));
 
    end else {ROUTE_0}
    begin
@@ -186,14 +186,14 @@ begin
          if Vit < Vitesse then W := Vit else W := Vitesse;
 
       if (Maville[(i+1) mod NB_BLOC_MAX_X,j].EtatFeux = 0)
-      then Vx := Min(VitesseVoulue,W)
-      else Vx := Max(VITESSE_MINIMALE,Min(Min(VitesseVoulue,W),2*((i+1)*TAILLE_BLOC_X-1.5*LONG_VOIT-Position.x)));
+      then Vx := Min(VitesseMaximale,W)
+      else Vx := Max(VITESSE_MINIMALE,Min(Min(VitesseMaximale,W),2*((i+1)*TAILLE_BLOC_X-1.5*LONG_VOIT-Position.x)));
 
       Vy := 0;
       Vitesse := Vx;
       Direction := Arctan2(Vy,Vx);
-      if QuelleVoie = VOIE_RAPIDE then VitesseVoulue := min(VITTESSE_VOIE_RAPIDE,max(VitesseVoulue + (random(ACCELERATION+1)-ACCELERATION*5),3*VITTESSE_VOIE_RAPIDE/4))
-      else VitesseVoulue := min(VITTESSE_VOIE_LENTE,max(VitesseVoulue + (random(ACCELERATION+1)-ACCELERATION*5),3*VITTESSE_VOIE_LENTE/4));
+      if QuelleVoie = VOIE_RAPIDE then VitesseMaximale := min(VITTESSE_VOIE_RAPIDE,max(VitesseMaximale + (random(ACCELERATION+1)-ACCELERATION*5),3*VITTESSE_VOIE_RAPIDE/4))
+      else VitesseMaximale := min(VITTESSE_VOIE_LENTE,max(VitesseMaximale + (random(ACCELERATION+1)-ACCELERATION*5),3*VITTESSE_VOIE_LENTE/4));
    end;
 end;
 
@@ -219,19 +219,19 @@ begin
          if Vit < Vitesse then W := -Vit else W := -Vitesse;
 
       if (Maville[i,j].EtatFeux = 2)
-      then Vy := Max(-VitesseVoulue,W)
+      then Vy := Max(-VitesseMaximale,W)
       else
       begin
          Val := j*TAILLE_BLOC_Y+ESPACE_CAREFOUR+1.5*LONG_VOIT-Position.y;
          if Val >= 0 then Val := Val - TAILLE_MAP_Y;
-         Vy := Min(-VITESSE_MINIMALE,Max(Max(-VitesseVoulue,W),2*Val));
+         Vy := Min(-VITESSE_MINIMALE,Max(Max(-VitesseMaximale,W),2*Val));
       end;
 
       Vx := 0;
       Vitesse := -Vy;
       Direction := 3*PI/2;
-      if QuelleVoie = VOIE_RAPIDE then VitesseVoulue := min(VITTESSE_VOIE_RAPIDE,max(VitesseVoulue + (random(ACCELERATION+1)-ACCELERATION*5),3*VITTESSE_VOIE_RAPIDE/4))
-      else VitesseVoulue := min(VITTESSE_VOIE_LENTE,max(VitesseVoulue + (random(ACCELERATION+1)-ACCELERATION*5),3*VITTESSE_VOIE_LENTE/4));
+      if QuelleVoie = VOIE_RAPIDE then VitesseMaximale := min(VITTESSE_VOIE_RAPIDE,max(VitesseMaximale + (random(ACCELERATION+1)-ACCELERATION*5),3*VITTESSE_VOIE_RAPIDE/4))
+      else VitesseMaximale := min(VITTESSE_VOIE_LENTE,max(VitesseMaximale + (random(ACCELERATION+1)-ACCELERATION*5),3*VITTESSE_VOIE_LENTE/4));
    end else {ROUTE_0}
    begin
       if Pos.x < Position.x then Dist := Pos.x-Position.x + 3*LONG_VOIT
@@ -241,19 +241,19 @@ begin
          if Vit < Vitesse then W := -Vit else W := -Vitesse;
 
       if (Maville[i,j].EtatFeux = 0)
-      then Vx := Max(-VitesseVoulue,W)
+      then Vx := Max(-VitesseMaximale,W)
       else
       begin
          Val := i*TAILLE_BLOC_X+ESPACE_CAREFOUR+1.5*LONG_VOIT-Position.x;
          if Val >= 0 then Val := Val - TAILLE_MAP_X;
-         Vx := Min(-VITESSE_MINIMALE,Max(Max(-VitesseVoulue,W),2*Val));
+         Vx := Min(-VITESSE_MINIMALE,Max(Max(-VitesseMaximale,W),2*Val));
       end;
 
       Vy := 0;
       Vitesse := -Vx;
       Direction := PI;
-      if QuelleVoie = VOIE_RAPIDE then VitesseVoulue := min(VITTESSE_VOIE_RAPIDE,max(VitesseVoulue + (random(ACCELERATION+1)-ACCELERATION*5),3*VITTESSE_VOIE_RAPIDE/4))
-      else VitesseVoulue := min(VITTESSE_VOIE_LENTE,max(VitesseVoulue + (random(ACCELERATION+1)-ACCELERATION*5),3*VITTESSE_VOIE_LENTE/4));
+      if QuelleVoie = VOIE_RAPIDE then VitesseMaximale := min(VITTESSE_VOIE_RAPIDE,max(VitesseMaximale + (random(ACCELERATION+1)-ACCELERATION*5),3*VITTESSE_VOIE_RAPIDE/4))
+      else VitesseMaximale := min(VITTESSE_VOIE_LENTE,max(VitesseMaximale + (random(ACCELERATION+1)-ACCELERATION*5),3*VITTESSE_VOIE_LENTE/4));
    end;
 end;
 

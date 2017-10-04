@@ -16,9 +16,13 @@ interface
 USES
    OpenGL;
 
+var
+   LeRepere : GLUint;
+
 procedure OrthoMode(left,top,right,bottom : integer);
 procedure PerspectiveMode;
-
+procedure CreerRepere();
+procedure DessinerRepere(x,y,z: real);
 
 
 implementation
@@ -50,6 +54,45 @@ begin
    glPopMatrix();
    // Go back to our model view matrix like normal
    glMatrixMode( GL_MODELVIEW );
+end;
+
+{*******************************************************************************
+ *
+ *
+ *
+ *******************************************************************************}
+procedure CreerRepere();
+begin
+   leRepere := glGenLists(1);
+   glNewList(leRepere,GL_COMPILE);
+   glLineWidth(2.0);
+   glBegin(GL_LINES);
+   glcolor3f(1,0,0);
+   glVertex3f(0,0,0);
+   glVertex3f(10,0,0);
+
+   glcolor3f(0,1,0);
+   glVertex3f(0,0,0);
+   glVertex3f(0,10,0);
+
+   glcolor3f(0,0,1);
+   glVertex3f(0,0,0);
+   glVertex3f(0,0,10);
+   glEnd();
+   glEndList();
+end;
+
+{*******************************************************************************
+ *
+ *
+ *
+ *******************************************************************************}
+procedure DessinerRepere(x,y,z: real);
+begin
+   GlPushMatrix();
+   gltranslated(x, y, z);
+   glcallList(leRepere);
+   GlPopMatrix();
 end;
 
 //----------------------------------------------------------------------------//

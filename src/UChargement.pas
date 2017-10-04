@@ -89,6 +89,7 @@ begin
    ProgressBar.Pas := Params.Width/5  ;  {il y a 5 Etapes}
    LoadTexture(GetCurrentDir + '\data\textures\chargement.bmp', Text_chgt, FALSE);
 
+   CreerRepere();
    ChargementDesTexture();
    ChargementDesVoitures();
 

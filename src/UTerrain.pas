@@ -154,33 +154,6 @@ end;
  *
  *
  *******************************************************************************}
-{procedure creerRepere();
- begin
- leRepere := glGenLists(1);
- glNewList(leRepere,GL_COMPILE);
- glLineWidth(2.0);
- glBegin(GL_LINES);
- glcolor3f(1,0,0);
- glVertex3f(0,0,0);
- glVertex3f(10,0,0);
-
- glcolor3f(0,1,0);
- glVertex3f(0,0,0);
- glVertex3f(0,10,0);
-
- glcolor3f(0,0,1);
- glVertex3f(0,0,0);
- glVertex3f(0,0,10);
- glEnd();
- glEndList();
- end;}
-
-
-{*******************************************************************************
- *
- *
- *
- *******************************************************************************}
 procedure NouveauTerrain(a,b : byte);
 begin
    //LoadRawFile('data/Terrain/terrain.raw');

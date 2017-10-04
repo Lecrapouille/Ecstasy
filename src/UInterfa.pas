@@ -199,22 +199,22 @@ begin
          AssignFile(F, GetCurrentDir+'\data\Voitures\'+ TabRepertVoit.elt[i].Nom + '\info.txt');
          Reset(F);
          Readln(F, chaine); Readln(F, chaine); TabRepertVoit.elt[i].Hauteur := StrToFloat(chaine);
-         Readln(F, chaine); Readln(F, chaine); TabRepertVoit.elt[i].Avant := StrToFloat(chaine);
-         Readln(F, chaine); Readln(F, chaine); TabRepertVoit.elt[i].Arriere := StrToFloat(chaine);
-         Readln(F, chaine); Readln(F, chaine); TabRepertVoit.elt[i].Gauche := StrToFloat(chaine);
-         Readln(F, chaine); Readln(F, chaine); TabRepertVoit.elt[i].Rayon := StrToFloat(chaine);
-         Readln(F, chaine); Readln(F, chaine); TabRepertVoit.elt[i].VitesseMax := 2*StrToFloat(chaine);
+         Readln(F, chaine); Readln(F, chaine); TabRepertVoit.elt[i].Avant := abs(StrToFloat(chaine));
+         Readln(F, chaine); Readln(F, chaine); TabRepertVoit.elt[i].Arriere := abs(StrToFloat(chaine));
+         Readln(F, chaine); Readln(F, chaine); TabRepertVoit.elt[i].Gauche := abs(StrToFloat(chaine));
+         Readln(F, chaine); Readln(F, chaine); TabRepertVoit.elt[i].Rayon := abs(StrToFloat(chaine));
+         Readln(F, chaine); Readln(F, chaine); TabRepertVoit.elt[i].VitesseMax := 2*abs(StrToFloat(chaine));
 
-         Readln(F, chaine); Readln(F, chaine); TabRepertVoit.elt[i].Masse_Roue := StrToFloat(chaine);
-         Readln(F, chaine); Readln(F, chaine); TabRepertVoit.elt[i].Masse_Voit := StrToFloat(chaine);
-         Readln(F, chaine); Readln(F, chaine); TabRepertVoit.elt[i].Reac_Sol := StrToFloat(chaine);
-         Readln(F, chaine); Readln(F, chaine); TabRepertVoit.elt[i].Raideur := StrToFloat(chaine);
-         Readln(F, chaine); Readln(F, chaine); TabRepertVoit.elt[i].Frot := StrToFloat(chaine);
+         Readln(F, chaine); Readln(F, chaine); TabRepertVoit.elt[i].Masse_Roue := abs(StrToFloat(chaine));
+         Readln(F, chaine); Readln(F, chaine); TabRepertVoit.elt[i].Masse_Voit := abs(StrToFloat(chaine));
+         Readln(F, chaine); Readln(F, chaine); TabRepertVoit.elt[i].Reac_Sol := abs(StrToFloat(chaine));
+         Readln(F, chaine); Readln(F, chaine); TabRepertVoit.elt[i].Raideur := abs(StrToFloat(chaine));
+         Readln(F, chaine); Readln(F, chaine); TabRepertVoit.elt[i].Frot := abs(StrToFloat(chaine));
 
-         Readln(F, chaine); Readln(F, chaine); TabRepertVoit.elt[i].InertieRoulis := StrToFloat(chaine);
-         Readln(F, chaine); Readln(F, chaine); TabRepertVoit.elt[i].InertieTangage := StrToFloat(chaine);
+         Readln(F, chaine); Readln(F, chaine); TabRepertVoit.elt[i].InertieRoulis := abs(StrToFloat(chaine));
+         Readln(F, chaine); Readln(F, chaine); TabRepertVoit.elt[i].InertieTangage := abs(StrToFloat(chaine));
 
-         Readln(F, chaine); Readln(F, chaine); TabRepertVoit.elt[i].Past := StrToFloat(chaine);
+         Readln(F, chaine); Readln(F, chaine); TabRepertVoit.elt[i].Past := abs(StrToFloat(chaine));
          Readln(F, chaine); Readln(F, chaine); TabRepertVoit.elt[i].Conducteur := StrToFloat(chaine);
          CloseFile(F);
       end;

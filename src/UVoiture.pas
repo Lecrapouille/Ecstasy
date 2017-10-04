@@ -20,7 +20,8 @@ uses UMath,
      UTypege,
      Ufrustum,
      UCaractere,
-     Sysutils;
+     Sysutils,
+     URepere;
 
 {*******************************************************************************}
 Type TVoiture = class(TObject)
@@ -135,7 +136,7 @@ begin
 
    {Roue avant gauche}
    glpushMatrix();
-   gltranslated(Param.Avant, Param.Gauche,RoueAG - Param.Hauteur);
+   gltranslated(Param.Avant, Param.Gauche, RoueAG - Param.Hauteur);
    glRotated(RadToDeg(theta), 0.0, 0.0, 1.0 );
    glrotated(RoueRot,0,1,0);
    glrotated(180,0,0,1);
@@ -144,7 +145,7 @@ begin
 
    {Roue arriere gauche}
    glpushMatrix();
-   gltranslated(Param.Arriere, Param.Gauche,RoueDG - Param.Hauteur);
+   gltranslated(-Param.Arriere, Param.Gauche, RoueDG - Param.Hauteur);
    glrotated(RoueRot,0,1,0);
    glrotated(180,0,0,1);
    glCallList(TabRepertVoit.elt[id].GLRoue.liste);
@@ -152,7 +153,7 @@ begin
 
    {Roue avant droite}
    glpushMatrix();
-   gltranslated(Param.Avant, -Param.Gauche,RoueAD - Param.Hauteur);
+   gltranslated(Param.Avant, -Param.Gauche, RoueAD - Param.Hauteur);
    glRotated(RadToDeg(theta), 0.0, 0.0, 1.0 );
    glrotated(RoueRot,0,1,0);
    glCallList(TabRepertVoit.elt[id].GLRoue.liste);
@@ -160,12 +161,11 @@ begin
 
    {Roue arriere droite}
    glpushMatrix();
-   gltranslated(Param.Arriere, -Param.Gauche,RoueDD - Param.Hauteur);
+   gltranslated(-Param.Arriere, -Param.Gauche, RoueDD - Param.Hauteur);
    glrotated(RoueRot,0,1,0);
    glCallList(TabRepertVoit.elt[id].GLRoue.liste);
    glPopMatrix();
-   glPopMatrix();
-end;
+   glPopMatrix();end;
 
 {*******************************************************************************
  *
@@ -276,6 +276,12 @@ begin
       resultat := Altitude(Position.x + Param.Avant*CosDirection + Param.Gauche*sinDirection,
                            Position.y + Param.Avant*sinDirection - Param.Gauche*CosDirection) -
          (RoueAD + Position.z + Avant * Tangage + Gauche*Roulis - Rayon);
+
+      {Debug: dessine l'endroit ou est la roue}
+      {dessinerRepere(Position.x + Param.Avant*CosDirection + Param.Gauche*sinDirection,
+                     Position.y + Param.Avant*sinDirection - Param.Gauche*CosDirection,
+                     Position.z);}
+
       if (resultat)>0 then result := resultat*REAC_SOL
       else result := 0;
    end;
@@ -290,6 +296,12 @@ begin
       resultat := Altitude(Position.x + Param.Avant*CosDirection - Param.Gauche*sinDirection,
                            Position.y + Param.Avant*sinDirection + Param.Gauche*CosDirection) -
          (RoueAG + Position.z + Avant * Tangage - Gauche*Roulis - Rayon);
+
+      {Debug: dessine l'endroit ou est la roue}
+      {dessinerRepere(Position.x + Param.Avant*CosDirection - Param.Gauche*sinDirection,
+                     Position.y + Param.Avant*sinDirection + Param.Gauche*CosDirection,
+                     Position.z);}
+
       if (resultat)>0 then result := resultat*REAC_SOL
       else result := 0;
    end;
@@ -308,6 +320,12 @@ begin
       resultat := Altitude(Position.x - Param.Arriere*CosDirection - Param.Gauche*sinDirection,
                            Position.y - Param.Arriere*sinDirection + Param.Gauche*CosDirection) -
          (RoueDG + Position.z - Arriere * Tangage - Gauche*Roulis - Rayon);
+
+      {Debug: dessine l'endroit ou est la roue}
+      {dessinerRepere(Position.x - Param.Arriere*CosDirection - Param.Gauche*sinDirection,
+                     Position.y - Param.Arriere*sinDirection + Param.Gauche*CosDirection,
+                     Position.z);}
+
       if (resultat)>0 then result := resultat*REAC_SOL
       else result := 0;
    end;
@@ -322,6 +340,12 @@ begin
       resultat := Altitude(Position.x - Param.Arriere*CosDirection + Param.Gauche*sinDirection,
                            Position.y - Param.Arriere*sinDirection - Param.Gauche*CosDirection) -
          (RoueDD + Position.z - Arriere * Tangage + Gauche*Roulis - Rayon);
+
+      {Debug: dessine l'endroit ou est la roue}
+      {dessinerRepere(Position.x - Param.Arriere*CosDirection + Param.Gauche*sinDirection,
+                     Position.y - Param.Arriere*sinDirection - Param.Gauche*CosDirection,
+                     Position.z);}
+
       if (resultat)>0 then result := resultat*REAC_SOL
       else result := 0;
    end;

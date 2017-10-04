@@ -144,7 +144,6 @@ begin
 
          Systeme.Actualise(Systeme.ListeParticule);
          if Params.Pluie then Pluie.Actualise(Joueur.Position, Pluie.ListeParticule);
-         //glcallList(leRepere);
 
 
          if (Camera.id = 2) then Joueur.AfficheTableauDeBord();

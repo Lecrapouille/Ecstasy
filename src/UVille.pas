@@ -24,6 +24,7 @@ uses UTypege,
      UCirculation,
      Math,
      UTerrain,
+     URepere,
      Opengl;
 
 procedure CreationVille();
@@ -360,12 +361,12 @@ end;
  *  Remarque : Pour afficher le repere --> glCallList(LeRepere).
  *
  *  Un bloc de la ville est consititue de la sorte :
- *
- *                   +----+--------------------+
- *                   |0  1|0    route 1       1|
- *                   |3  2|3                  2|
- *                   +----+--------------------+
- *                   |0r1 |                    |
+ *                                                                    X
+ *                   +----+--------------------+                      ^
+ *                   |0ca1|0    route 1       1|                      | rouge
+ *                   |3rr2|3                  2|                      |
+ *                   +----+--------------------+              Y <-----+
+ *                   |0r1 |                    |                  vert
  *                   | o  |                    |
  *                   | u  |   Le bloc de       |
  *                   | t  |     maisons        |
@@ -511,7 +512,12 @@ begin
    then
    begin
       glCallList(Route_Liste_Affichage);
-      if b <> RANGEE_DU_FLEUVE then glCallList(Maison_Liste_Affichage)
+      if b <> RANGEE_DU_FLEUVE then
+      begin
+         glCallList(Maison_Liste_Affichage);
+         // Debug
+         {dessinerRepere(Carrefour.TabPos[2].x, Carrefour.TabPos[2].y, Carrefour.TabPos[2].z);}
+      end
       else
       begin
          Decal_Texture_Eau := Decal_Texture_Eau + 0.01;

@@ -65,19 +65,19 @@ procedure CreerRepere();
 begin
    leRepere := glGenLists(1);
    glNewList(leRepere,GL_COMPILE);
-   glLineWidth(2.0);
+   glLineWidth(4.0);
    glBegin(GL_LINES);
    glcolor3f(1,0,0);
    glVertex3f(0,0,0);
-   glVertex3f(10,0,0);
+   glVertex3f(20,0,0);
 
    glcolor3f(0,1,0);
    glVertex3f(0,0,0);
-   glVertex3f(0,10,0);
+   glVertex3f(0,20,0);
 
    glcolor3f(0,0,1);
    glVertex3f(0,0,0);
-   glVertex3f(0,0,10);
+   glVertex3f(0,0,20);
    glEnd();
    glEndList();
 end;
@@ -89,10 +89,12 @@ end;
  *******************************************************************************}
 procedure DessinerRepere(x,y,z: real);
 begin
+   glDisable(GL_DEPTH_TEST);
    GlPushMatrix();
    gltranslated(x, y, z);
    glcallList(leRepere);
    GlPopMatrix();
+   glEnable(GL_DEPTH_TEST);
 end;
 
 //----------------------------------------------------------------------------//

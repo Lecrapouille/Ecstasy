@@ -1,6 +1,6 @@
 object Form1: TForm1
-  Left = 649
-  Top = 452
+  Left = 753
+  Top = 256
   Anchors = [akRight, akBottom]
   BorderIcons = []
   BorderStyle = bsToolWindow
@@ -148,8 +148,24 @@ object Form1: TForm1
             '640 x 480'
             '800 x 600'
             '1024 x 768'
+            '1280 x 720'
             '1280 x 1024'
-            '1600 x 1200')
+            '1366 x 768'
+            '1400 x 1050'
+            '1600 x 1024'
+            '1600 x 1200'
+            '1920 x 1080'
+            '2048 x 1536'
+            '2560 x 1440'
+            '2560 x 2048'
+            '3840 x 2400'
+            '3840 x 2160'
+            '4096 x 3072'
+            '5120 x 4096'
+            '6400 x 4800'
+            '7680 x 4320'
+            '8192 x 6144'
+            '16384 x 12288')
         end
         object ComboBox2: TComboBox
           Left = 16

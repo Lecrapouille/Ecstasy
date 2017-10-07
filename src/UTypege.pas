@@ -23,7 +23,9 @@ uses
 CONST
    // Frames Per Seconds
    FPS_TIMER = 1;                     // Timer to calculate FPS
-   FPS_INTERVAL = 500;                // Calculate FPS every 1000 ms
+   IFPS_INTERVAL = 1000;
+   FPS_INTERVAL = 1.0 * IFPS_INTERVAL; // Calculate FPS every 1000 ms
+   MS_PAR_IMAGE = 16; // 60 FPS = 16.6 ms arrondi a 17
 
    INFINI = 1000000;
 
@@ -66,7 +68,7 @@ CONST
    TPS_FEU_VERT = 6; //en secondes
    TPS_FEU_ORANGE = 2;
    TPS_FEU_ROUGE = 8;
-   TPS_CYCLE = 16;
+   TPS_CYCLE = TPS_FEU_VERT + TPS_FEU_ORANGE + TPS_FEU_ROUGE;
 
    EST_AU_VERT = 0;
    EST_AU_ORANGE = 1;
@@ -250,18 +252,13 @@ var
    DistanceCamera : real = 30;
 
    {FPS}
-   ElapsedTime : DWord = 0;
-   FrameTime : DWord = 0;
-   FPSCount : Integer = 0;
+   FPSCount : integer = 0;
 
    {Parametres videos}
    params : T_param;
 
    Random_Terrain : integer;
    NumeroIdentifVoit : integer;
-
-   LesFPS : integer;
-   LesFPS1 : integer = 30;
 
    Duree_feu_vert,
    Duree_feu_rouge,

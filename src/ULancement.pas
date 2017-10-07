@@ -47,7 +47,6 @@ var
    h_DC   : HDC;                        // Global device context
    h_RC   : HGLRC;                      // OpenGL rendering context
    keys   : Array[0..255] of Boolean;   // Holds keystrokes
-                                        //  FPSCount : Integer = 0;              // Counter for FPS
 
    FogCouleur_1 : Array[0..3] Of GLFloat;
    FogCouleur_2 : Array[0..3] Of GLFloat = (0,0,1,1);
@@ -250,7 +249,7 @@ begin
 end;
 
 //----------------------------------------------------------------------------//
-//  Determines the application’s response to the messages received            //
+//  Determines the application's response to the messages received            //
 //----------------------------------------------------------------------------//
 function WndProc(hWnd: HWND; Msg: UINT;  wParam: WPARAM;  lParam: LPARAM): LRESULT; stdcall;
 begin
@@ -289,12 +288,9 @@ begin
          begin
             if wParam = FPS_TIMER then
             begin
-               FPSCount :=Round(FPSCount * 1000/FPS_INTERVAL);   // calculate to get per Second incase intercal is less or greater than 1 second
+               FPSCount := Round(FPSCount * 1000/FPS_INTERVAL);   // calculate to get per Second incase intercal is less or greater than 1 second
                SetWindowText(h_Wnd, PChar(WND_TITLE + '   [' + intToStr(FPSCount) + ' FPS]'));
-
-               LesFPS := FPSCount;
                FPSCount := 0;
-               Result := 0;
             end;
          end;
    else
@@ -524,7 +520,7 @@ begin
    end;
 
    // Initializes the timer used to calculate the FPS
-   SetTimer(h_Wnd, FPS_TIMER, FPS_INTERVAL, nil);
+   SetTimer(h_Wnd, FPS_TIMER, IFPS_INTERVAL, nil);
 
    // Settings to ensure that the window is the topmost window
    ShowWindow(h_Wnd, SW_SHOW);

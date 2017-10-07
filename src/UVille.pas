@@ -566,7 +566,6 @@ begin
       if TimerFeux > Duree_cycle then
       begin
          TimerFeux := 1;
-         LesFPS1 := LesFPS;
       end;
 
       if TimerFeux < Duree_feu_vert then EtatFeux := 0 {1er feu: vert}

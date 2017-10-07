@@ -35,6 +35,9 @@ USES
    UParticules,
    ULancement;
 
+var
+  deltaTime : real;
+
 function WinMain(hInstance : HINST; hPrevInstance : HINST;
                  lpCmdLine : PChar; nCmdShow : Integer;
                  param : T_param) : Integer; stdcall;
@@ -52,7 +55,7 @@ var
    msg : TMsg;
    finished : Boolean;
    i : integer;
-   //DemoStart, LastTime : DWord;
+   DemoStart, LastTime, ElapsedTime : DWord;  // millisecondes
 begin
    {Attention ne rien mettre avant 'if not glCreateWnd(param) then ...'}
    // Perform application initialization:
@@ -64,8 +67,10 @@ begin
 
    {Initialisation}
    finished := false;
-
    chargement(Keys);
+
+   DemoStart := GetTickCount();
+   ElapsedTime := 0;
 
    {Boucle principale du jeu}
    while not finished do
@@ -81,7 +86,13 @@ begin
          end;
       end else
       begin
-         Inc(FPSCount);                      // Increment FPS Counter
+
+         {Calcul du pas en temps}
+         LastTime := ElapsedTime;
+         ElapsedTime := GetTickCount() - DemoStart;
+         ElapsedTime := (LastTime + ElapsedTime) DIV 2;
+         deltaTime := ElapsedTime / 1000.0; // secondes
+
          //definition des actions
          UtilisationDuClavier({Joueur,Camera,}Keys, finished);
          BougeSouris(XMouse, YMouse);
@@ -121,19 +132,11 @@ begin
          {Frustum}
          Myfrust.CalculateFrustum;
 
-         {Affiche les FPS}
-         glTexte(50,50,1,0,0,IntToStr(LesFPS));
-
-         //FrameTime := GetTickCount() - ElapsedTime - DemoStart;
-         //LastTime := ElapsedTime;
-         //ElapsedTime := GetTickCount() - DemoStart;     // Calculate Elapsed Time
-         //ElapsedTime := (LastTime + ElapsedTime) DIV 2; // Average it out for smoother movement
-
          {Actualisation du plan de feux}
-         Duree_feu_vert   := Max(1,TPS_FEU_VERT   * LesFPS1);
-         Duree_feu_rouge   := Max(1,TPS_FEU_ROUGE  * LesFPS1);
-         Duree_feu_orange   := Max(1,TPS_FEU_ORANGE * LesFPS1);
-         Duree_cycle   := Max(1,TPS_CYCLE * LesFPS1);
+         Duree_feu_vert   := Max(1, TPS_FEU_VERT);
+         Duree_feu_rouge   := Max(1, TPS_FEU_ROUGE);
+         Duree_feu_orange   := Max(1, TPS_FEU_ORANGE);
+         Duree_cycle   := Max(1, TPS_CYCLE);
 
          ActuCircuDirect();
          ActuCircuIndirect();
@@ -148,6 +151,14 @@ begin
 
          if (Camera.id = 2) then Joueur.AfficheTableauDeBord();
 
+         {Force les FPS a 60 soit 1 image toutes les 16.66 ms}
+         //while GetTickCount() - CurrentTime < MS_PAR_IMAGE do
+         //begin end;
+
+         {FPS mis a jour dans ULancement.pas}
+         Inc(FPSCount);
+
+         {OpenGL}
          SwapBuffers(h_DC);
       end;
    end;

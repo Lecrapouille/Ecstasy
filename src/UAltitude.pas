@@ -102,32 +102,30 @@ end;
  * Remarques  : Voir l'unite UVille pour la structure de la ville.
  *
  *******************************************************************************}
-function QuelleRoute(const x,y : real) : TTriplet;
+function QuelleRoute(const x, y : real) : TTriplet;
 var Resultat : TTriplet; Couple : TCouple;
 begin
-   Couple := QuellePartition(x,y);
-   Resultat.x := Couple.x; Resultat.y := Couple.y;
-   if (      (x >= MaVille[Couple.x,Couple.y].route0.TabPos[0].x)
-             AND (x <= MaVille[Couple.x,Couple.y].route0.TabPos[3].x)
-             AND (y >= MaVille[Couple.x,Couple.y].route0.TabPos[0].y)
-             AND (y <= MaVille[Couple.x,Couple.y].route0.TabPos[1].y)
-      ) then Resultat.z := ROUTE_0  // route 0
-   else
-      if (      (x >= MaVille[Couple.x,Couple.y].route1.TabPos[0].x)
-                AND (x <= MaVille[Couple.x,Couple.y].route1.TabPos[3].x)
-                AND (y >= MaVille[Couple.x,Couple.y].route1.TabPos[0].y)
-                AND (y <= MaVille[Couple.x,Couple.y].route1.TabPos[1].y)
-         ) then Resultat.z := ROUTE_1  // route 1
+   Couple := QuellePartition(x, y);
+   if y <= MaVille[Couple.x, Couple.y].carrefour.TabPos[2].y then
+   begin
+      if x < MaVille[Couple.x, Couple.y].carrefour.TabPos[2].x
+      then
+         Resultat.z := LECARREFOUR
       else
-         if (      (x >= MaVille[Couple.x,Couple.y].carrefour.TabPos[0].x)
-                   AND (x <= MaVille[Couple.x,Couple.y].carrefour.TabPos[3].x)
-                   AND (y >= MaVille[Couple.x,Couple.y].carrefour.TabPos[0].y)
-                   AND (y <= MaVille[Couple.x,Couple.y].carrefour.TabPos[1].y)
-            ) then Resultat.z := LECARREFOUR // carrefour
-         else Resultat.z := MAISONS;      // dans les immeubles
+         Resultat.z := ROUTE_0
+   end
+   else
+   begin
+      if x < MaVille[Couple.x, Couple.y].carrefour.TabPos[2].x
+      then
+         Resultat.z := ROUTE_1
+      else
+         Resultat.z := MAISONS
+   end;
+
+   Resultat.x := Couple.x; Resultat.y := Couple.y;
    result := resultat;
 end;
-
 
 procedure ModuloCarte(var P : TVecteur2D);
 begin

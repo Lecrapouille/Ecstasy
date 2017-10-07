@@ -23,7 +23,7 @@ uses  Windows,
       Sysutils;
 
 
-CONST NB_SUB = 32;
+CONST NB_SUB = 1;
 ECHELLE_VERT = 0;
 
 //VAR
@@ -40,48 +40,29 @@ Procedure glBindTexture(target: GLEnum;
                         texture: GLuint);
 Stdcall; External 'OpenGL32.dll';
 
-{*******************************************************************************
- *
- *
- *
- *******************************************************************************}
-procedure LoadRawFile(strName : String);
-//var F : File;
-begin
-   //  AssignFile(F, strName);
-   //{$I-}
-   //   Reset(F, 1);
-   //{$I+}
-   //  if IOResult <> 0 then
-   //  begin
-   //    MessageBox(0, 'Il n''y a pas de Height Map au format *.RAW!', 'Error', MB_OK);
-   //    Exit;
-   //  end;
-   //  BlockRead(F,iiiiiiii,sizeof(image));
-   //  CloseFile(F);
-end;
-
-procedure TerrainAleatoire(a,b, {Elv1,Elv2,Elv3,Elv4,}ElvMax : integer);
-var i,j : byte;
+procedure TerrainAleatoire(a,b,ElvMax : integer);
+var i,j,aa,bb : byte;
 begin
    with MaVille[a,b] do
    begin
-      {Terrain[0,0]           := Elv1;
-       Terrain[0,NB_SUB]      := Elv2;
-       Terrain[NB_SUB,0]      := Elv3;
-       Terrain[NB_SUB,NB_SUB] := Elv4;
+       {if a = 0 then aa := NB_BLOC_MAX_X - 1 else aa := a - 1;
+       if b = 0 then bb := NB_BLOC_MAX_Y - 1 else bb := b - 1;}
+       if a = (NB_BLOC_MAX_X - 1) then aa := 0 else aa := a + 1;
+       if b = (NB_BLOC_MAX_Y - 1) then bb := 0 else bb := b + 1;
 
-       for i := 1 to NB_SUB-1 do
-       Terrain[}
+       Terrain[0,0]           := Maville[a,b].Carrefour.TabPos[2].z;
+       Terrain[NB_SUB,NB_SUB] := Maville[aa,bb].Carrefour.TabPos[2].z;
+
+       Terrain[NB_SUB,0]      := Maville[a,b].Route0.TabPos[2].z;
+       Terrain[0,NB_SUB]      := Maville[a,b].Route1.TabPos[2].z;
 
 
-
-      for i := 1 to 16 do
+      for i := 1 to NB_SUB do
       begin
-         for j := 1 to 16 do
+         for j := 1 to NB_SUB do
          begin
-            Terrain[i,j] := 0.97*Terrain[i-1,j-1]+0.03*random(ElvMax);
-            Terrain[32-i,32-j] := Terrain[i,j];
+            //Terrain[i,j] := 0.97*Terrain[i-1,j-1]+0.03*random(ElvMax);
+            //Terrain[i,j] := Terrain[i-1,j-1];
          end;
       end;
    end;
@@ -105,6 +86,8 @@ begin
    //glNewList(terrain, GL_COMPILE);
    //
 
+   //glPolygonMode(GL_FRONT, GL_LINE);
+   //glPolygonMode(GL_BACK, GL_LINE);
    GlPushMatrix();
 
    glcullface(GL_BACK);
@@ -146,6 +129,8 @@ begin
    glcullface(GL_FRONT);
 
    GlPopMatrix();
+   //glPolygonMode(GL_FRONT, GL_FILL);
+   //glPolygonMode(GL_BACK, GL_FILL);
    // glEndList();
 end;
 
@@ -156,7 +141,6 @@ end;
  *******************************************************************************}
 procedure NouveauTerrain(a,b : byte);
 begin
-   //LoadRawFile('data/Terrain/terrain.raw');
    TerrainAleatoire(a,b,200);
    CreerTerrain(a,b);
 end;

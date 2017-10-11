@@ -42,9 +42,9 @@ CONST
    NB_BLOC_MAX_X = 6;
    NB_BLOC_MAX_Y = 6;
 
-   ESPACE_CAREFOUR = 50;
-   LONG_ROUTE_X = 500;
-   LONG_ROUTE_Y = 350;
+   ESPACE_CAREFOUR = 100;
+   LONG_ROUTE_X = 300;
+   LONG_ROUTE_Y = 300;
 
    NB_MAISON_MAX_X = LONG_ROUTE_X DIV LONG_PLUS_GRAND_IMMEUBLE;
    NB_MAISON_MAX_Y = LONG_ROUTE_Y DIV LONG_PLUS_GRAND_IMMEUBLE;
@@ -236,6 +236,7 @@ var
    TabImeublesObjt  : TTabImeublesObjt;
    Text_berges,
    Text_route,
+   Text_carrefour,
    Text_eau,
    Text_sol,
    Text_chgt,

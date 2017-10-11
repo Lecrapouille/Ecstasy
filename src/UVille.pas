@@ -671,7 +671,7 @@ begin
 
             glEnable(GL_TEXTURE_2D);
             glcolor3f(1,1,1);
-            glBindTexture(GL_TEXTURE_2D, Text_route);
+            glBindTexture(GL_TEXTURE_2D, Text_carrefour);
 
             n := CreerNormale(A,C,B);
             glnormal(n.x,n.y,n.z);

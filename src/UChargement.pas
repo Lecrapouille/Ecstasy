@@ -40,7 +40,8 @@ procedure ChargementDesTexture();
 begin
    ProgressBar.Etape := 0; Loading(0);
    LoadTexture(GetCurrentDir + '\data\textures\particule.bmp', Text_part, FALSE);
-   LoadTexture(GetCurrentDir + '\data\textures\road2.tga', Text_route, FALSE);
+   LoadTexture(GetCurrentDir + '\data\textures\road.jpg', Text_route, FALSE);
+   LoadTexture(GetCurrentDir + '\data\textures\cross.jpg', Text_carrefour, FALSE);
    LoadTexture(GetCurrentDir + '\data\textures\eau.bmp', Text_eau, FALSE);
    LoadTexture(GetCurrentDir + '\data\textures\sol.bmp', Text_sol, FALSE);
    LoadTexture(GetCurrentDir + '\data\textures\pont.bmp', Text_berges, FALSE);

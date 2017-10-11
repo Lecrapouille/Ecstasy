@@ -33,10 +33,8 @@ USES
    USons,
    DDirectSound,
    UParticules,
+   UAltitude,
    ULancement;
-
-var
-  deltaTime : real;
 
 function WinMain(hInstance : HINST; hPrevInstance : HINST;
                  lpCmdLine : PChar; nCmdShow : Integer;
@@ -55,7 +53,7 @@ var
    msg : TMsg;
    finished : Boolean;
    i : integer;
-   DemoStart, LastTime, ElapsedTime : DWord;  // millisecondes
+   DemoStart, LastTime : DWord;  // millisecondes
 begin
    {Attention ne rien mettre avant 'if not glCreateWnd(param) then ...'}
    // Perform application initialization:
@@ -131,12 +129,6 @@ begin
 
          {Frustum}
          Myfrust.CalculateFrustum;
-
-         {Actualisation du plan de feux}
-         Duree_feu_vert   := Max(1, TPS_FEU_VERT);
-         Duree_feu_rouge   := Max(1, TPS_FEU_ROUGE);
-         Duree_feu_orange   := Max(1, TPS_FEU_ORANGE);
-         Duree_cycle   := Max(1, TPS_CYCLE);
 
          ActuCircuDirect();
          ActuCircuIndirect();

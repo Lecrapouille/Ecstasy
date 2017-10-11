@@ -65,9 +65,9 @@ CONST
    // FEUX TRICOLORES
    HAUTEUR_FEU_TRICOLORE = 14;//9.3;
 
-   TPS_FEU_VERT = 6; //en secondes
-   TPS_FEU_ORANGE = 2;
-   TPS_FEU_ROUGE = 8;
+   TPS_FEU_VERT = 6000; //en millisecondes
+   TPS_FEU_ORANGE = 2000;
+   TPS_FEU_ROUGE = 8000;
    TPS_CYCLE = TPS_FEU_VERT + TPS_FEU_ORANGE + TPS_FEU_ROUGE;
 
    EST_AU_VERT = 0;
@@ -253,6 +253,8 @@ var
 
    {FPS}
    FPSCount : integer = 0;
+   deltaTime : real;
+   ElapsedTime : DWord;  // millisecondes
 
    {Parametres videos}
    params : T_param;
@@ -263,7 +265,8 @@ var
    Duree_feu_vert,
    Duree_feu_rouge,
    Duree_feu_orange,
-   Duree_cycle : integer;
+   Duree_cycle : DWord;
+   TimerFeux : DWord;
 
    Volant : gluint;
 

@@ -140,7 +140,6 @@ TBloc = class(Tobject)
 public
    Route0,Route1,Carrefour : TRoute;
    TabCirculation : TTabCirculation;
-   TimerFeux : integer;
    EtatFeux : integer;
    TypeDuBloc : byte;
    Terrain : array[0..NB_SUB,0..NB_SUB] of real;
@@ -558,23 +557,25 @@ end;
 
 {************************ FEU TRICOLORE ****************************************}
 procedure TBloc.ActualiseFeu(i,j, id : integer);
+var
+   timing: Longword;
 begin
-   //Actualisation
+   {Actualisation de l'etat des feux}
    if id = ACTUALISE_LES_FEUX then
    begin
-      TimerFeux := (TimerFeux + 1);
-      if TimerFeux > Duree_cycle then
-      begin
-         TimerFeux := 1;
-      end;
+      timing := ElapsedTime - TimerFeux;
+      if timing < Duree_feu_vert then EtatFeux := 0 {1er feu: vert -- 3eme feu: rouge}
+      else if timing < (Duree_feu_vert + Duree_feu_orange) then EtatFeux := 1 {1er feu: orange -- 3eme feu: rouge}
+      else if timing < (Duree_feu_vert + Duree_feu_orange + Duree_feu_rouge) then EtatFeux := 2 {1er feu: rouge -- 3eme feu: vert}
+      else EtatFeux := 3; {1er  feu: rouge -- 3eme feu: orange}
 
-      if TimerFeux < Duree_feu_vert then EtatFeux := 0 {1er feu: vert}
-      else if TimerFeux < Duree_feu_rouge then EtatFeux := 1 {1er feu: orange}
-      else if TimerFeux < (Duree_feu_vert+Duree_feu_rouge) then EtatFeux := 2 {1er feu: rouge}
-      else EtatFeux := 3;
+      if timing > Duree_cycle then
+      begin
+         TimerFeux := ElapsedTime;
+      end;
    end;
 
-   //Affichage des feux
+   {Affichage des feux}
    if id = DESSINE_LES_FEUX then
    begin
       glPushMatrix();
@@ -592,7 +593,7 @@ begin
              end;
          1 : begin
                 glcallList(TabPart[1]);  {1er  feu: orange}
-                glcallList(TabPart[4]);  {2eme feu: vert}
+                glcallList(TabPart[4]);  {2eme feu: orange}
                 glcallList(TabPart[8]);  {3eme feu: rouge}
                 glcallList(TabPart[11]); {4eme feu: rouge}
              end;
@@ -696,6 +697,12 @@ A0,B0,C0,D0 : Tvecteur;
 A1,B1,C1,D1 : Tvecteur;
 TabCarrefour : array[0..NB_BLOC_MAX_X,0..NB_BLOC_MAX_Y,0..3] of TVecteur;
 begin
+   {Actualisation du plan de feux}
+   Duree_feu_vert := TPS_FEU_VERT;
+   Duree_feu_rouge := TPS_FEU_ROUGE;
+   Duree_feu_orange := TPS_FEU_ORANGE;
+   Duree_cycle := TPS_CYCLE;
+
    {On se donne une altitude aleatoire pour chaque bloc de la ville. Les 4 sommets
     du carrefour de chaque bloc ont la meme altitude.}
    for i := 0 to NB_BLOC_MAX_X do

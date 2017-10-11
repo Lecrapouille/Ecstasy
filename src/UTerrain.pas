@@ -22,16 +22,11 @@ uses  Windows,
       UMath,
       Sysutils;
 
-
 CONST NB_SUB = 1;
-ECHELLE_VERT = 0;
+ELEVATION_TERRAIN = 200;
 
-//VAR
-//nbSubdivise : integer = NB_SUB_INIT;
-//EchelleVert : real = ECHELLE_VERT_INIT;
-//TextureDeFond : Gluint;
-
-procedure NouveauTerrain(a,b : byte);
+procedure CreerTerrain(a,b : byte);
+function AltitudeDuTerrain(x,y : real) : real;
 
 implementation
 uses       UVille;
@@ -40,28 +35,58 @@ Procedure glBindTexture(target: GLEnum;
                         texture: GLuint);
 Stdcall; External 'OpenGL32.dll';
 
-procedure TerrainAleatoire(a,b,ElvMax : integer);
-var i,j,aa,bb : byte;
+function AltitudeDuTerrain(x,y : real) : real;
+var
+   a, b : integer;
+   pA, pB, pC, pD, p : Tvecteur;
+begin
+   a := trunc(x / LONG_ROUTE_X) mod NB_SUB;
+   b := trunc(y / LONG_ROUTE_Y) mod NB_SUB;
+
+   pA := Maville[a,b].Carrefour.TabPos[2];
+   pB := Maville[a,b].Route0.TabPos[2];
+   pC := Maville[a,b].Route1.TabPos[2];
+   pD := Maville[(a+1) mod NB_BLOC_MAX_X, (b+1) mod NB_BLOC_MAX_X].Carrefour.TabPos[2];
+
+   p.x := x;
+   p.y := y;
+  if PointDansTriangle(pA, pB, pC, p) then
+     p.z := PositionZSurTriangle(pA, pB, pC, p)
+  else
+     p.z := PositionZSurTriangle(pB, pD, pC, p);
+
+     result := p.z;
+end;
+
+procedure TerrainAleatoire(a, b : integer);
+var i, j : byte;
+pA, pB, pC, pD, p : Tvecteur;
 begin
    with MaVille[a,b] do
    begin
-       {if a = 0 then aa := NB_BLOC_MAX_X - 1 else aa := a - 1;
-       if b = 0 then bb := NB_BLOC_MAX_Y - 1 else bb := b - 1;}
-       if a = (NB_BLOC_MAX_X - 1) then aa := 0 else aa := a + 1;
-       if b = (NB_BLOC_MAX_Y - 1) then bb := 0 else bb := b + 1;
+      pA := Maville[a,b].Carrefour.TabPos[2];
+      pB := Maville[a,b].Route0.TabPos[2];
+      pC := Maville[a,b].Route1.TabPos[2];
+      pD := Maville[(a+1) mod NB_BLOC_MAX_X, (b+1) mod NB_BLOC_MAX_X].Carrefour.TabPos[2];
 
-       Terrain[0,0]           := Maville[a,b].Carrefour.TabPos[2].z;
-       Terrain[NB_SUB,NB_SUB] := Maville[aa,bb].Carrefour.TabPos[2].z;
+      Terrain[0,0]           := pA.z;
+      Terrain[NB_SUB,0]      := pB.z;
+      Terrain[0,NB_SUB]      := pC.z;
+      Terrain[NB_SUB,NB_SUB] := pD.z;
 
-       Terrain[NB_SUB,0]      := Maville[a,b].Route0.TabPos[2].z;
-       Terrain[0,NB_SUB]      := Maville[a,b].Route1.TabPos[2].z;
-
-
-      for i := 1 to NB_SUB do
+      for i := 0 to NB_SUB do
       begin
-         for j := 1 to NB_SUB do
+         for j := 0 to NB_SUB do
          begin
-            //Terrain[i,j] := 0.97*Terrain[i-1,j-1]+0.03*random(ElvMax);
+             p.x := pA.x + i * LONG_ROUTE_X / NB_SUB;
+             p.y := pA.y + j * LONG_ROUTE_Y / NB_SUB;
+
+             {if PointDansTriangle(pA, pB, pC, p) then
+                 Terrain[i,j] := PositionZSurTriangle(pA, pB, pC, p)
+             else
+                 Terrain[i,j] := PositionZSurTriangle(pB, pD, pC, p);  }
+
+            //Terrain[i,j] := 0.97*Terrain[i-1,j-1]+0.03*random(ELEVATION_TERRAIN);
             //Terrain[i,j] := Terrain[i-1,j-1];
          end;
       end;
@@ -73,7 +98,7 @@ end;
  *
  *
  *******************************************************************************}
-procedure CreerTerrain(a,b : byte);
+procedure ListeAffichageTerrain(a, b : byte);
 var i,j : integer;
 PasX,PasY : real;
 P1,P2,P3,P4 : TVecteur;
@@ -96,8 +121,8 @@ begin
    glBindTexture(GL_TEXTURE_2D, Text_sol);
    gltranslated(Maville[a,b].Carrefour.TabPos[0].x+ESPACE_CAREFOUR,
                 Maville[a,b].Carrefour.TabPos[0].y+ESPACE_CAREFOUR,0);
-   for i :=0 to NB_SUB-1 do
-      for j :=0 to NB_SUB-1 do
+   for i :=0 to (NB_SUB-1) do
+      for j :=0 to (NB_SUB-1) do
       begin
          P1.x := -1+i*pasX;
          P1.y := -1+j*pasY;
@@ -139,10 +164,10 @@ end;
  *
  *
  *******************************************************************************}
-procedure NouveauTerrain(a,b : byte);
+procedure CreerTerrain(a,b : byte);
 begin
-   TerrainAleatoire(a,b,200);
-   CreerTerrain(a,b);
+   TerrainAleatoire(a, b);
+   ListeAffichageTerrain(a, b);
 end;
 
 end.

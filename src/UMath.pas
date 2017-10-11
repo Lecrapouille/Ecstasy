@@ -41,6 +41,8 @@ function CosScalaire(const A,B : TVecteur) : real;
 function ProduitScalaire(const A,B : TVecteur) : real;
 function Norme(const A : Tvecteur) : real;
 function Distance(const A,B : TVecteur) : real;
+function PositionZSurTriangle(pA, pB, pC, p : Tvecteur) : real;
+function PointDansTriangle(pA, pB, pC, p : Tvecteur) : Boolean;
 
 implementation
 
@@ -99,20 +101,34 @@ begin
    result := N;
 end;
 
-procedure PositionSurTriangle(const A,B,C,Position : Tvecteur);
-var Normale,Resultat : TVecteur;
+{pA,pB,pC: points 3D du triangle, p: le point 2D a tester}
+function PositionZSurTriangle(pA, pB, pC, p : Tvecteur) : real;
+var a, b, c, d : real;
 begin
-   Normale := CreerNormale(A,B,C);
-   Resultat.x := Position.x;
-   Resultat.y := Position.y;
-   Resultat.z := Position.x*Normale.x +
-      Position.y*Normale.y +
-      Position.z*Normale.z -
-      (Normale.x*A.x+Normale.y*A.y+Normale.z*A.z);
-
-   gltexte(100,100,0,0,1,floattostr(Resultat.x));
-   gltexte(100,120,0,0,1,floattostr(Resultat.y));
-   gltexte(100,140,0,0,1,floattostr(Resultat.z));
+    // Equation plan: ax+by+cz+d=0
+    a := (pB.y - pA.y) * (pC.z - pA.z) - (pC.y - pA.y) * (pB.z - pA.z);
+    b := (pB.z - pA.z) * (pC.x - pA.x) - (pC.z - pA.z) * (pB.x - pA.x);
+    c := (pB.x - pA.x) * (pC.y - pA.y) - (pC.x - pA.x) * (pB.y - pA.y);
+    d := -(a * pA.x + b * pA.y + c * pA.z);
+    // z = (-d -ax -by) / c
+    result := (-d - a * p.x - b * p.y) / c;
 end;
+
+function signe(pA, pB, pC: Tvecteur): real;
+begin
+    result := (pA.x - pC.x) * (pB.y - pC.y) - (pB.x - pC.x) * (pA.y - pC.y);
+end;
+
+{pA,pB,pC: points 3D du triangle, p: le point 2D a tester}
+function PointDansTriangle(pA, pB, pC, p : Tvecteur) : Boolean;
+var b1, b2, b3: Boolean;
+begin
+    b1 := signe(p, pA, pB) < 0.0;
+    b2 := signe(p, pB, pC) < 0.0;
+    b3 := signe(p, pC, pA) < 0.0;
+
+    result := (b1 = b2) AND (b2 = b3);
+end;
+
 end.
 

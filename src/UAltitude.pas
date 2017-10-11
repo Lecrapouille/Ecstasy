@@ -28,18 +28,6 @@ procedure ModuloCarte(var P : TVecteur2D);
 
 implementation
 
-function AltitudeDuTerrain(x,y : real; Resultat : TTriplet) : real;
-var px,py : integer;
-PasX,PasY : real;
-begin
-   PasX := NB_SUB / LONG_ROUTE_X;
-   PasY := NB_SUB / LONG_ROUTE_Y;
-
-   px := trunc((x - MaVille[Resultat.x,Resultat.y].Carrefour.TabPos[2].x) * PasX);
-   py := trunc((y - MaVille[Resultat.x,Resultat.y].Carrefour.TabPos[2].y) * PasY);
-   result := MaVille[Resultat.x,Resultat.y].Terrain[px,py];
-end;
-
 {******************************  Altitude  *************************************
  *
  *  Nom        : function Altitude(x,y : real) : real;
@@ -65,9 +53,9 @@ begin
          ROUTE_0 : Pos.z := Route0.Pente * (x - Route0.TabPos[0].x) + Route0.TabPos[0].z;
          ROUTE_1 : Pos.z := Route1.Pente * (y - Route1.TabPos[0].y) + Route1.TabPos[0].z;
          LECARREFOUR : Pos.z := Carrefour.TabPos[0].z;
-         MAISONS : if Resultat.y = RANGEE_DU_FLEUVE then Pos.z := -30;  // tombe dans l'eau
-         //else if TypeDuBloc = EST_UN_BLOC then Pos.z := 0;  // dans les immeubles
-         //else Pos.z := AltitudeDuTerrain(x,y,Resultat);
+         MAISONS : if Resultat.y = RANGEE_DU_FLEUVE then Pos.z := -30  // tombe dans l'eau
+         else if TypeDuBloc = EST_UN_BLOC then Pos.z := 0  // dans les immeubles
+         else Pos.z := AltitudeDuTerrain(x,y);
       end;
    end;
    result := Pos.z;

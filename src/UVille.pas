@@ -401,7 +401,7 @@ begin
    if b <> RANGEE_DU_FLEUVE then
       if ran < Params.ProportionTerrain then    // Terrain aleatoire
       begin
-         NouveauTerrain(a,b);
+         CreerTerrain(a,b);
          TypeDuBloc := EST_UN_TERRAIN;
       end else
       begin

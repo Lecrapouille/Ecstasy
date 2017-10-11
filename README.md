@@ -1,24 +1,40 @@
 # Ecstasy
 
-3D game made in Delphi and OpenGL for Windows (95, Xp). EPITA school project. Our first team project, so sorry this is not a optimized game and use it 'as it' !
+Ecstasy is a 3D game made in Delphi5 and OpenGL (<= 2.1) for Windows Xp made in 2003 at EPITA school.
+
+Ecstasy was one of our first team projects (and game), so sorry this is not an optimized and free-bug game, use it 'as it' !
+
+Screenshot
+
+![alt tag](https://github.com/Lecrapouille/Ecstasy/blob/master/doc/screenshot.jpg)
+
+:) :) :) !!! Warning: Never take this substance when driving !!! :) :) :)
 
 Features are:
 * city generated randomly on a torus world.
 * cars stopped at traffic lights.
-* cars have a physic model.
+* the player car has a basic physic model.
+* project evolution doc (requested by our teachers).
 
 Not implemented:
-* missing a fixed frame rate.
-* no collision detection.
-* no IA (collision avoidance, cars do not turn).
-* off-road partially implemented.
-* city generation with a procedural process.
-* disable physics when cars are too far from the player.
+* missing a fixed frame rate (will be fixed in 2017).
+* off-road partially implemented (will be fixed in 2017).
+* simple optim to avoid game slowing down on hudge traffic jam. (will be fixed in 2017).
+* no collision detection: cars and buildings (will be fixed in 2017 but just for buildings). 
+* no IA (collision avoidance, cars do not turn). (will never be added)
+* city generation with a better procedural process. (will never be added)
+* More physics (like pumping effect on wheel depending on acceleration). (maybe will be added one day).
 
-Screenshot:
+Player control:
 
-![alt tag](https://github.com/Lecrapouille/Ecstasy/blob/master/doc/screenshot.jpg)
+* F1 key: change the camera view (inside or outside the car).
+* Numeric keys: 4, 6, 2, 8 for changing the camera position and angle.
+* Left/Right key (or mouse): change the wheel angle.
+* Tabular key: Change the gear (driving or reverse).
 
 Notes:
 
-* install/speedway.rar contains the runnable version Windows (95, Xp). You will need to unrar data/data.rar in the same directory than the exec.
+* This is a french project (code + doc). Translations (even for the code source) upon request by e-mail.
+* More french documentation is given on my [webpage](http://q.quadrat.free.fr/ecstasy-fr.html) concerning how to add more cars in the game.
+* This project needs Borland Delphi 5 (never tried higher version). If you need Delphi5 for Windows XP (if people still have it): send me an e-mail. The main project is named `Ecstasy.dpr`.
+* You will need data/ near the exe to be loaded.

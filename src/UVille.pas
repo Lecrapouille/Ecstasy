@@ -705,9 +705,9 @@ begin
 
    {On se donne une altitude aleatoire pour chaque bloc de la ville. Les 4 sommets
     du carrefour de chaque bloc ont la meme altitude.}
-   for i := 0 to NB_BLOC_MAX_X do
+   for i := 0 to (NB_BLOC_MAX_X-1) do
    begin
-      for j := 0 to NB_BLOC_MAX_Y do
+      for j := 0 to (NB_BLOC_MAX_Y-1) do
       begin
          A0.x := i*TAILLE_BLOC_X; A0.y := j*TAILLE_BLOC_Y;
          if (j = RANGEE_DU_FLEUVE) OR (j = RANGEE_DU_FLEUVE+1) then A0.z := 0 else A0.z := random*Random_Terrain;
@@ -725,19 +725,19 @@ begin
    {Construction des routes : on relie une route a deux carrefours.
     Attention : on utilise N-1 blocs et non N blocs, car les 2 carrefours n'ap-
     -partiennent pas au meme bloc.}
-   for i := 0 to NB_BLOC_MAX_X-1 do
+   for i := 0 to (NB_BLOC_MAX_X-1) do
    begin
-      for j := 0 to NB_BLOC_MAX_Y-1 do
+      for j := 0 to (NB_BLOC_MAX_Y-1) do
       begin
          {Premiere Route}
-         A0.x := i*TAILLE_BLOC_X+ESPACE_CAREFOUR; A0.y := j*TAILLE_BLOC_Y; A0.z := TabCarrefour[i mod NB_BLOC_MAX_X,j mod NB_BLOC_MAX_Y,0].z;
+         A0.x := i*TAILLE_BLOC_X+ESPACE_CAREFOUR; A0.y := j*TAILLE_BLOC_Y; A0.z := TabCarrefour[i,j,0].z;
          B0.x := A0.x; B0.y := A0.y+ESPACE_CAREFOUR; B0.z := A0.z;
-         C0.x := A0.x+TAILLE_BLOC_X-ESPACE_CAREFOUR; C0.y := B0.y; C0.z := TabCarrefour[(i+1) mod NB_BLOC_MAX_X ,j mod NB_BLOC_MAX_Y,0].z;
+         C0.x := A0.x+TAILLE_BLOC_X-ESPACE_CAREFOUR; C0.y := B0.y; C0.z := TabCarrefour[(i+1) mod NB_BLOC_MAX_X ,j,0].z;
          D0.x := C0.x; D0.y := A0.y; D0.z := C0.z;
 
          {Deuxieme Route}
-         A1.x := i*TAILLE_BLOC_X; A1.y := j*TAILLE_BLOC_Y+ESPACE_CAREFOUR; A1.z := TabCarrefour[i mod NB_BLOC_MAX_X,j mod NB_BLOC_MAX_Y,0].z;
-         B1.x := A1.x; B1.y := A1.y+TAILLE_BLOC_Y-ESPACE_CAREFOUR; B1.z := TabCarrefour[i mod NB_BLOC_MAX_X,(j+1) mod NB_BLOC_MAX_Y,0].z;
+         A1.x := i*TAILLE_BLOC_X; A1.y := j*TAILLE_BLOC_Y+ESPACE_CAREFOUR; A1.z := TabCarrefour[i,j,0].z;
+         B1.x := A1.x; B1.y := A1.y+TAILLE_BLOC_Y-ESPACE_CAREFOUR; B1.z := TabCarrefour[i,(j+1) mod NB_BLOC_MAX_Y,0].z;
          C1.x := A1.x+ESPACE_CAREFOUR; C1.y := B1.y; C1.z := B1.z;
          D1.x := C1.x; D1.y := A1.y; D1.z := A1.z;
 
@@ -775,9 +775,9 @@ end;
 Procedure DestroyVille();
 var i,j : integer;
 begin
-   for i := 0 to NB_BLOC_MAX_X-1 do
+   for i := 0 to (NB_BLOC_MAX_X-1) do
    begin
-      for j := 0 to NB_BLOC_MAX_Y-1 do
+      for j := 0 to (NB_BLOC_MAX_Y-1) do
       begin
          //circulation
          MaVille[i,j].TabCirculation[ROUTE_0,SENS_DIRECT,VOIE_RAPIDE].DestroyCirculation();
@@ -808,15 +808,14 @@ begin
    end;
 end;
 
-
-Procedure AfficheVille();
+Procedure AfficheVille();   // FIXME: bug modulo n'affiche pas tous les blocs
 var i,j,ii,jj,iii,jjj : integer; Couple : TCouple;
 begin
    //******METTRE FRUSTUM SUR LE PLAN PAS UN CUBE
    Couple := QuellePartition(Joueur.Position.x,Joueur.Position.y);
-   for i := 0 to 2 do
+   for i := 0 to NB_QUARTIER_A_AFFICHER do
    begin
-      for j := 0 to 2 do
+      for j := 0 to NB_QUARTIER_A_AFFICHER do
       begin
          ii := (Couple.x-1+i);
          jj := (Couple.y-1+j);

@@ -548,18 +548,6 @@ begin
          glEnable(GL_CULL_FACE);
       end;
 
-      TabCirculation[ROUTE_0,SENS_DIRECT,VOIE_LENTE].Affiche();
-      TabCirculation[ROUTE_0,SENS_DIRECT,VOIE_RAPIDE].Affiche();
-      TabCirculation[ROUTE_0,SENS_INDIRECT,VOIE_LENTE].Affiche();
-      TabCirculation[ROUTE_0,SENS_INDIRECT,VOIE_RAPIDE].Affiche();
-
-      TabCirculation[ROUTE_1,SENS_DIRECT,VOIE_LENTE].Affiche();
-      TabCirculation[ROUTE_1,SENS_DIRECT,VOIE_RAPIDE].Affiche();
-      TabCirculation[ROUTE_1,SENS_INDIRECT,VOIE_LENTE].Affiche();
-      TabCirculation[ROUTE_1,SENS_INDIRECT,VOIE_RAPIDE].Affiche();
-   end;
-end;
-
       glPushMatrix();
       glDepthMask(GL_FALSE);
       glDisable(GL_CULL_FACE);
@@ -595,6 +583,16 @@ end;
       glDepthMask(GL_TRUE);
       glEnable(GL_CULL_FACE);
       GLPopMatrix();
+
+      TabCirculation[ROUTE_0,SENS_DIRECT,VOIE_LENTE].Affiche();
+      TabCirculation[ROUTE_0,SENS_DIRECT,VOIE_RAPIDE].Affiche();
+      TabCirculation[ROUTE_0,SENS_INDIRECT,VOIE_LENTE].Affiche();
+      TabCirculation[ROUTE_0,SENS_INDIRECT,VOIE_RAPIDE].Affiche();
+
+      TabCirculation[ROUTE_1,SENS_DIRECT,VOIE_LENTE].Affiche();
+      TabCirculation[ROUTE_1,SENS_DIRECT,VOIE_RAPIDE].Affiche();
+      TabCirculation[ROUTE_1,SENS_INDIRECT,VOIE_LENTE].Affiche();
+      TabCirculation[ROUTE_1,SENS_INDIRECT,VOIE_RAPIDE].Affiche();
    end;
 end;
 

@@ -89,6 +89,7 @@ CONST
    ACCELERATION = 5;          // pour les goodies
    VITTESSE_VOIE_RAPIDE = 220;
    VITTESSE_VOIE_LENTE =  150;
+   ESPACE_SECURITE = 3 * LONG_VOIT;
 
    // CAMERA
    ALTITUDE_MAX_CAMERA = 200; // Vue aeriene

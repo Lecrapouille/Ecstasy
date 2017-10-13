@@ -156,17 +156,17 @@ var Dist,W : real;
 begin
    if QuelleRoute = ROUTE_1 then
    begin
-      if Pos.y > Position.y then Dist := Pos.y-Position.y -3*LONG_VOIT
-      else Dist := Pos.y + TAILLE_MAP_Y-Position.y - 3*LONG_VOIT;
+      if Pos.y > Position.y then Dist := Pos.y-Position.y - ESPACE_SECURITE
+      else Dist := Pos.y + TAILLE_MAP_Y-Position.y - ESPACE_SECURITE;
 
       {Si la voiture est trop pres de la suivante elle prend la meme vitesse}
       if Dist > 0 then W := Vitesse+ACCELERATION else
          if Vit < Vitesse then W := Vit else W := Vitesse;
 
       {si le feu est a l'orange ou au rouge, la voiture ralentit}
-      if (Maville[i,(j+1) mod NB_BLOC_MAX_Y].EtatFeux = 2)
+      if (Maville[i,(j+1) mod NB_BLOC_MAX_Y].EtatFeux = ETAT_FEUX_ROUGE_VERT)
       then Vy := Min(VitesseMaximale,W)
-      else Vy := Max(VITESSE_MINIMALE,Min(Min(VitesseMaximale,W),2*((j+1)*TAILLE_BLOC_Y-1.5*LONG_VOIT-Position.y)));
+      else Vy := Max(VITESSE_MINIMALE,Min(Min(VitesseMaximale,W),2*((j+1)*TAILLE_BLOC_Y-ESPACE_SECURITE-Position.y)));
 
       Vx := 0;
       Vitesse := Vy;
@@ -179,15 +179,15 @@ begin
 
    end else {ROUTE_0}
    begin
-      if Pos.x > Position.x then Dist := Pos.x-Position.x -3*LONG_VOIT
-      else Dist := Pos.x+TAILLE_MAP_X-Position.x -3*LONG_VOIT;
+      if Pos.x > Position.x then Dist := Pos.x-Position.x - ESPACE_SECURITE
+      else Dist := Pos.x+TAILLE_MAP_X-Position.x - ESPACE_SECURITE;
 
       if Dist > 0 then W := Vitesse+ACCELERATION else
          if Vit < Vitesse then W := Vit else W := Vitesse;
 
-      if (Maville[(i+1) mod NB_BLOC_MAX_X,j].EtatFeux = 0)
+      if (Maville[(i+1) mod NB_BLOC_MAX_X,j].EtatFeux = ETAT_FEUX_VERT_ROUGE)
       then Vx := Min(VitesseMaximale,W)
-      else Vx := Max(VITESSE_MINIMALE,Min(Min(VitesseMaximale,W),2*((i+1)*TAILLE_BLOC_X-1.5*LONG_VOIT-Position.x)));
+      else Vx := Max(VITESSE_MINIMALE,Min(Min(VitesseMaximale,W),2*((i+1)*TAILLE_BLOC_X-ESPACE_SECURITE-Position.x)));
 
       Vy := 0;
       Vitesse := Vx;

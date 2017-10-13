@@ -62,6 +62,7 @@ var
    function glCreateWnd(param : T_param) : Boolean;
    procedure glKillWnd(Width, Height : Integer; Fullscreen : Boolean);
    Procedure glBindTexture(target: GLEnum; texture: GLuint); Stdcall; External 'OpenGL32.dll';
+   procedure BuildFont( police : integer);
 
 implementation
 uses USons;
@@ -140,10 +141,9 @@ procedure InitialisationOpengl(Width: GLsizei; Height: GLsizei; params : T_Param
 var fWidth, fHeight  : GLfloat;
 begin
    //glClearColor(1.0, 0.0, 1.0, 1.0);     // Black Background
-
-
+   BuildFont(params.police);                            // Liste d'affichage des fontes
    glClearDepth(1.0);                                   // Enables Clearing Of The Depth Buffer
-   glDepthFunc(GL_LESS);                                        // The Type Of Depth Test To Do
+   glDepthFunc(GL_LESS);                                // The Type Of Depth Test To Do
    glShadeModel(GL_SMOOTH);                             // Enables Smooth Color Shading
    glBlendFunc(GL_SRC_ALPHA,GL_ONE);
    glEnable(GL_DEPTH_TEST);
@@ -226,10 +226,8 @@ begin
                       ANTIALIASED_QUALITY,
                       FF_DONTCARE or DEFAULT_PITCH,
                       'Times New Roman');
-   //'Courier New');
 
    SelectObject(h_DC, font);
-
    wglUseFontBitmaps(h_DC, 32, 96, base);
 end;
 //----------------------------------------------------------------------------//
@@ -253,6 +251,7 @@ end;
 //----------------------------------------------------------------------------//
 function WndProc(hWnd: HWND; Msg: UINT;  wParam: WPARAM;  lParam: LPARAM): LRESULT; stdcall;
 begin
+   Result := 0; 
    case (Msg) of
       WM_CREATE:
          begin
@@ -530,10 +529,6 @@ begin
    // Ensure the OpenGL window is resized properly
    InitialisationOpengl(param.Width, param.Height, params);
    glResizeWnd(param.Width, param.Height);
-
-   {Liste d'affichage des fontes}
-   BuildFont(param.police);
-
    Result := True;
 end;
 //----------------------------------------------------------------------------//

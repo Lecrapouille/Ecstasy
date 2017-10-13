@@ -22,6 +22,8 @@ USES
    Messages;
 
 procedure glTexte(posx,posy, colorr,colorg,colorb : glfloat; texte : string);
+procedure KillFont;
+//procedure BuildFont( police : integer);
 
 VAR
    base : Gluint;
@@ -29,6 +31,30 @@ VAR
 
 implementation
 uses UTypege;
+
+//----------------------------------------------------------------------------//
+{procedure BuildFont( police : integer);
+var font: HFONT;
+begin
+   base := glGenLists(96);
+   font := CreateFont(-1* police,
+                      0,
+                      0,
+                      0,
+                      FW_BOLD,
+                      0,
+                      0,
+                      0,
+                      ANSI_CHARSET,
+                      OUT_TT_PRECIS,
+                      CLIP_DEFAULT_PRECIS,
+                      ANTIALIASED_QUALITY,
+                      FF_DONTCARE or DEFAULT_PITCH,
+                      'Times New Roman');
+
+   SelectObject(h_DC, font);
+   wglUseFontBitmaps(h_DC, 32, 96, base);
+end;}
 
 //----------------------------------------------------------------------------//
 procedure KillFont;

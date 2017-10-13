@@ -16,6 +16,10 @@ interface
 uses OpenGL, Glaux, Sysutils, Windows, Utextures, UTypege;
 
 function CreerMasque(CheminMasque,CheminImage : string) : GLUint;
+procedure LibererMasque;
+
+var
+NouvelleListe : GLUint;
 
 implementation
 
@@ -26,6 +30,10 @@ Procedure glGenTextures(n: GLsizei;
                         Textures: PGLuint);
 Stdcall; External 'OpenGL32.dll';
 
+procedure LibererMasque;
+begin
+   if (glIsList(NouvelleListe)) then glDeleteLists(NouvelleListe,1);
+end;
 
 {-------------------------------------------------------------------------------
  -
@@ -34,16 +42,16 @@ Stdcall; External 'OpenGL32.dll';
  -
  -------------------------------------------------------------------------------}
 function CreerMasque(CheminMasque,CheminImage : string) : GLUint;
-var NouvelleListe, Masque,Image : GLUint; pTextures : PTAUX_RGBImageRec;
+var Masque,Image : GLUint; pTextures : PTAUX_RGBImageRec;
 begin
 
    {Creation d'une texture masque}
-   glGenTextures( 1, @Masque);
    If FileExists(CheminMasque) then
    begin
       pTextures := auxDIBImageLoadA(PChar(CheminMasque));
       If Assigned(pTextures) then
       begin
+         glGenTextures(1, @Masque);
          glBindTexture(GL_TEXTURE_2D, Masque);
          glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
          glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -54,12 +62,12 @@ begin
    end;
 
    {Creation d'une texture image}
-   glGenTextures( 1, @Image);
    If FileExists(CheminImage) then
    begin
       pTextures := auxDIBImageLoadA(PChar(CheminImage));
       If Assigned(pTextures) then
       begin
+         glGenTextures(1, @Image);
          glBindTexture(GL_TEXTURE_2D, Image);
          glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
          glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -69,7 +77,6 @@ begin
       end;
    end;
 
-   if (glIsList(NouvelleListe)) then glDeleteLists(NouvelleListe,1);
    NouvelleListe := glGenLists(1);
    glNewList(NouvelleListe,GL_COMPILE);
 

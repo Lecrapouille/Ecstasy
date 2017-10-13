@@ -34,7 +34,8 @@ USES
    DDirectSound,
    UParticules,
    UAltitude,
-   ULancement;
+   ULancement,
+   UTransparence;
 
 function WinMain(hInstance : HINST; hPrevInstance : HINST;
                  lpCmdLine : PChar; nCmdShow : Integer;
@@ -155,16 +156,21 @@ begin
       end;
    end;
    finished := False;
+
    Myfrust.Destroy();
    Joueur.Destroy();
+   DestroyVille();
 
    //liberer memoire liste d'affichage
    glDeleteLists(feurouge_liste.liste,1);
    glDeleteLists(pont_liste.liste,1);
+   glDeleteLists(Lerepere,1);
+   glDeleteLists(Ville_liste,1);
+   glDeleteLists(Terrain,1);
+
    //liste d'affichage des voitures
    for i := 1 to TabRepertVoit.long do
    begin
-
       glDeleteLists(TabRepertVoit.elt[i-1].GLRoue.liste,1);
       glDeleteLists(TabRepertVoit.elt[i-1].GLCarcasse.liste,1);
    end;
@@ -175,14 +181,8 @@ begin
    //Particules
    for i := 0 to 11 do glDeleteLists(TabPart[i],1);
 
-   glDeleteLists(Lerepere,1);
-   glDeleteLists(Ville_liste,1);
-   glDeleteLists(Terrain,1);
-
-   //VILLE
-   DestroyVille();
-
-   //******VOITURES******//
+   LibererMasque();
+   KillFont();
 
    // Arret du son
    StopAllSounds();

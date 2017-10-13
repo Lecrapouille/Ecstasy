@@ -518,13 +518,21 @@ end;
 {  Determines file type and sends to correct function              }
 {------------------------------------------------------------------}
 function LoadTexture(Filename: String; var Texture : GLuint; LoadFromRes : Boolean) : Boolean;
+var
+  extension: string;
 begin
-   if copy(Uppercase(filename), length(filename)-3, 4) = '.BMP' then
-      LoadBMPTexture(Filename, Texture, LoadFromRes);
-   if copy(Uppercase(filename), length(filename)-3, 4) = '.JPG' then
-      LoadJPGTexture(Filename, Texture, LoadFromRes);
-   if copy(Uppercase(filename), length(filename)-3, 4) = '.TGA' then
-      LoadTGATexture(Filename, Texture, LoadFromRes);
+   extension := copy(Uppercase(filename), length(filename)-3, 4);
+   if extension = '.BMP' then
+      result := LoadBMPTexture(Filename, Texture, LoadFromRes)
+   else if extension = '.JPG' then
+      result := LoadJPGTexture(Filename, Texture, LoadFromRes)
+   else if extension = '.TGA' then
+      result := LoadTGATexture(Filename, Texture, LoadFromRes)
+   else
+      begin
+      result := False;
+      MessageBox(0, PChar('Unknown extension "'+ Filename +'".'), PChar('Texture File Error'), MB_OK);
+      end
 end;
 
 

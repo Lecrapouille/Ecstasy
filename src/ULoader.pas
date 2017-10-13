@@ -99,7 +99,7 @@ begin
    taille2 := length(s2);
    while (i<=taille1) and (j<=taille2) do begin
       j := 1;
-      while s1[i+j-1]=s2[j] do begin
+      while (i+j-1<=taille1) and (j<=taille2) and (s1[i+j-1]=s2[j]) do begin
          j := j+1;
       end;
       i := i+1;
@@ -111,23 +111,24 @@ end;
 
 function convertfloat(buffer : string; nbr : integer) : GLFloat;
 var retour : GLFloat;
-i, j, V : integer;
+i, j, lon, V : integer;
 begin
    i := 1;
    j := 1;
-   while buffer[i]<>'*' do
+   lon := length(buffer);
+   while (i<=lon) and (buffer[i]<>'*') do
       inc(i);
    while nbr>0 do
    begin
-      while ord(buffer[i])<>$09 do
+      while (i<=lon) and (ord(buffer[i])<>$09) do
          inc(i);
       dec(nbr);
       inc(i);
    end;
-   while buffer[i+j]<>'.' do
+   while (i+j<=lon) and (buffer[i+j]<>'.') do
       inc(j);
    inc(j);
-   while (ord(buffer[i+j])>=ord('0')) and (ord(buffer[i+j])<=ord('9')) do
+   while (i+j<=lon) and (ord(buffer[i+j])>=ord('0')) and (ord(buffer[i+j])<=ord('9')) do
       inc(j);
    val(copy(buffer, i, j), retour, V);
    result := retour;
@@ -135,7 +136,7 @@ end;
 //------------------------------------------------------------------------------------------
 
 procedure loadmateriauxlist (obj : pObjet; bool : boolean);
-var i,j,long : integer;  chaine : string;
+var i,j,long,k : integer;  chaine : string;
 s1 : string;
 begin
    obj^.TextureQueue := @obj^.TextureHead;
@@ -147,7 +148,7 @@ begin
          long := length(buffer);
          i := 0;
          chaine := '';
-         while buffer[long-i] <> ' '  do
+         while (long-i >= 1) and (buffer[long-i] <> ' ')  do
          begin
             if buffer[long-i] = '.' then buffer[long-i] := ',';
             chaine := buffer[long-i] + chaine;
@@ -158,11 +159,12 @@ begin
          if (recherche('*BITMAP ', buffer))then
          begin
             s1 := '';
-            j := 0;
-            while (j<length(buffer)) and (buffer[j]<>'"') do
+            j := 1;
+            k := length(buffer);
+            while (j<=k) and (buffer[j]<>'"') do
                inc(j);
             inc(j);
-            while buffer[j]<>'"' do
+            while (j<=k) and (buffer[j]<>'"') do
             begin
                if buffer[j]='\' then
                   s1 := '';
@@ -186,7 +188,7 @@ begin
                long := length(buffer);
                i := 0;
                chaine := '';
-               while buffer[long-i] <> ' '  do
+               while (long-i >= 1) and (buffer[long-i] <> ' ')  do
                begin
                   if buffer[long-i] = '.' then buffer[long-i] := ',';
                   chaine := buffer[long-i] + chaine;
@@ -199,7 +201,7 @@ begin
                   long := length(buffer);
                   i := 0;
                   chaine := '';
-                  while buffer[long-i] <> ' '  do
+                  while (long-i >= 1) and (buffer[long-i] <> ' ')  do
                   begin
                      if buffer[long-i] = '.' then buffer[long-i] := ',';
                      chaine := buffer[long-i] + chaine;
@@ -352,7 +354,7 @@ end;
 
 procedure loadTexFace(obj : pobjet);
 var
-   i, j, valeur, V : integer;
+   i, j, lon, valeur, V : integer;
 begin
    obj^.MeshQueue^.FaceQueue := @obj^.MeshQueue^.FaceHead;
    while not recherche('}', buffer) do
@@ -362,26 +364,27 @@ begin
       begin
          i := 1;
          j := 1;
-         while buffer[i]<>'*' do
+         lon := length(buffer);
+         while (i<=lon) and (buffer[i]<>'*') do
             inc(i);
-         while buffer[i]<>#09 do
+         while (i<=lon) and (buffer[i]<>#09) do
             inc(i);
          inc(i);
-         while (ord(buffer[i+j])>=ord('0')) and (ord(buffer[i+j])<=ord('9')) do
+         while (i+j<=lon) and (ord(buffer[i+j])>=ord('0')) and (ord(buffer[i+j])<=ord('9')) do
             inc(j);
          val(copy(buffer, i, j), valeur, V);
          obj^.MeshQueue^.FaceQueue^.TextCoord[1] := loadPTex(valeur, obj);
 
          i := i+j+1;
          j := 1;
-         while (ord(buffer[i+j])>=ord('0')) and (ord(buffer[i+j])<=ord('9')) do
+         while (i+j<=lon) and (ord(buffer[i+j])>=ord('0')) and (ord(buffer[i+j])<=ord('9')) do
             inc(j);
          val(copy(buffer, i, j), valeur, V);
          obj^.MeshQueue^.FaceQueue^.TextCoord[2] := loadPTex(valeur, obj);
 
          i := i+j+1;
          j := 1;
-         while (ord(buffer[i+j])>=ord('0')) and (ord(buffer[i+j])<=ord('9')) do
+         while (i+j<=lon) and (ord(buffer[i+j])>=ord('0')) and (ord(buffer[i+j])<=ord('9')) do
             inc(j);
          val(copy(buffer, i, j), valeur, V);
          obj^.MeshQueue^.FaceQueue^.TextCoord[3] := loadPTex(valeur, obj);
@@ -407,7 +410,7 @@ begin
       long := length(buffer);
       i := 0;
       chaine := '';
-      while ord(buffer[long-i])<>$09  do
+      while (long-i>=1) and (ord(buffer[long-i])<>$09)  do
       begin
          if buffer[long-i] = '.' then buffer[long-i] := ',';
          chaine := buffer[long-i] + chaine;
@@ -419,7 +422,7 @@ begin
       long := length(buffer);
       i := i+1;
       chaine := '';
-      while ord(buffer[long-i]) <> $09 do
+      while (long-i>=1) and (ord(buffer[long-i]) <> $09) do
       begin
          if buffer[long-i] = '.' then buffer[long-i] := ',';
          chaine := buffer[long-i] + chaine;
@@ -431,7 +434,7 @@ begin
       long := length(buffer);
       i := i+1;
       chaine := '';
-      while buffer[long-i] <> ' ' do
+      while (long-i>=1) and (buffer[long-i] <> ' ') do
       begin
          if buffer[long-i] = '.' then buffer[long-i] := ',';
          chaine := buffer[long-i] + chaine;
@@ -451,7 +454,7 @@ begin
       long := length(buffer);
       i := 0;
       chaine := '';
-      while ord(buffer[long-i])<>$09  do
+      while (long-i>=1) and (ord(buffer[long-i])<>$09)  do
       begin
          if buffer[long-i] = '.' then buffer[long-i] := ',';
          chaine := buffer[long-i] + chaine;
@@ -463,7 +466,7 @@ begin
       long := length(buffer);
       i := i+1;
       chaine := '';
-      while ord(buffer[long-i]) <> $09 do
+      while (long-i>=1) and (ord(buffer[long-i]) <> $09) do
       begin
          if buffer[long-i] = '.' then buffer[long-i] := ',';
          chaine := buffer[long-i] + chaine;
@@ -475,7 +478,7 @@ begin
       long := length(buffer);
       i := i+1;
       chaine := '';
-      while buffer[long-i] <> ' ' do
+      while (long-i>=1) and (buffer[long-i] <> ' ') do
       begin
          if buffer[long-i] = '.' then buffer[long-i] := ',';
          chaine := buffer[long-i] + chaine;
@@ -491,7 +494,7 @@ end;
 
 procedure loadMesh (obj : pobjet);
 var
-   i, j, valeur, V : integer;
+   i, j, valeur, lon, V : integer;
 begin
    obj^.MeshQueue := @Obj^.MeshHead;
    while not EOF(InFile) do
@@ -513,9 +516,10 @@ begin
       begin
          i := 1;
          j := 1;
-         while (ord(buffer[i])<ord('0')) or (ord(buffer[i])>ord('9')) do
+         lon := length(buffer);
+         while (i<=lon) and ((ord(buffer[i])<ord('0')) or (ord(buffer[i])>ord('9'))) do
             inc(i);
-         while (ord(buffer[i+j])>=ord('0')) and (ord(buffer[i+j])<=ord('9')) do
+         while (i+j<=lon) and (ord(buffer[i+j])>=ord('0')) and (ord(buffer[i+j])<=ord('9')) do
             inc(j);
          val(copy(buffer, i, j), valeur, V);
          obj^.TextureQueue := @obj^.TextureHead;

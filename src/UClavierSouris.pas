@@ -38,13 +38,15 @@ end;
 procedure UtilisationDuClavier(var Keys : array of boolean; var finished : boolean);
 var i : integer;
 begin
-   if (keys[VK_ESCAPE]) then finished := True else
-      if (keys[VK_TAB]) and (not keysold[VK_TAB]) AND (abs(Joueur.Vitesse) <= 11) then
+   if (keys[VK_ESCAPE]) then
+      finished := True
+   else if (keys[VK_TAB]) and (not keysold[VK_TAB]) AND (abs(Joueur.Vitesse) <= 11) then
       begin
          Joueur.MarcheArriere := not(Joueur.MarcheArriere);
          thetaCamera := trunc(thetaCamera+DegToRad(180)) mod 360;
-      end;
-   if (keys[VK_F1]) and (not keysold[VK_F1]) then Camera.id := (Camera.id+1) mod (NB_VUE_CAMERA+1)
+      end
+   else if (keys[VK_F1]) and (not keysold[VK_F1]) then
+       Camera.id := (Camera.id+1) mod (NB_VUE_CAMERA+1)
    else
    begin
       {deplacement du joueur}

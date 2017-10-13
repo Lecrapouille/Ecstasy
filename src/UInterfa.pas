@@ -152,11 +152,10 @@ begin
    // Joueur := TJoueur.Create(40,40,1);
    if (DISTANCE_CLIPPING <= ALTITUDE_MAX_CAMERA) then MessageBox(0, 'Erreur', 'DISTANCE_CLIPPING <= ALTITUDE_MAX_CAMERA', MB_OK And MB_ICONWARNING )
    else
-      //if (LONG_ROUTE_X mod LONG_PLUS_GRAND_IMMEUBLE <> 0) OR (LONG_ROUTE_Y mod LONG_PLUS_GRAND_IMMEUBLE <> 0) then
-      //   MessageBox(0, 'LONG_ROUTE_X mod LONG_PLUS_GRAND_IMMEUBLE <> 0', 'LONG_ROUTE_X mod LONG_PLUS_GRAND_IMMEUBLE <> 0', MB_OK And MB_ICONWARNING )
-      //else
-
-         WinMain( hInstance, hPrevInst, CmdLine, CmdShow, params )
+      if (LONG_ROUTE_X_DESIREE mod LONG_PLUS_GRAND_IMMEUBLE <> 0) OR (LONG_ROUTE_Y_DESIREE mod LONG_PLUS_GRAND_IMMEUBLE <> 0) then
+         MessageBox(0, 'LONG_ROUTE_X_DESIREE mod LONG_PLUS_GRAND_IMMEUBLE <> 0', 'LONG_ROUTE_Y_DESIREE mod LONG_PLUS_GRAND_IMMEUBLE <> 0', MB_OK And MB_ICONWARNING )
+      else
+         WinMain(hInstance, hPrevInst, CmdLine, CmdShow, params)
 end;
 
 procedure TForm1.FormCreate(Sender: TObject);

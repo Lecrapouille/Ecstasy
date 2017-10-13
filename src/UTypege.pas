@@ -63,16 +63,15 @@ CONST
    MAX_PARTICULE_TEXTURE = 20;
 
    // FEUX TRICOLORES
-   HAUTEUR_FEU_TRICOLORE = 14;//9.3;
-
+   HAUTEUR_FEU_TRICOLORE = 23.5;
    TPS_FEU_VERT = 6000; // duree fu feu vert en millisecondes
    TPS_FEU_ORANGE = 2000;
-
-   EST_AU_VERT = 0;
-   EST_AU_ORANGE = 1;
-   EST_AU_ROUGE = 2;
    TPS_FEU_ROUGE = 6000;
    TPS_CYCLE = TPS_FEU_VERT + 2 * TPS_FEU_ORANGE + TPS_FEU_ROUGE;
+   ETAT_FEUX_VERT_ROUGE = 0; {1er feu: vert -- 3eme feu: rouge}
+   ETAT_FEUX_ORANGE_ROUGE = 1; {1er feu: orange -- 3eme feu: rouge}
+   ETAT_FEUX_ROUGE_VERT = 2; {1er feu: rouge -- 3eme feu: vert}
+   ETAT_FEUX_ROUGE_ORANGE = 3; {1er  feu: rouge -- 3eme feu: orange}
 
    // SOURIS
    MOUSE_SPEED = 0.5;         // Vitesse de la souris
@@ -129,6 +128,7 @@ T_param = record
    Altitude : integer;
    circu : byte;
    ProportionTerrain : integer; // Proportion nb de terrains par rapport aux immeubles
+   CarrefourAmericain : boolean; // Style americain ou Europen (= feux apres ou avant le carrefour)
 end;
 //////////////////////////////////
 pVertex = ^TVertex;

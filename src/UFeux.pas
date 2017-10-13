@@ -79,8 +79,11 @@ end;
  *
  *******************************************************************************}
 procedure DisplayListFeuxTricolores();
-var px,py,pz : real; TabTexture : TTabTexture;
+var px,py,pz,offsetFeux : real; TabTexture : TTabTexture;
 begin
+   {Place les feux avant ou apres le carrefour}
+   if Params.CarrefourAmericain then offsetFeux := ESPACE_CAREFOUR else offsetFeux := 0;
+
    TabTexture.long := 0;
    TextureBlending('data\textures\particule.bmp',TabTexture,0,0,0,8,1,0,0);
    TextureBlending('data\textures\particule.bmp',TabTexture,0,0,0,8,0,1,0);
@@ -95,13 +98,13 @@ begin
    TabPart[0] := glGenLists(1);
    glNewList(TabPart[0],GL_COMPILE);
    glpushMatrix();
-   gltranslated(px-3,py+10.4,pz+HAUTEUR_FEU_TRICOLORE);
+   gltranslated(px-3+offsetFeux, py+16, pz+HAUTEUR_FEU_TRICOLORE);
    glrotated(90,0,1,0);
    glcallList(TabTexture.elt[1]);
    glPopMatrix();
 
    glpushMatrix();
-   gltranslated(px-3,py+10.4+6.4,pz+0.4+HAUTEUR_FEU_TRICOLORE);
+   gltranslated(px-3+offsetFeux, py+29, pz+1+HAUTEUR_FEU_TRICOLORE);
    glrotated(90,0,1,0);
    glcallList(TabTexture.elt[1]);
    glPopMatrix();
@@ -112,35 +115,34 @@ begin
    TabPart[1] := glGenLists(1);
    glNewList(TabPart[1],GL_COMPILE);
    glpushMatrix();
-   gltranslated(px-3,py+11.2,pz+HAUTEUR_FEU_TRICOLORE);
+   gltranslated(px-3+offsetFeux, py+18, pz+HAUTEUR_FEU_TRICOLORE);
    glrotated(90,0,1,0);
    glcallList(TabTexture.elt[2]);
    glPopMatrix();
 
    glpushMatrix();
-   gltranslated(px-3,py+11.2+6.4,pz+0.4+HAUTEUR_FEU_TRICOLORE);
+   gltranslated(px-3+offsetFeux, py+31, pz+1+HAUTEUR_FEU_TRICOLORE);
    glrotated(90,0,1,0);
    glcallList(TabTexture.elt[2]);
    glPopMatrix();
    GlEndList();
 
-   {Lumiere rouge esur le premier feu}
+   {Lumiere rouge sur le premier feu}
    if (glIsList(TabPart[2])) then glDeleteLists(TabPart[2],1);
    TabPart[2] := glGenLists(1);
    glNewList(TabPart[2],GL_COMPILE);
    glpushMatrix();
-   gltranslated(px-2,py+12,pz+HAUTEUR_FEU_TRICOLORE);
+   gltranslated(px-3+offsetFeux, py+20, pz+HAUTEUR_FEU_TRICOLORE);
    glrotated(90,0,1,0);
    glcallList(TabTexture.elt[0]);
    glPopMatrix();
 
    glpushMatrix();
-   gltranslated(px-2,py+12+7.9,pz+0.6+HAUTEUR_FEU_TRICOLORE);
+   gltranslated(px-3+offsetFeux, py+33, pz+1+HAUTEUR_FEU_TRICOLORE);
    glrotated(90,0,1,0);
    glcallList(TabTexture.elt[0]);
    glPopMatrix();
    GlEndList();
-
 
    {Lumiere verte sur le deuxieme feu}
    px := MaVille[0,0].Carrefour.TabPos[2].x;
@@ -151,13 +153,13 @@ begin
    TabPart[3] := glGenLists(1);
    glNewList(TabPart[3],GL_COMPILE);
    glpushMatrix();
-   gltranslated(px+3,py-10.4,pz+HAUTEUR_FEU_TRICOLORE);
+   gltranslated(px+3-offsetFeux, py-15.5, pz+HAUTEUR_FEU_TRICOLORE);
    glrotated(90,0,1,0);
    glcallList(TabTexture.elt[1]);
    glPopMatrix();
 
    glpushMatrix();
-   gltranslated(px+3,py-10.4-6.4,pz+0.4+HAUTEUR_FEU_TRICOLORE);
+   gltranslated(px+3-offsetFeux, py-29, pz+1+HAUTEUR_FEU_TRICOLORE);
    glrotated(90,0,1,0);
    glcallList(TabTexture.elt[1]);
    glPopMatrix();
@@ -168,13 +170,13 @@ begin
    TabPart[4] := glGenLists(1);
    glNewList(TabPart[4],GL_COMPILE);
    glpushMatrix();
-   gltranslated(px+3,py-11.2,pz+HAUTEUR_FEU_TRICOLORE);
+   gltranslated(px+3-offsetFeux, py-17.5, pz+HAUTEUR_FEU_TRICOLORE);
    glrotated(90,0,1,0);
    glcallList(TabTexture.elt[2]);
    glPopMatrix();
 
    glpushMatrix();
-   gltranslated(px+3,py-11.2-6.4,pz+0.4+HAUTEUR_FEU_TRICOLORE);
+   gltranslated(px+3-offsetFeux, py-31, pz+1+HAUTEUR_FEU_TRICOLORE);
    glrotated(90,0,1,0);
    glcallList(TabTexture.elt[2]);
    glPopMatrix();
@@ -185,36 +187,34 @@ begin
    TabPart[5] := glGenLists(1);
    glNewList(TabPart[5],GL_COMPILE);
    glpushMatrix();
-   gltranslated(px+3,py-12.1,pz+HAUTEUR_FEU_TRICOLORE);
+   gltranslated(px+3-offsetFeux, py-19.5, pz+HAUTEUR_FEU_TRICOLORE);
    glrotated(90,0,1,0);
    glcallList(TabTexture.elt[0]);
    glPopMatrix();
 
    glpushMatrix();
-   gltranslated(px+3,py-12.1-6.4,pz+0.4+HAUTEUR_FEU_TRICOLORE);
+   gltranslated(px+3-offsetFeux, py-33, pz+1+HAUTEUR_FEU_TRICOLORE);
    glrotated(90,0,1,0);
    glcallList(TabTexture.elt[0]);
    glPopMatrix();
    GlEndList();
 
-
-   ////
    {Lumiere verte sur le troisieme feu}
    px := MaVille[0,0].Carrefour.TabPos[3].x;
    py := MaVille[0,0].Carrefour.TabPos[3].y;
-   pz := 0;//MaVille[0,0].Carrefour.TabPos[3].z;
+   pz := 0;
 
    if (glIsList(TabPart[6])) then glDeleteLists(TabPart[6],1);
    TabPart[6] := glGenLists(1);
    glNewList(TabPart[6],GL_COMPILE);
    glpushMatrix();
-   gltranslated(px-10.4,py-1,pz+HAUTEUR_FEU_TRICOLORE);
+   gltranslated(px-15, py-3+offsetFeux, pz+HAUTEUR_FEU_TRICOLORE);
    glrotated(90,1,0,0);
    glcallList(TabTexture.elt[1]);
    glPopMatrix();
 
    glpushMatrix();
-   gltranslated(px-10.4-6.4,py-1,pz+0.4+HAUTEUR_FEU_TRICOLORE);
+   gltranslated(px-29, py-3+offsetFeux, pz+1+HAUTEUR_FEU_TRICOLORE);
    glrotated(90,1,0,0);
    glcallList(TabTexture.elt[1]);
    glPopMatrix();
@@ -225,13 +225,13 @@ begin
    TabPart[7] := glGenLists(1);
    glNewList(TabPart[7],GL_COMPILE);
    glpushMatrix();
-   gltranslated(px-11.2,py-1,pz+HAUTEUR_FEU_TRICOLORE);
+   gltranslated(px-18, py-3+offsetFeux, pz+HAUTEUR_FEU_TRICOLORE);
    glrotated(90,1,0,0);
    glcallList(TabTexture.elt[2]);
    glPopMatrix();
 
    glpushMatrix();
-   gltranslated(px-11.2-6.4,py-1,pz+0.4+HAUTEUR_FEU_TRICOLORE);
+   gltranslated(px-31, py-3+offsetFeux, pz+1+HAUTEUR_FEU_TRICOLORE);
    glrotated(90,1,0,0);
    glcallList(TabTexture.elt[2]);
    glPopMatrix();
@@ -242,13 +242,13 @@ begin
    TabPart[8] := glGenLists(1);
    glNewList(TabPart[8],GL_COMPILE);
    glpushMatrix();
-   gltranslated(px-12.1,py-1,pz+HAUTEUR_FEU_TRICOLORE);
+   gltranslated(px-19, py-3+offsetFeux, pz+HAUTEUR_FEU_TRICOLORE);
    glrotated(90,1,0,0);
    glcallList(TabTexture.elt[0]);
    glPopMatrix();
 
    glpushMatrix();
-   gltranslated(px-12.1-6.4,py-1,pz+0.4+HAUTEUR_FEU_TRICOLORE);
+   gltranslated(px-32, py-3+offsetFeux, pz+1+HAUTEUR_FEU_TRICOLORE);
    glrotated(90,1,0,0);
    glcallList(TabTexture.elt[0]);
    glPopMatrix();
@@ -263,13 +263,13 @@ begin
    TabPart[9] := glGenLists(1);
    glNewList(TabPart[9],GL_COMPILE);
    glpushMatrix();
-   gltranslated(px+10.4,py+1,pz+HAUTEUR_FEU_TRICOLORE);
+   gltranslated(px+16, py+3-offsetFeux, pz+HAUTEUR_FEU_TRICOLORE);
    glrotated(90,1,0,0);
    glcallList(TabTexture.elt[1]);
    glPopMatrix();
 
    glpushMatrix();
-   gltranslated(px+10.4+6.4,py+1,pz+0.4+HAUTEUR_FEU_TRICOLORE);
+   gltranslated(px+29, py+3-offsetFeux, pz+1+HAUTEUR_FEU_TRICOLORE);
    glrotated(90,1,0,0);
    glcallList(TabTexture.elt[1]);
    glPopMatrix();
@@ -280,13 +280,13 @@ begin
    TabPart[10] := glGenLists(1);
    glNewList(TabPart[10],GL_COMPILE);
    glpushMatrix();
-   gltranslated(px+11.2,py+1,pz+HAUTEUR_FEU_TRICOLORE);
+   gltranslated(px+18, py+3-offsetFeux, pz+HAUTEUR_FEU_TRICOLORE);
    glrotated(90,1,0,0);
    glcallList(TabTexture.elt[2]);
    glPopMatrix();
 
    glpushMatrix();
-   gltranslated(px+11.2+6.4,py+1,pz+0.4+HAUTEUR_FEU_TRICOLORE);
+   gltranslated(px+31, py+3-offsetFeux, pz+1+HAUTEUR_FEU_TRICOLORE);
    glrotated(90,1,0,0);
    glcallList(TabTexture.elt[2]);
    glPopMatrix();
@@ -297,13 +297,13 @@ begin
    TabPart[11] := glGenLists(1);
    glNewList(TabPart[11],GL_COMPILE);
    glpushMatrix();
-   gltranslated(px+12.1,py+1,pz+HAUTEUR_FEU_TRICOLORE);
+   gltranslated(px+20, py+3-offsetFeux, pz+HAUTEUR_FEU_TRICOLORE);
    glrotated(90,1,0,0);
    glcallList(TabTexture.elt[0]);
    glPopMatrix();
 
    glpushMatrix();
-   gltranslated(px+12.1+6.4,py+1,pz+0.4+HAUTEUR_FEU_TRICOLORE);
+   gltranslated(px+33, py+3-offsetFeux, pz+1+HAUTEUR_FEU_TRICOLORE);
    glrotated(90,1,0,0);
    glcallList(TabTexture.elt[0]);
    glPopMatrix();

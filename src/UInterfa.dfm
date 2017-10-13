@@ -1,6 +1,6 @@
 object Form1: TForm1
-  Left = 753
-  Top = 256
+  Left = 689
+  Top = 174
   Anchors = [akRight, akBottom]
   BorderIcons = []
   BorderStyle = bsToolWindow
@@ -82,7 +82,7 @@ object Form1: TForm1
     Top = 0
     Width = 457
     Height = 409
-    ActivePage = TabSheet1
+    ActivePage = TabSheet3
     TabOrder = 2
     object TabSheet1: TTabSheet
       Caption = '&Configuration du joueur'
@@ -99,7 +99,7 @@ object Form1: TForm1
         Width = 433
         Height = 21
         DragMode = dmAutomatic
-        ItemHeight = 13
+        ItemHeight = 0
         TabOrder = 0
         Text = 'ComboBox3'
         OnChange = ComboBox3Change
@@ -269,7 +269,7 @@ object Form1: TForm1
           Top = 88
           Width = 97
           Height = 17
-          Caption = 'CheckBox11'
+          Caption = 'Nuit'
           TabOrder = 2
           OnClick = CheckBox11Click
         end
@@ -278,7 +278,7 @@ object Form1: TForm1
           Top = 40
           Width = 129
           Height = 17
-          Caption = 'CheckBox12'
+          Caption = 'Pluie désactivée'
           TabOrder = 3
           OnClick = CheckBox12Click
         end
@@ -292,28 +292,28 @@ object Form1: TForm1
         TabOrder = 3
         object Label8: TLabel
           Left = 7
-          Top = 16
+          Top = 40
           Width = 123
           Height = 13
           Caption = 'Pente max des routes'
         end
         object Label27: TLabel
           Left = 7
-          Top = 72
+          Top = 96
           Width = 141
           Height = 13
           Caption = 'Altitude max des collines'
         end
         object Label6: TLabel
           Left = 8
-          Top = 128
+          Top = 152
           Width = 137
           Height = 13
           Caption = 'Pourcentage de terrains'
         end
         object TrackBar1: TTrackBar
           Left = 8
-          Top = 32
+          Top = 56
           Width = 129
           Height = 33
           Max = 100
@@ -329,7 +329,7 @@ object Form1: TForm1
         end
         object Edit10: TEdit
           Left = 136
-          Top = 32
+          Top = 56
           Width = 41
           Height = 21
           ReadOnly = True
@@ -338,7 +338,7 @@ object Form1: TForm1
         end
         object TrackBar3: TTrackBar
           Left = 8
-          Top = 88
+          Top = 112
           Width = 129
           Height = 33
           Max = 150
@@ -354,7 +354,7 @@ object Form1: TForm1
         end
         object Edit15: TEdit
           Left = 136
-          Top = 88
+          Top = 112
           Width = 41
           Height = 21
           ReadOnly = True
@@ -363,7 +363,7 @@ object Form1: TForm1
         end
         object ScrollBar2: TScrollBar
           Left = 16
-          Top = 152
+          Top = 176
           Width = 113
           Height = 16
           PageSize = 0
@@ -373,11 +373,22 @@ object Form1: TForm1
         end
         object Edit1: TEdit
           Left = 136
-          Top = 144
+          Top = 168
           Width = 41
           Height = 21
           TabOrder = 5
           Text = '0'
+        end
+        object CheckBox7: TCheckBox
+          Left = 8
+          Top = 16
+          Width = 161
+          Height = 17
+          Caption = 'Carrefour style américain'
+          Checked = True
+          State = cbChecked
+          TabOrder = 6
+          OnClick = CheckBox7Click
         end
       end
       object GroupBox10: TGroupBox

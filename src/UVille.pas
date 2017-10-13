@@ -158,7 +158,7 @@ private
                          AffPont : boolean);
    constructor Creation(P : TVecteur; nh,nd,nb,ng,a,b,ran : integer);
    procedure Affiche(a,b : integer);
-   procedure ActualiseFeu(i,j,id : integer);
+   procedure ActualiseFeu(i,j : integer);
 end;
 
 {*******************************************************************************
@@ -220,7 +220,11 @@ procedure TBloc.CreateRoute(A0,B0,C0,D0 : TVecteur; n0 : integer;
                             A2,B2,C2,D2 : TVecteur; n2 : integer;
                             AffPont : boolean);
 var dx,dy : real;
+offsetFeux: real;
 begin
+   {Place les feux avant ou apres le carrefour}
+   if Params.CarrefourAmericain then offsetFeux := ESPACE_CAREFOUR else offsetFeux := 0;
+
    if (glIsList(Route_Liste_Affichage)) then glDeleteLists(Route_Liste_Affichage,1);
    Route_Liste_Affichage := glGenLists(1);
    glNewList(Route_Liste_Affichage,GL_COMPILE);
@@ -241,29 +245,29 @@ begin
 
    {Feux tricolores}
    glpushmatrix();
-   gltranslated(Carrefour.TabPos[3].x,Carrefour.TabPos[3].y,Carrefour.TabPos[3].z);
-   glscale(1.5,1.5,1.5);
+   gltranslated(Carrefour.TabPos[3].x,Carrefour.TabPos[3].y+offsetFeux,Carrefour.TabPos[3].z);
+   glscale(2.5,2.5,2.5);
    glcalllist(feurouge_liste.liste);
    glpopmatrix();
 
    glpushmatrix();
-   gltranslated(Carrefour.TabPos[2].x,Carrefour.TabPos[2].y,Carrefour.TabPos[2].z);
+   gltranslated(Carrefour.TabPos[2].x-offsetFeux,Carrefour.TabPos[2].y,Carrefour.TabPos[2].z);
    glrotated(90,0,0,1);
-   glscale(1.5,1.5,1.5);
+   glscale(2.5,2.5,2.5);
    glcalllist(feurouge_liste.liste);
    glpopmatrix();
 
    glpushmatrix();
-   gltranslated(Carrefour.TabPos[1].x,Carrefour.TabPos[1].y,Carrefour.TabPos[1].z);
+   gltranslated(Carrefour.TabPos[1].x,Carrefour.TabPos[1].y-offsetFeux,Carrefour.TabPos[1].z);
    glrotated(180,0,0,1);
-   glscale(1.5,1.5,1.5);
+   glscale(2.5,2.5,2.5);
    glcalllist(feurouge_liste.liste);
    glpopmatrix();
 
    glpushmatrix();
-   gltranslated(Carrefour.TabPos[0].x,Carrefour.TabPos[0].y,Carrefour.TabPos[0].z);
+   gltranslated(Carrefour.TabPos[0].x+offsetFeux,Carrefour.TabPos[0].y,Carrefour.TabPos[0].z);
    glrotated(-90,0,0,1);
-   glscale(1.5,1.5,1.5);
+   glscale(2.5,2.5,2.5);
    glcalllist(feurouge_liste.liste);
    glpopmatrix();
 
@@ -555,55 +559,31 @@ begin
    end;
 end;
 
-{************************ FEU TRICOLORE ****************************************}
-procedure TBloc.ActualiseFeu(i,j, id : integer);
-var
-   timing: Longword;
-begin
-   {Actualisation de l'etat des feux}
-   if id = ACTUALISE_LES_FEUX then
-   begin
-      timing := ElapsedTime - TimerFeux;
-      if timing < Duree_feu_vert then EtatFeux := 0 {1er feu: vert -- 3eme feu: rouge}
-      else if timing < (Duree_feu_vert + Duree_feu_orange) then EtatFeux := 1 {1er feu: orange -- 3eme feu: rouge}
-      else if timing < (Duree_feu_vert + Duree_feu_orange + Duree_feu_rouge) then EtatFeux := 2 {1er feu: rouge -- 3eme feu: vert}
-      else EtatFeux := 3; {1er  feu: rouge -- 3eme feu: orange}
-
-      if timing > Duree_cycle then
-      begin
-         TimerFeux := ElapsedTime;
-      end;
-   end;
-
-   {Affichage des feux}
-   if id = DESSINE_LES_FEUX then
-   begin
       glPushMatrix();
       glDepthMask(GL_FALSE);
       glDisable(GL_CULL_FACE);
-      Gltranslated(i*TAILLE_BLOC_X,j*TAILLE_BLOC_Y,Maville[i,j].Carrefour.TabPos[0].z);
-
+      Gltranslated(a*TAILLE_BLOC_X, b*TAILLE_BLOC_Y, Carrefour.TabPos[0].z);
 
       case EtatFeux of
-         0 : begin
+         ETAT_FEUX_VERT_ROUGE : begin
                 glcallList(TabPart[0]);  {1er  feu: vert}
                 glcallList(TabPart[3]);  {2eme feu: vert}
                 glcallList(TabPart[8]);  {3eme feu: rouge}
                 glcallList(TabPart[11]); {4eme feu: rouge}
              end;
-         1 : begin
+         ETAT_FEUX_ORANGE_ROUGE : begin
                 glcallList(TabPart[1]);  {1er  feu: orange}
                 glcallList(TabPart[4]);  {2eme feu: orange}
                 glcallList(TabPart[8]);  {3eme feu: rouge}
                 glcallList(TabPart[11]); {4eme feu: rouge}
              end;
-         2 : begin
+         ETAT_FEUX_ROUGE_VERT : begin
                 glcallList(TabPart[2]);  {1er  feu: rouge}
                 glcallList(TabPart[5]);  {2eme feu: rouge}
                 glcallList(TabPart[6]);  {3eme feu: vert}
                 glcallList(TabPart[9]);  {4eme feu: vert}
              end;
-         3 : begin
+         ETAT_FEUX_ROUGE_ORANGE : begin
                 glcallList(TabPart[2]);  {1er  feu: rouge}
                 glcallList(TabPart[5]);  {2eme feu: rouge}
                 glcallList(TabPart[7]);  {3eme feu: orange}
@@ -614,6 +594,24 @@ begin
       glEnable(GL_CULL_FACE);
       GLPopMatrix();
    end;
+end;
+
+{************************ FEU TRICOLORE ****************************************}
+procedure TBloc.ActualiseFeu(i,j : integer);
+var
+   timing: Longword;
+begin
+   {Actualisation de l'etat des feux}
+      timing := ElapsedTime - TimerFeux;
+      if timing < Duree_feu_vert then EtatFeux := ETAT_FEUX_VERT_ROUGE {1er feu: vert -- 3eme feu: rouge}
+      else if timing < (Duree_feu_vert + Duree_feu_orange) then EtatFeux := ETAT_FEUX_ORANGE_ROUGE {1er feu: orange -- 3eme feu: rouge}
+      else if timing < (Duree_feu_vert + Duree_feu_orange + Duree_feu_rouge) then EtatFeux := ETAT_FEUX_ROUGE_VERT {1er feu: rouge -- 3eme feu: vert}
+      else EtatFeux := ETAT_FEUX_ROUGE_ORANGE; {1er  feu: rouge -- 3eme feu: orange}
+
+      if timing > Duree_cycle then
+      begin
+         TimerFeux := ElapsedTime;
+      end;
 end;
 
 
@@ -803,7 +801,7 @@ begin
    begin
       for j := 0 to (NB_BLOC_MAX_Y-1) do
       begin
-         MaVille[i,j].ActualiseFeu(i,j,ACTUALISE_LES_FEUX);
+         MaVille[i,j].ActualiseFeu(i,j);
       end;
    end;
 end;
@@ -830,7 +828,6 @@ begin
                glpushmatrix();
                gltranslated(-TAILLE_MAP_X,-TAILLE_MAP_Y,0);
                Maville[iii,jjj].Affiche(iii,jjj);
-               Maville[iii,jjj].ActualiseFeu(iii,jjj,DESSINE_LES_FEUX);
                glpopMatrix();
             end else
                if (jj < NB_BLOC_MAX_Y) then
@@ -839,7 +836,6 @@ begin
                   glpushmatrix();
                   gltranslated(-TAILLE_MAP_X,0,0);
                   Maville[iii,jj].Affiche(iii,jj);
-                  Maville[iii,jj].ActualiseFeu(iii,jj,DESSINE_LES_FEUX);
                   glpopMatrix();
                end else
                   if (jj >= NB_BLOC_MAX_Y) then
@@ -849,7 +845,6 @@ begin
                      glpushmatrix();
                      gltranslated(-TAILLE_MAP_X,TAILLE_MAP_Y,0);
                      Maville[iii,jjj].Affiche(iii,jjj);
-                     Maville[iii,jjj].ActualiseFeu(iii,jjj,DESSINE_LES_FEUX);
                      glpopMatrix();
                   end;
          end else
@@ -861,13 +856,11 @@ begin
                   glpushmatrix();
                   gltranslated(0,-TAILLE_MAP_Y,0);
                   Maville[ii,jjj].Affiche(ii,jjj);
-                  Maville[ii,jjj].ActualiseFeu(ii,jjj,DESSINE_LES_FEUX);
                   glpopMatrix();
                end else
                   if (jj < NB_BLOC_MAX_Y) then
                   begin
                      Maville[ii,jj].Affiche(ii,jj);
-                     Maville[ii,jj].ActualiseFeu(ii,jj,1);
                   end else
                      if (jj >= NB_BLOC_MAX_Y) then
                      begin
@@ -875,7 +868,6 @@ begin
                         glpushmatrix();
                         gltranslated(0,TAILLE_MAP_Y,0);
                         Maville[ii,jjj].Affiche(ii,jjj);
-                        Maville[ii,jjj].ActualiseFeu(ii,jjj,DESSINE_LES_FEUX);
                         glpopMatrix();
                      end;
             end else
@@ -888,7 +880,6 @@ begin
                      glpushmatrix();
                      gltranslated(TAILLE_MAP_X,-TAILLE_MAP_Y,0);
                      Maville[iii,jjj].Affiche(iii,jjj);
-                     Maville[iii,jjj].ActualiseFeu(iii,jjj,DESSINE_LES_FEUX);
                      glpopMatrix();
                   end else
                      if (jj < NB_BLOC_MAX_Y) then
@@ -897,7 +888,6 @@ begin
                         glpushmatrix();
                         gltranslated(TAILLE_MAP_X,0,0);
                         Maville[iii,jj].Affiche(iii,jj);
-                        Maville[iii,jj].ActualiseFeu(iii,jj,DESSINE_LES_FEUX);
                         glpopMatrix();
                      end else
                         if (jj >= NB_BLOC_MAX_Y) then
@@ -907,7 +897,6 @@ begin
                            glpushmatrix();
                            GLtranslated(TAILLE_MAP_X,TAILLE_MAP_Y,0);
                            Maville[iii,jjj].Affiche(iii,jjj);
-                           Maville[iii,jjj].ActualiseFeu(iii,jjj,DESSINE_LES_FEUX);
                            glpopMatrix();
                         end;
                end;

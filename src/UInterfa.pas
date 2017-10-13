@@ -79,6 +79,7 @@ type
       Label5: TLabel;
       Label6: TLabel;
     Memo1: TMemo;
+    CheckBox7: TCheckBox;
       procedure Button2Click(Sender: TObject);
       procedure Button1Click(Sender: TObject);
       procedure FormCreate(Sender: TObject);
@@ -98,6 +99,7 @@ type
       procedure CheckBox12Click(Sender: TObject);
       procedure ScrollBar2Change(Sender: TObject);
       procedure CheckBox6Click(Sender: TObject);
+    procedure CheckBox7Click(Sender: TObject);
    public
       procedure ChargerVoiture();
    private
@@ -481,7 +483,7 @@ procedure TForm1.CheckBox4Click(Sender: TObject);
 begin
    Params.Soleil := CheckBox4.checked;
    if CheckBox4.checked then CheckBox4.Caption := 'Lumière du soleil activée'
-   else CheckBox4.Caption := 'Lumière du soleil desactivée';
+   else CheckBox4.Caption := 'Lumière du soleil désactivée';
 end;
 
 procedure TForm1.CheckBox11Click(Sender: TObject);
@@ -495,7 +497,7 @@ procedure TForm1.CheckBox12Click(Sender: TObject);
 begin
    Params.Pluie := CheckBox12.Checked;
    if CheckBox12.Checked then CheckBox12.Caption := 'Pluie activée'
-   else CheckBox12.Caption := 'Pluie desactivée';
+   else CheckBox12.Caption := 'Pluie désactivée';
 end;
 
 procedure TForm1.ScrollBar2Change(Sender: TObject);
@@ -507,6 +509,13 @@ end;
 procedure TForm1.CheckBox6Click(Sender: TObject);
 begin
    Params.son := CheckBox6.Checked;
+end;
+
+procedure TForm1.CheckBox7Click(Sender: TObject);
+begin
+   Params.CarrefourAmericain := CheckBox7.Checked;
+   if CheckBox7.Checked then CheckBox7.Caption := 'Carrefour style américain'
+   else CheckBox7.Caption := 'Carrefour style européen';
 end;
 
 end.

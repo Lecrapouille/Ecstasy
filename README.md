@@ -1,20 +1,24 @@
 # Ecstasy
 
-Ecstasy is a 3D game made in Delphi5 and OpenGL (<= 2.1) for Windows Xp made in 2003 at EPITA school.
+Ecstasy is a 3D game made in Delphi version 5 and OpenGL (<= 2.1) for Windows Xp made in 2003 at EPITA school.
 
 Ecstasy was one of our first team projects (and game), so sorry this is not an optimized and free-bug game, use it 'as it' !
 
-Screenshot
+## Wanted
+
+I'm looking for Delphi developers. I'm curious to check if Ecstasy can work on recent Windows (>= 7) and therefore if the project can compile with a more recent Delphi.
+
+## Screenshot:
 
 ![alt tag](https://github.com/Lecrapouille/Ecstasy/blob/master/doc/screenshot.jpg)
 
 :) :) :) !!! Warning: Never take this substance when driving !!! :) :) :)
 
-Features are:
+## Features are
 * city generated randomly on a torus world.
 * cars stopped at traffic lights.
-* the player car has a basic physic model.
-* project evolution doc (requested by our teachers).
+* developement report (requested by our teachers).
+* the player car has a basic physic model (physic is explained in the pdf).
 
 Not implemented:
 * missing a fixed frame rate (will be fixed in 2017).
@@ -25,14 +29,14 @@ Not implemented:
 * city generation with a better procedural process. (will never be added)
 * More physics (like pumping effect on wheel depending on acceleration). (maybe will be added one day).
 
-Player control:
+## Player control
 
 * F1 key: change the camera view (inside or outside the car).
 * Numeric keys: 4, 6, 2, 8 for changing the camera position and angle.
 * Left/Right key (or mouse): change the wheel angle.
 * Tabular key: Change the gear (driving or reverse).
 
-Notes:
+## Notes
 
 * This is a french project (code + doc). Translations (even for the code source) upon request by e-mail.
 * More french documentation is given on my [webpage](http://q.quadrat.free.fr/ecstasy-fr.html) concerning how to add more cars in the game.

@@ -141,7 +141,7 @@ begin
          if Params.Pluie then Pluie.Actualise(Joueur.Position, Pluie.ListeParticule);
 
 
-         if (Camera.id = 2) then Joueur.AfficheTableauDeBord();
+         if (Camera.id = 1) then Joueur.AfficheTableauDeBord();
 
          {Force les FPS a 60 soit 1 image toutes les 16.66 ms}
          //while GetTickCount() - CurrentTime < MS_PAR_IMAGE do

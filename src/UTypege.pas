@@ -56,6 +56,7 @@ CONST
    TAILLE_MAP_Y = NB_BLOC_MAX_Y*TAILLE_BLOC_Y;
 
    RANGEE_DU_FLEUVE = 4;
+   PROFONDEUR_FLEUVE = -30;
 
    // PARTICULE
    ACTUALISE_LES_FEUX = 0;
@@ -235,6 +236,7 @@ var
    TabRepertVoit : TTabRepertoires;
    TabImeublesObjt  : TTabImeublesObjt;
    Text_berges,
+   Text_pont,
    Text_route,
    Text_carrefour,
    Text_eau,

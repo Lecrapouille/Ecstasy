@@ -44,7 +44,8 @@ begin
    LoadTexture(GetCurrentDir + '\data\textures\cross.jpg', Text_carrefour, FALSE);
    LoadTexture(GetCurrentDir + '\data\textures\eau.bmp', Text_eau, FALSE);
    LoadTexture(GetCurrentDir + '\data\textures\sol.bmp', Text_sol, FALSE);
-   LoadTexture(GetCurrentDir + '\data\textures\pont.bmp', Text_berges, FALSE);
+   LoadTexture(GetCurrentDir + '\data\textures\pont.bmp', Text_pont, FALSE);
+   LoadTexture(GetCurrentDir + '\data\textures\wall.bmp', Text_berges, FALSE);
 
    LoadTexture(GetCurrentDir + '\data\textures\TableauDeBord.bmp', TableauDeBord_0, FALSE);
    Volant_0 := CreerMasque(GetCurrentDir + '\data\textures\volant0_masque.bmp',

@@ -53,7 +53,7 @@ begin
          ROUTE_0 : Pos.z := Route0.Pente * (x - Route0.TabPos[0].x) + Route0.TabPos[0].z;
          ROUTE_1 : Pos.z := Route1.Pente * (y - Route1.TabPos[0].y) + Route1.TabPos[0].z;
          LECARREFOUR : Pos.z := Carrefour.TabPos[0].z;
-         MAISONS : if Resultat.y = RANGEE_DU_FLEUVE then Pos.z := -30  // tombe dans l'eau
+         MAISONS : if Resultat.y = RANGEE_DU_FLEUVE then Pos.z := PROFONDEUR_FLEUVE  // tombe dans l'eau
          else if TypeDuBloc = EST_UN_BLOC then Pos.z := 0  // dans les immeubles
          else Pos.z := AltitudeDuTerrain(x,y);
       end;

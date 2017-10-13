@@ -282,7 +282,7 @@ begin
 
       //texture sol boueux
       GlPushMatrix();
-      Gltranslated(Carrefour.TabPos[2].x+LONG_ROUTE_X/2,Carrefour.TabPos[2].y+LONG_ROUTE_Y/2,-30);
+      Gltranslated(Carrefour.TabPos[2].x+LONG_ROUTE_X/2,Carrefour.TabPos[2].y+LONG_ROUTE_Y/2, PROFONDEUR_FLEUVE);
       GlEnable(GL_TEXTURE_2D);
       Glcolor3f(1,1,1);
       GlBindTexture(GL_TEXTURE_2D, Text_sol);

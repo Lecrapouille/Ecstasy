@@ -65,14 +65,14 @@ CONST
    // FEUX TRICOLORES
    HAUTEUR_FEU_TRICOLORE = 14;//9.3;
 
-   TPS_FEU_VERT = 6000; //en millisecondes
+   TPS_FEU_VERT = 6000; // duree fu feu vert en millisecondes
    TPS_FEU_ORANGE = 2000;
-   TPS_FEU_ROUGE = 8000;
-   TPS_CYCLE = TPS_FEU_VERT + TPS_FEU_ORANGE + TPS_FEU_ROUGE;
 
    EST_AU_VERT = 0;
    EST_AU_ORANGE = 1;
    EST_AU_ROUGE = 2;
+   TPS_FEU_ROUGE = 6000;
+   TPS_CYCLE = TPS_FEU_VERT + 2 * TPS_FEU_ORANGE + TPS_FEU_ROUGE;
 
    // SOURIS
    MOUSE_SPEED = 0.5;         // Vitesse de la souris

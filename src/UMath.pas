@@ -41,8 +41,8 @@ function CosScalaire(const A,B : TVecteur) : real;
 function ProduitScalaire(const A,B : TVecteur) : real;
 function Norme(const A : Tvecteur) : real;
 function Distance(const A,B : TVecteur) : real;
-function PositionZSurTriangle(pA, pB, pC, p : Tvecteur) : real;
-function PointDansTriangle(pA, pB, pC, p : Tvecteur) : Boolean;
+function PositionZSurTriangle(p1, p2, p3, p : Tvecteur) : real;
+function PointDansTriangle(p0, p1, p2, p : Tvecteur) : Boolean;
 
 implementation
 
@@ -102,32 +102,29 @@ begin
 end;
 
 {pA,pB,pC: points 3D du triangle, p: le point 2D a tester}
-function PositionZSurTriangle(pA, pB, pC, p : Tvecteur) : real;
-var a, b, c, d : real;
+function PositionZSurTriangle(p1, p2, p3, p : Tvecteur) : real;
+var det, l1, l2, l3 : real;
 begin
-    // Equation plan: ax+by+cz+d=0
-    a := (pB.y - pA.y) * (pC.z - pA.z) - (pC.y - pA.y) * (pB.z - pA.z);
-    b := (pB.z - pA.z) * (pC.x - pA.x) - (pC.z - pA.z) * (pB.x - pA.x);
-    c := (pB.x - pA.x) * (pC.y - pA.y) - (pC.x - pA.x) * (pB.y - pA.y);
-    d := -(a * pA.x + b * pA.y + c * pA.z);
-    // z = (-d -ax -by) / c
-    result := (-d - a * p.x - b * p.y) / c;
+        det := (p2.y - p3.y) * (p1.x - p3.x) + (p3.x - p2.x) * (p1.y - p3.y);
+
+        l1 := ((p2.y - p3.y) * (p.x - p3.x) + (p3.x - p2.x) * (p.y - p3.y)) / det;
+        l2 := ((p3.y - p1.y) * (p.x - p3.x) + (p1.x - p3.x) * (p.y - p3.y)) / det;
+        l3 := 1.0 - l1 - l2;
+
+        result := l1 * p1.z + l2 * p2.z + l3 * p3.z;
 end;
 
-function signe(pA, pB, pC: Tvecteur): real;
+{ http://jsfiddle.net/PerroAZUL/zdaY8/1/ }
+function PointDansTriangle(p0, p1, p2, p : Tvecteur) : Boolean;
+var DoubleArea, sign, s, t : real;
 begin
-    result := (pA.x - pC.x) * (pB.y - pC.y) - (pB.x - pC.x) * (pA.y - pC.y);
-end;
+    // Area = 0.5f * DoubleArea
+    DoubleArea := -p1.y * p2.x + p0.y * (-p1.x + p2.x) + p0.x * (p1.y - p2.y) + p1.x * p2.y;
+    if DoubleArea < 0.0 then sign := -1.0 else sign := 1.0;
+    s := (p0.y * p2.x - p0.x * p2.y + (p2.y - p0.y) * p.x + (p0.x - p2.x) * p.y) * sign;
+    t := (p0.x * p1.y - p0.y * p1.x + (p0.y - p1.y) * p.x + (p1.x - p0.x) * p.y) * sign;
 
-{pA,pB,pC: points 3D du triangle, p: le point 2D a tester}
-function PointDansTriangle(pA, pB, pC, p : Tvecteur) : Boolean;
-var b1, b2, b3: Boolean;
-begin
-    b1 := signe(p, pA, pB) < 0.0;
-    b2 := signe(p, pB, pC) < 0.0;
-    b3 := signe(p, pC, pA) < 0.0;
-
-    result := (b1 = b2) AND (b2 = b3);
+    result := (s > 0.0) AND (t > 0.0) AND ((s + t) < DoubleArea * sign);
 end;
 
 end.

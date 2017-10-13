@@ -17,13 +17,13 @@ USES
    OpenGL;
 
 var
-   LeRepere : GLUint;
+   LeRepere, LeRepere2 : GLUint;
 
 procedure OrthoMode(left,top,right,bottom : integer);
 procedure PerspectiveMode;
 procedure CreerRepere();
 procedure DessinerRepere(x,y,z: real);
-
+procedure DessinerRepere2(x,y,z: real);
 
 implementation
 //----------------------------------------------------------------------------//
@@ -80,6 +80,24 @@ begin
    glVertex3f(0,0,20);
    glEnd();
    glEndList();
+
+   leRepere2 := glGenLists(1);
+   glNewList(leRepere2,GL_COMPILE);
+   glLineWidth(4.0);
+   glBegin(GL_LINES);
+   glcolor3f(1,1,0);
+   glVertex3f(0,0,0);
+   glVertex3f(20,0,0);
+
+   glcolor3f(0,1,1);
+   glVertex3f(0,0,0);
+   glVertex3f(0,20,0);
+
+   glcolor3f(1,0,1);
+   glVertex3f(0,0,0);
+   glVertex3f(0,0,20);
+   glEnd();
+   glEndList();
 end;
 
 {*******************************************************************************
@@ -89,12 +107,22 @@ end;
  *******************************************************************************}
 procedure DessinerRepere(x,y,z: real);
 begin
-   glDisable(GL_DEPTH_TEST);
+   //glDisable(GL_DEPTH_TEST);
    GlPushMatrix();
    gltranslated(x, y, z);
    glcallList(leRepere);
    GlPopMatrix();
-   glEnable(GL_DEPTH_TEST);
+   //glEnable(GL_DEPTH_TEST);
+end;
+
+procedure DessinerRepere2(x,y,z: real);
+begin
+   //glDisable(GL_DEPTH_TEST);
+   GlPushMatrix();
+   gltranslated(x, y, z);
+   glcallList(leRepere2);
+   GlPopMatrix();
+   //glEnable(GL_DEPTH_TEST);
 end;
 
 //----------------------------------------------------------------------------//

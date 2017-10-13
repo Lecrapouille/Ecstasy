@@ -20,11 +20,12 @@ uses  Windows,
       //      glaux,
       UTypege,
       UMath,
-      Sysutils;
+      Sysutils,
+      URepere;
 
 CONST
 NB_SUB_TROTTOIR = 1;
-NB_SUB_TERRAIN = 1;
+NB_SUB_TERRAIN = 4;
 ELEVATION_TERRAIN = 200;
 
 procedure CreerTrottoir(a,b : byte);
@@ -43,7 +44,7 @@ var
    a, b : integer;
    pA, pB, pC, pD, p : Tvecteur;
 begin
-   a := trunc(x / LONG_ROUTE_X) mod NB_SUB_TERRAIN;
+   {a := trunc(x / LONG_ROUTE_X) mod NB_SUB_TERRAIN;
    b := trunc(y / LONG_ROUTE_Y) mod NB_SUB_TERRAIN;
 
    pA := Maville[a,b].Carrefour.TabPos[2];
@@ -58,11 +59,33 @@ begin
   else
      p.z := PositionZSurTriangle(pB, pD, pC, p);
 
-     result := p.z;
+     result := p.z;} result := 0;
+end;
+
+procedure TriangleDebug(pA, pB, pC : Tvecteur);
+begin
+   glBegin(GL_LINE_LOOP);
+   glLineWidth(4.0);
+   glcolor3f(0.5,0.5,0.5);
+   glVertex3f(pA.x,pA.y,pA.z+1.5);
+   glVertex3f(pB.x,pB.y,pB.z+1.5);
+   glVertex3f(pC.x,pC.y,pC.z+1.5);
+   glEnd();
+end;
+
+procedure TriangleDebug2(pA, pB, pC : Tvecteur);
+begin
+   glBegin(GL_LINE_LOOP);
+   glLineWidth(4.0);
+   glcolor3f(0.75,0.75,0.0);
+   glVertex3f(pA.x,pA.y,pA.z+1.5);
+   glVertex3f(pB.x,pB.y,pB.z+1.5);
+   glVertex3f(pC.x,pC.y,pC.z+1.5);
+   glEnd();
 end;
 
 procedure TerrainAleatoire(a, b : integer);
-var i, j : byte;
+var i, j, k : byte;
 pA, pB, pC, pD, p : Tvecteur;
 begin
    with MaVille[a,b] do
@@ -70,28 +93,40 @@ begin
       pA := Maville[a,b].Carrefour.TabPos[2];
       pB := Maville[a,b].Route0.TabPos[2];
       pC := Maville[a,b].Route1.TabPos[2];
-      pD := Maville[(a+1) mod NB_BLOC_MAX_X, (b+1) mod NB_BLOC_MAX_X].Carrefour.TabPos[2];
+      pD := Maville[(a+1) mod NB_BLOC_MAX_X, (b+1) mod NB_BLOC_MAX_Y].Carrefour.TabPos[0];
 
-      Terrain[0,0]           := pA.z;
-      Terrain[NB_SUB_TERRAIN,0]      := pB.z;
-      Terrain[0,NB_SUB_TERRAIN]      := pC.z;
+         {Sur les bords de la carte appliquer un modulo de la taille carte sur les distances}
+         if pA.x >= pD.x then
+         begin
+            pD.x := pD.x + TAILLE_MAP_X;
+         end;
+         if pA.y >= pD.y then
+         begin
+            pD.y := pD.y + TAILLE_MAP_Y;
+         end;
+
+      Terrain[0,0]                           := pA.z;
+      Terrain[NB_SUB_TERRAIN,0]              := pB.z;
+      Terrain[0,NB_SUB_TERRAIN]              := pC.z;
       Terrain[NB_SUB_TERRAIN,NB_SUB_TERRAIN] := pD.z;
+
+      TriangleDebug2(pA, pD, pC);
+      TriangleDebug(pD, pB, pA);
 
       for i := 0 to NB_SUB_TERRAIN do
       begin
+         k := 0;
          for j := 0 to NB_SUB_TERRAIN do
          begin
              p.x := pA.x + i * LONG_ROUTE_X / NB_SUB_TERRAIN;
              p.y := pA.y + j * LONG_ROUTE_Y / NB_SUB_TERRAIN;
 
-             {if PointDansTriangle(pA, pB, pC, p) then
-                 Terrain[i,j] := PositionZSurTriangle(pA, pB, pC, p)
-             else
-                 Terrain[i,j] := PositionZSurTriangle(pB, pD, pC, p);  }
-
+             if i <= j - k then begin Terrain[i,j] := PositionZSurTriangle(pA, pD, pC, p); DessinerRepere(p.x, p.y, Terrain[i,j]+2); end
+             else begin Terrain[i,j] := PositionZSurTriangle(pD, pB, pA, p); DessinerRepere2(p.x, p.y, Terrain[i,j]+2); end;
             //Terrain[i,j] := 0.97*Terrain[i-1,j-1]+0.03*random(ELEVATION_TERRAIN);
             //Terrain[i,j] := Terrain[i-1,j-1];
          end;
+         inc(k);
       end;
    end;
 end;
@@ -117,8 +152,8 @@ var i,j : integer;
 PasX,PasY : real;
 P1,P2,P3,P4 : TVecteur;
 begin
-   PasX := 1.0+LONG_ROUTE_X/subdivision;
-   PasY := 1.0+LONG_ROUTE_Y/subdivision;
+   PasX := LONG_ROUTE_X/subdivision;
+   PasY := LONG_ROUTE_Y/subdivision;
 
    //if (glIsList(terrain)) then glDeleteLists(terrain,1);
    //terrain := glGenLists(1);

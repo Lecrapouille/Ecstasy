@@ -22,9 +22,12 @@ uses  Windows,
       UMath,
       Sysutils;
 
-CONST NB_SUB = 1;
+CONST
+NB_SUB_TROTTOIR = 1;
+NB_SUB_TERRAIN = 1;
 ELEVATION_TERRAIN = 200;
 
+procedure CreerTrottoir(a,b : byte);
 procedure CreerTerrain(a,b : byte);
 function AltitudeDuTerrain(x,y : real) : real;
 
@@ -40,8 +43,8 @@ var
    a, b : integer;
    pA, pB, pC, pD, p : Tvecteur;
 begin
-   a := trunc(x / LONG_ROUTE_X) mod NB_SUB;
-   b := trunc(y / LONG_ROUTE_Y) mod NB_SUB;
+   a := trunc(x / LONG_ROUTE_X) mod NB_SUB_TERRAIN;
+   b := trunc(y / LONG_ROUTE_Y) mod NB_SUB_TERRAIN;
 
    pA := Maville[a,b].Carrefour.TabPos[2];
    pB := Maville[a,b].Route0.TabPos[2];
@@ -70,16 +73,16 @@ begin
       pD := Maville[(a+1) mod NB_BLOC_MAX_X, (b+1) mod NB_BLOC_MAX_X].Carrefour.TabPos[2];
 
       Terrain[0,0]           := pA.z;
-      Terrain[NB_SUB,0]      := pB.z;
-      Terrain[0,NB_SUB]      := pC.z;
-      Terrain[NB_SUB,NB_SUB] := pD.z;
+      Terrain[NB_SUB_TERRAIN,0]      := pB.z;
+      Terrain[0,NB_SUB_TERRAIN]      := pC.z;
+      Terrain[NB_SUB_TERRAIN,NB_SUB_TERRAIN] := pD.z;
 
-      for i := 0 to NB_SUB do
+      for i := 0 to NB_SUB_TERRAIN do
       begin
-         for j := 0 to NB_SUB do
+         for j := 0 to NB_SUB_TERRAIN do
          begin
-             p.x := pA.x + i * LONG_ROUTE_X / NB_SUB;
-             p.y := pA.y + j * LONG_ROUTE_Y / NB_SUB;
+             p.x := pA.x + i * LONG_ROUTE_X / NB_SUB_TERRAIN;
+             p.y := pA.y + j * LONG_ROUTE_Y / NB_SUB_TERRAIN;
 
              {if PointDansTriangle(pA, pB, pC, p) then
                  Terrain[i,j] := PositionZSurTriangle(pA, pB, pC, p)
@@ -93,18 +96,29 @@ begin
    end;
 end;
 
+procedure Trottoir(a, b : integer);    // FIXME Trottoir pas Terrain
+begin
+   with MaVille[a,b] do
+   begin
+      Terrain[0,0]                               := Maville[a,b].Carrefour.TabPos[2].z;
+      Terrain[NB_SUB_TROTTOIR,0]                := Maville[a,b].Route0.TabPos[2].z;
+      Terrain[0,NB_SUB_TROTTOIR]                := Maville[a,b].Route1.TabPos[2].z;
+      Terrain[NB_SUB_TROTTOIR,NB_SUB_TROTTOIR] := Maville[(a+1) mod NB_BLOC_MAX_X, (b+1) mod NB_BLOC_MAX_X].Carrefour.TabPos[2].z;
+   end;
+end;
+
 {*******************************************************************************
  *
  *
  *
  *******************************************************************************}
-procedure ListeAffichageTerrain(a, b : byte);
+procedure ListeAffichageTerrain(a, b, subdivision : byte; texture: gluint);
 var i,j : integer;
 PasX,PasY : real;
 P1,P2,P3,P4 : TVecteur;
 begin
-   PasX := LONG_ROUTE_X/NB_SUB;
-   PasY := LONG_ROUTE_Y/NB_SUB;
+   PasX := 1.0+LONG_ROUTE_X/subdivision;
+   PasY := 1.0+LONG_ROUTE_Y/subdivision;
 
    //if (glIsList(terrain)) then glDeleteLists(terrain,1);
    //terrain := glGenLists(1);
@@ -118,11 +132,11 @@ begin
    glcullface(GL_BACK);
    glcolor3f(1,1,1);
    glEnable(GL_TEXTURE_2D);
-   glBindTexture(GL_TEXTURE_2D, Text_sol);
+   glBindTexture(GL_TEXTURE_2D, texture);
    gltranslated(Maville[a,b].Carrefour.TabPos[0].x+ESPACE_CAREFOUR,
                 Maville[a,b].Carrefour.TabPos[0].y+ESPACE_CAREFOUR,0);
-   for i :=0 to (NB_SUB-1) do
-      for j :=0 to (NB_SUB-1) do
+   for i :=0 to (NB_SUB_TERRAIN-1) do
+      for j :=0 to (NB_SUB_TERRAIN-1) do
       begin
          P1.x := -1+i*pasX;
          P1.y := -1+j*pasY;
@@ -167,7 +181,13 @@ end;
 procedure CreerTerrain(a,b : byte);
 begin
    TerrainAleatoire(a, b);
-   ListeAffichageTerrain(a, b);
+   ListeAffichageTerrain(a, b, NB_SUB_TERRAIN, Text_sol);
+end;
+
+procedure CreerTrottoir(a,b : byte);
+begin
+   Trottoir(a, b);
+   ListeAffichageTerrain(a, b, NB_SUB_TROTTOIR, Text_pont);
 end;
 
 end.

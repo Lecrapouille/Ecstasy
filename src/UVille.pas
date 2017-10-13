@@ -142,7 +142,8 @@ public
    TabCirculation : TTabCirculation;
    EtatFeux : integer;
    TypeDuBloc : byte;
-   Terrain : array[0..NB_SUB,0..NB_SUB] of real;
+   Terrain : array[0..NB_SUB_TERRAIN,0..NB_SUB_TERRAIN] of real;
+   Trottoir : array[0..NB_SUB_TROTTOIR,0..NB_SUB_TROTTOIR] of real;
 private
    Decal_Texture_Eau : real; // pour l'eau
    Maison_Liste_Affichage,
@@ -232,16 +233,8 @@ begin
    Route1 := TRoute.Create(A1,B1,C1,D1,n1);
    Carrefour := TRoute.Create(A2,B2,C2,D2,n2);
 
-
-
-
    dx := (LONG_ROUTE_X+ESPACE_CAREFOUR)/2;
    dy := (LONG_ROUTE_Y+ESPACE_CAREFOUR)/2;
-
-   //** Anass
-   //Troioire0 := TRoute.Create(...
-   // ...
-   //Troioire4 := TRoute.Create(...
 
    {Feux tricolores}
    glpushmatrix();
@@ -379,7 +372,7 @@ end;
  *                   +----+--------------------+
  *
  * *****************************************************************************}
-function TireUnImmeuble(taille : integer) : integer;
+function TireUnImmeuble({taille : integer}) : integer;
 //var i : integer;
 begin
    //i := NB_TYPE_MAISON;
@@ -389,7 +382,7 @@ begin
 end;
 
 {*******************************************************************************}
-constructor TBloc.Creation(P : TVecteur; nh,nd,nb,ng,a,b,ran : integer);
+constructor TBloc.Creation(P : TVecteur; nh,nd,nb,ng,a,b,ran : integer);    // FIXME: bug altitude des immeubles; pas toujours dans le sol
 var i,nume : integer; Long : integer;
 pos : TVecteur;
 begin
@@ -409,16 +402,21 @@ begin
          TypeDuBloc := EST_UN_TERRAIN;
       end else
       begin
+         CreerTrottoir(a,b);
+
          TypeDuBloc := EST_UN_BLOC;
          {GAUCHE-HAUT vers DROIT-HAUT}
-         i := 0; Long := 0;
-         Pos := P;
+         i := 0; Long := 2*LONG_TROTTOIR;
+         Pos.x := P.x + LONG_TROTTOIR;
+         Pos.y := P.y + LONG_TROTTOIR;
          while Long < LongHaut do
          begin
-            if LongHaut-Long >= LONG_PLUS_GRAND_IMMEUBLE then nume := TireUnImmeuble(LONG_PLUS_GRAND_IMMEUBLE+1)
-            else nume := TireUnImmeuble(LongHaut-Long);
+            nume := TireUnImmeuble();
+            {if LongHaut-Long >= LONG_PLUS_GRAND_IMMEUBLE then nume := TireUnImmeuble(LONG_PLUS_GRAND_IMMEUBLE+1)
+            else nume := TireUnImmeuble(LongHaut-Long);}
+
             Pos.x := pos.x+0.5*ParamMaison[nume].taille;
-            pos.y := P.y+0.5*ParamMaison[nume].taille;
+            pos.y := P.y+0.5*ParamMaison[nume].taille + LONG_TROTTOIR;
             pos.z := Min(Altitude(Pos.x-0.5*ParamMaison[nume].taille,Pos.y-LONG_PLUS_GRAND_IMMEUBLE),
                          Altitude(Pos.x+0.5*ParamMaison[nume].taille,Pos.y-LONG_PLUS_GRAND_IMMEUBLE));
 
@@ -432,18 +430,19 @@ begin
 
          {GAUCHE-HAUT vers GAUCHE-BAS}
          Gauche[0] := Haut[0];
-         Pos.x := P.x;
+         Pos.x := P.x + LONG_TROTTOIR;
          Pos.y := 0.5*Gauche[0].TailleY+Gauche[0].Position.y;
          Pos.z := P.z;
          Long := Gauche[0].TailleY;
          i := 1;
 
-         while Long < LongGauche do
+         while Long < LongGauche - 2*LONG_TROTTOIR do
          begin
-            if LongGauche-Long >= LONG_PLUS_GRAND_IMMEUBLE then nume := TireUnImmeuble(LONG_PLUS_GRAND_IMMEUBLE+1)
-            else nume := TireUnImmeuble(LongGauche-Long);
+            nume := TireUnImmeuble();
+            {if LongGauche-Long >= LONG_PLUS_GRAND_IMMEUBLE then nume := TireUnImmeuble(LONG_PLUS_GRAND_IMMEUBLE+1)
+            else nume := TireUnImmeuble(LongGauche-Long);}
             Pos.y := Pos.y+0.5*ParamMaison[nume].taille;
-            pos.x := P.x+0.5*ParamMaison[nume].taille;
+            pos.x := P.x+0.5*ParamMaison[nume].taille + LONG_TROTTOIR;
             pos.z := Min(Altitude(Pos.x-LONG_PLUS_GRAND_IMMEUBLE,Pos.y-0.5*ParamMaison[nume].taille),
                          Altitude(Pos.x-LONG_PLUS_GRAND_IMMEUBLE,Pos.y+0.5*ParamMaison[nume].taille));
 
@@ -457,16 +456,17 @@ begin
 
          {GAUCHE-BAS vers DROIT-BAS}
          Bas[0] := Gauche[LongGauche];
-         Pos.x := Bas[0].Position.x+0.5*Bas[0].TailleX;
-         Pos.y := Bas[0].Position.y;
+         Pos.x := Bas[0].Position.x+0.5*Bas[0].TailleX ;
+         Pos.y := Bas[0].Position.y - 0*LONG_TROTTOIR;
 
          i := 1; Long := Bas[0].TailleX;
-         while Long < LongBas do
+         while Long < LongBas - 2*LONG_TROTTOIR do
          begin
-            if LongBas-Long >= LONG_PLUS_GRAND_IMMEUBLE then nume := TireUnImmeuble(LONG_PLUS_GRAND_IMMEUBLE+1)
-            else nume := TireUnImmeuble(LongBas-Long);
+            nume := TireUnImmeuble();
+            {if LongBas-Long >= LONG_PLUS_GRAND_IMMEUBLE then nume := TireUnImmeuble(LONG_PLUS_GRAND_IMMEUBLE+1)
+            else nume := TireUnImmeuble(LongBas-Long);}
             Pos.x := pos.x+0.5*ParamMaison[nume].taille;
-            pos.y := 0.5*Bas[0].TailleY+Bas[0].Position.y-0.5*ParamMaison[nume].taille;
+            pos.y := 0.5*Bas[0].TailleY+Bas[0].Position.y-0.5*ParamMaison[nume].taille - 0*LONG_TROTTOIR;
             pos.z := Min(Altitude(Pos.x-0.5*ParamMaison[nume].taille,Pos.y+LONG_PLUS_GRAND_IMMEUBLE),
                          Altitude(Pos.x+0.5*ParamMaison[nume].taille,Pos.y+LONG_PLUS_GRAND_IMMEUBLE));
 
@@ -486,8 +486,9 @@ begin
          i := 1; Long := Droit[0].TailleY+Bas[LongBas].TailleY;
          while Long < LongDroit do
          begin
-            if LongDroit-Long >= LONG_PLUS_GRAND_IMMEUBLE then nume := TireUnImmeuble(LONG_PLUS_GRAND_IMMEUBLE+1)
-            else nume := TireUnImmeuble(LongDroit-Long);
+            nume := TireUnImmeuble();
+            {if LongDroit-Long >= LONG_PLUS_GRAND_IMMEUBLE then nume := TireUnImmeuble(LONG_PLUS_GRAND_IMMEUBLE+1)
+            else nume := TireUnImmeuble(LongDroit-Long);}
             pos.x := 0.5*Droit[0].TailleX+Droit[0].Position.x-0.5*ParamMaison[nume].taille;
             Pos.y := Pos.y+0.5*ParamMaison[nume].taille;
             pos.z := Min(Altitude(Pos.x+LONG_PLUS_GRAND_IMMEUBLE,Pos.y-0.5*ParamMaison[nume].taille),
@@ -590,6 +591,7 @@ end;
                 glcallList(TabPart[10]); {4eme feu: orange}
              end;
       end;
+
       glDepthMask(GL_TRUE);
       glEnable(GL_CULL_FACE);
       GLPopMatrix();

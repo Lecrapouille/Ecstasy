@@ -1,11 +1,9 @@
-*.~pas
-*.~PAS
-*.~dfm
-*.~DFM
+*.~*
+*~
 *.dcu
 *.DCU
 *.cfg
 *.CFG
 *.dof
 *.DOF
-*~
+Thumbs.db

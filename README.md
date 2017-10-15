@@ -1,44 +1,99 @@
 # Ecstasy
 
-Ecstasy is a 3D game made in Delphi version 5 and OpenGL (<= 2.1) for Windows Xp made in 2003 at EPITA school.
+Ecstasy is a 3D game made in Delphi version 5 and OpenGL (<= 2.1), and some DirectX stuffs (for sound) for Windows Xp made in 2003 at EPITA school.
 
 Ecstasy was one of our first team projects (and game), so sorry this is not an optimized and free-bug game, use it 'as it' !
 
-## Wanted
+### Wanted
 
 I'm looking for Delphi developers. I'm curious to check if Ecstasy can work on recent Windows (>= 7) and therefore if the project can compile with a more recent Delphi.
 
-## Screenshot:
+### Screenshot
 
 ![alt tag](https://github.com/Lecrapouille/Ecstasy/blob/master/doc/screenshot.jpg)
 
 :) :) :) !!! Warning: Never take this substance when driving !!! :) :) :)
 
-## Features are
-* city generated randomly on a torus world.
+### Features are
+* infinite-sized city because generated randomly on a torus world (nice way to say I apply modulo on positions).
 * cars stopped at traffic lights.
 * developement report (requested by our teachers).
 * the player car has a basic physic model (physic is explained in the pdf).
 
+Note: In 2017, for the fun, I currently fixing lot of bugs and finishing some features.
+
 Not implemented:
 * missing a fixed frame rate (will be fixed in 2017).
-* off-road partially implemented (will be fixed in 2017).
+* ~~off-road partially implemented (will be fixed in 2017).~~
 * simple optim to avoid game slowing down on hudge traffic jam. (will be fixed in 2017).
 * no collision detection: cars and buildings (will be fixed in 2017 but just for buildings). 
-* no IA (collision avoidance, cars do not turn). (will never be added)
-* city generation with a better procedural process. (will never be added)
+* no IA (collision avoidance, IA cars do not turn; no police cars to catch the player).
+* city generation with a better procedural process.
 * More physics (like pumping effect on wheel depending on acceleration). (maybe will be added one day).
 
-## Player control
+### Player control
 
 * F1 key: change the camera view (inside or outside the car).
 * Numeric keys: 4, 6, 2, 8 for changing the camera position and angle.
+* Up/down: accelerate or brake.
 * Left/Right key (or mouse): change the wheel angle.
 * Tabular key: Change the gear (driving or reverse).
 
-## Notes
+### Notes
 
+* This project needs Borland Delphi 5. The main project is named `Ecstasy.dpr`. If you need Delphi5 for Windows XP (if people still use XP): send me an e-mail. You are welcome to check if this project works on different Windows and Delphi.
 * This is a french project (code + doc). Translations (even for the code source) upon request by e-mail.
 * More french documentation is given on my [webpage](http://q.quadrat.free.fr/ecstasy-fr.html) concerning how to add more cars in the game.
-* This project needs Borland Delphi 5 (never tried higher version). If you need Delphi5 for Windows XP (if people still have it): send me an e-mail. The main project is named `Ecstasy.dpr`.
-* You will need data/ near the exe to be loaded.
+* 3D models (car and buildings) are exported into ASE file format (use 3D Studio Max for example)
+* You will need the `data` directory near the `Ecstasy.exe` to be loaded.
+
+### Diving inside the code
+
+The city is just a grid of zones (2D matrix). Corners of the city are linked. That is why the city is infinite and we can see it, it lives on a torus world.
+
+A block is another kind of matrix: a rectangle made of two roads (horizontally and vertically), a cross-road, in the remaining space, there either buildings or a river or terrains (off-road). A road is a 4-ways road: direct (low and fast) and indirect (low and fast) Let see:
+one of the blocks: 
+```
+      +---------+----------------------------+           ^ X
+      |0 cross 1|0    road #1               1|           |
+      |  road   |                            |           | red
+      |3       2|3                          2|   Y <-----+
+      +---------+----------------------------+       green
+      |0       1|                            | 
+      |    r    |          buildings         |
+      |    o    |             or             |
+      |    a    |            river           |
+      |    d    |             or             |
+      |   #0    |          off-road          | 
+      |3       2|                            |
+      +---------+----------------------------+
+```
+Numbers 0 .. 3 indicates vertices order. Roads and crossroads are just 2 triangles. You can display the word axis (dessinerRepere(x,y,z). The X-axis is red and thr Y-axis is green. The Z-axis is blue and its direction is up.
+
+We give a random altitude to all crossroads (crossroad have all its vertices on the same altitude). Like this roads have a known slope. The off-road terrain is made of a matrix of rectangles sub-divided into two triangles (like any game with a height-map). The pavement of buildings is made of two triangles (that is enough good visualy and simple). It's now very easy to compute the altitude anywhere on the city.
+
+The city matrix looks like this:
+```
+  +--------------+--------------+-----+
+  | blocks[0,0]  |  block[1,0]  | ... |
+  +--------------+--------------+-----+
+  | blocks[1,0]  |  block[1,1]  | ... |
+  +--------------+--------------+-----+
+  |     ...      |      ...     | ... |
+  +--------------+--------------+-----+
+```
+
+A road looks like this (same behavior for road#0 and raod #1):
+```
+  +--------------------------------------+
+  |     <----      low way               |
+  +--  --  --  --  --  --  --  --  --  --+ direct way
+  |     <----     fast way               |
+  +======================================+
+  |     ---->      low way               |
+  +--  --  --  --  --  --  --  --  --  --+ indirect way
+  |     ---->     fast way               |
+  +--------------------------------------+
+```
+
+Traffic jam is just a dynalic list (linked-list) of vehicles. Each car know the velocity and position of the previous one. When a car changes of block (it was on the head of the linked-list) it's just detached form this list and placed on the queue of the list of the new block. The head car does not know information about the previous car (the last of the other block) but just know the state of the traffic light: it stops when passing from green to orange.

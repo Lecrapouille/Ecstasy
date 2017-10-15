@@ -575,6 +575,11 @@ function LoadTexture(Filename: String; var Texture : GLuint; LoadFromRes : Boole
 var
   extension: string;
 begin
+   if not(FileExists(Filename)) then
+   begin
+      MessageBox(0, PChar(Filename + ' n''existe pas'), PChar('Texture Error'), MB_OK);
+      exit;
+   end;
    extension := copy(Uppercase(filename), length(filename)-3, 4);
    if extension = '.BMP' then
       result := LoadBMPTexture(Filename, Texture, LoadFromRes)

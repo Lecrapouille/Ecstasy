@@ -59,8 +59,8 @@ begin
    ProgressBar.Etape := 1; Loading(0);
    for i := 1 to TabRepertVoit.long do
    begin
-      loaderAse(GetCurrentDir+'\data\Voitures\'+ TabRepertVoit.elt[i].Nom + '\Carcasse.ASE', @TabRepertVoit.elt[i-1].GLCarcasse, FALSE);
-      loaderAse(GetCurrentDir+'\data\Voitures\'+ TabRepertVoit.elt[i].Nom + '\Roue.ASE', @TabRepertVoit.elt[i-1].GLRoue, FALSE);
+      loaderAse(GetCurrentDir+'\data\Voitures\'+ TabRepertVoit.elt[i].Nom, 'Carcasse.ASE', @TabRepertVoit.elt[i-1].GLCarcasse, FALSE);
+      loaderAse(GetCurrentDir+'\data\Voitures\'+ TabRepertVoit.elt[i].Nom, 'Roue.ASE', @TabRepertVoit.elt[i-1].GLRoue, FALSE);
    end;
    ChargementFeuArriere();
    Loading(1);
@@ -70,12 +70,12 @@ procedure ChargementDesImmeubles();
 var i : integer;
 begin
    ProgressBar.Etape := 2; Loading(0);
-   loaderAse(GetCurrentDir + '\data\Immeubles\FeuRouge.ASE', @feurouge_liste, FALSE);
-   loaderAse(GetCurrentDir + '\data\Immeubles\Pont.ASE', @pont_liste, FALSE);
+   loaderAse(GetCurrentDir + '\data\Immeubles', 'FeuRouge.ASE', @feurouge_liste, FALSE);
+   loaderAse(GetCurrentDir + '\data\Immeubles', 'Pont.ASE', @pont_liste, FALSE);
 
    for i := 0 to NB_TYPE_MAISON do
    begin
-      loaderAse(GetCurrentDir + '\data\Immeubles\Immeuble_'+IntToStr(i)+'.ASE', @TabImeublesObjt[i], Params.Nuit);
+      loaderAse(GetCurrentDir + '\data\Immeubles', 'Immeuble_'+IntToStr(i)+'.ASE', @TabImeublesObjt[i], Params.Nuit);
    end;
    Loading(1);
 end;

@@ -40,7 +40,7 @@ var
    //                         textures: PGLuint);
    //                         Stdcall; External 'OpenGL32.dll';
 
-   procedure loaderAse(nomfich : string; obj : pobjet; LaNuit : boolean);
+   procedure loaderAse(NomDossier : string; NomFich : string; obj : pobjet; ModeNuit : boolean);
    procedure libererobjet(var Obj : TObjet);
 
 implementation
@@ -135,7 +135,7 @@ begin
 end;
 //------------------------------------------------------------------------------------------
 
-procedure loadmateriauxlist (obj : pObjet; bool : boolean);
+procedure loadmateriauxlist (NomDossier : string; obj : pObjet; bool : boolean);
 var i,j,long,k : integer;  chaine : string;
 s1 : string;
 begin
@@ -171,7 +171,7 @@ begin
                s1 := s1 + buffer[j];
                inc(j);
             end;
-            s1 := GetCurrentDir + '\data\textures\' + s1;
+            s1 := NomDossier + '\textures\' + s1;
 
             //on change s1 pour devenir s1_nuit.bmp
             if bool then
@@ -540,18 +540,21 @@ end;
 
 //------------------------------------------------------------------------------------------
 
-procedure loaderAse(nomfich : string; obj : pobjet; LaNuit : boolean);
+procedure loaderAse(NomDossier : string; NomFich : string; obj : pobjet; ModeNuit : boolean);
+var NomComplet: String;
 begin
-   if not(FileExists(nomfich)) then ShowMessage(nomfich + 'n''existe pas')
+   NomComplet := NomDossier + '/' + NomFich;
+   if not(FileExists(NomComplet)) then
+      ShowMessage(NomComplet + ' n''existe pas')
    else
    begin
-      AssignFile(InFile, nomfich);
+      AssignFile(InFile, NomComplet);
       Reset(InFile);
       while not EOF(InFile) do
       begin
          readln(Infile, buffer);
 
-         if (recherche('*MATERIAL_LIST {', buffer)) then loadmateriauxlist(obj,LaNuit);
+         if (recherche('*MATERIAL_LIST {', buffer)) then loadmateriauxlist(NomDossier,obj,ModeNuit);
          if (recherche('*MESH {', buffer))then loadmesh(obj);
       end;
       CloseFile(InFile);

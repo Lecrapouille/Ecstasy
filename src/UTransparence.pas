@@ -59,6 +59,10 @@ begin
          glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, pTextures^.SizeX, pTextures^.SizeY,
                        0, GL_RGB, GL_UNSIGNED_BYTE, pTextures^.Data);
       end;
+   end
+   else
+   begin
+      MessageBox(0, PChar('File not found  - ' + CheminMasque), PChar('Texture'), MB_OK);
    end;
 
    {Creation d'une texture image}
@@ -75,6 +79,10 @@ begin
          glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, pTextures^.SizeX, pTextures^.SizeY,
                        0, GL_RGB, GL_UNSIGNED_BYTE, pTextures^.Data);
       end;
+   end
+   else
+   begin
+      MessageBox(0, PChar('File not found  - ' + CheminImage), PChar('Texture'), MB_OK);
    end;
 
    NouvelleListe := glGenLists(1);

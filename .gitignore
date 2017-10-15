@@ -2,8 +2,6 @@
 *~
 *.dcu
 *.DCU
-*.cfg
-*.CFG
 *.dof
 *.DOF
 Thumbs.db

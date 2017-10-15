@@ -127,7 +127,7 @@ private
    Position : TVecteur;
    Liste_Affichage : gluint;
    constructor Create(posi : TVecteur; id : integer);
-   procedure Affiche(id : byte);
+   procedure Affiche(id : byte; hauteur: real);
 end;
 
 {*******************************************************************************
@@ -174,11 +174,23 @@ var
    TabPart : TTabPart;
    ParamMaison : array [0..NB_TYPE_MAISON] of Tinfo;
    DureeFeu : TDureeFeu = (0,0,0);
+   HauteurImmeuble : real = 1.0;
 
 implementation
 uses UJoueur, ULancement, UAltitude;
 
 procedure glBindTexture(target: GLenum; texture: GLuint); stdcall; external 'opengl32.dll';
+
+{*******************************************************************************
+ *
+ * Calcule un facteur d'echelle a appliquer sur la hauteur des immeubles
+ *
+ *******************************************************************************}
+function RandomHauteurImmeuble() : real;
+begin
+   HauteurImmeuble := 0.6 * HauteurImmeuble + 0.4 * (1.0 + random(2));
+   result := HauteurImmeuble;
+end;
 
 {*******************************************************************************
  *
@@ -205,12 +217,12 @@ begin
    Liste_Affichage := ParamMaison[id].Liste_Affichage;
 end;
 
-procedure TMaison.Affiche(id : byte);
+procedure TMaison.Affiche(id : byte; hauteur: real);
 begin
    glpushMatrix();
    gltranslated(Position.x,Position.y,Position.z);
    glrotate(-90*id,0,0,1);
-   //glscale(ECHELLE_IMMEUBLE,ECHELLE_IMMEUBLE,ECHELLE_IMMEUBLE);
+   glscalef(1.0, 1.0, hauteur);
    glCallList(Liste_Affichage);
    glPopMatrix();
 end;
@@ -403,8 +415,8 @@ begin
       end else
       begin
          CreerTrottoir(a,b);
-
          TypeDuBloc := EST_UN_BLOC;
+
          {GAUCHE-HAUT vers DROIT-HAUT}
          i := 0; Long := 2*LONG_TROTTOIR;
          Pos.x := P.x + LONG_TROTTOIR;
@@ -421,7 +433,7 @@ begin
                          Altitude(Pos.x+0.5*ParamMaison[nume].taille,Pos.y-LONG_PLUS_GRAND_IMMEUBLE));
 
             Haut[i] := TMaison.Create(pos,nume);
-            Haut[i].Affiche(0);
+            Haut[i].Affiche(0, RandomHauteurImmeuble());
             Pos.x := pos.x+0.5*ParamMaison[nume].taille;
             Long := Long+ParamMaison[nume].taille;
             i := i+1;
@@ -447,7 +459,7 @@ begin
                          Altitude(Pos.x-LONG_PLUS_GRAND_IMMEUBLE,Pos.y+0.5*ParamMaison[nume].taille));
 
             Gauche[i] := TMaison.Create(pos,nume);
-            Gauche[i].Affiche(1);
+            Gauche[i].Affiche(1, RandomHauteurImmeuble());
             Pos.y := pos.y+0.5*ParamMaison[nume].taille;
             Long := Long+ParamMaison[nume].taille;
             i := i+1;
@@ -471,7 +483,7 @@ begin
                          Altitude(Pos.x+0.5*ParamMaison[nume].taille,Pos.y+LONG_PLUS_GRAND_IMMEUBLE));
 
             Bas[i] := TMaison.Create(pos,nume);
-            Bas[i].Affiche(2);
+            Bas[i].Affiche(2, RandomHauteurImmeuble());
             Pos.x := pos.x+0.5*ParamMaison[nume].taille;
             Long := Long+ParamMaison[nume].taille;
             i := i+1;
@@ -495,7 +507,7 @@ begin
                          Altitude(Pos.x+LONG_PLUS_GRAND_IMMEUBLE,Pos.y+0.5*ParamMaison[nume].taille));
 
             Droit[i] := TMaison.Create(pos,nume);
-            Droit[i].Affiche(3);
+            Droit[i].Affiche(3, RandomHauteurImmeuble());
             Pos.y := pos.y+0.5*ParamMaison[nume].taille;
             Long := Long+ParamMaison[nume].taille;
             i := i+1;

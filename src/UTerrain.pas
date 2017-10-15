@@ -25,8 +25,8 @@ uses  Windows,
 
 CONST
 NB_SUB_TROTTOIR = 1;
-NB_SUB_TERRAIN = 4;
-ELEVATION_TERRAIN = 200;
+NB_SUB_TERRAIN = 16;
+ELEVATION_TERRAIN = 50;
 
 procedure CreerTrottoir(a,b : byte);
 procedure CreerTerrain(a,b : byte);
@@ -90,6 +90,7 @@ pA, pB, pC, pD, p : Tvecteur;
 begin
    with MaVille[a,b] do
    begin
+      {Recupere les position des bords du quartier}
       pA := Maville[a,b].Carrefour.TabPos[2];
       pB := Maville[a,b].Route0.TabPos[2];
       pC := Maville[a,b].Route1.TabPos[2];
@@ -110,9 +111,10 @@ begin
       Terrain[0,NB_SUB_TERRAIN]              := pC.z;
       Terrain[NB_SUB_TERRAIN,NB_SUB_TERRAIN] := pD.z;
 
-      TriangleDebug2(pA, pD, pC);
-      TriangleDebug(pD, pB, pA);
+      //TriangleDebug2(pA, pD, pC);
+      //TriangleDebug(pD, pB, pA);
 
+      {Creation de la grille: triangulation}
       for i := 0 to NB_SUB_TERRAIN do
       begin
          k := 0;
@@ -121,12 +123,19 @@ begin
              p.x := pA.x + i * LONG_ROUTE_X / NB_SUB_TERRAIN;
              p.y := pA.y + j * LONG_ROUTE_Y / NB_SUB_TERRAIN;
 
-             if i <= j - k then begin Terrain[i,j] := PositionZSurTriangle(pA, pD, pC, p); DessinerRepere(p.x, p.y, Terrain[i,j]+2); end
-             else begin Terrain[i,j] := PositionZSurTriangle(pD, pB, pA, p); DessinerRepere2(p.x, p.y, Terrain[i,j]+2); end;
-            //Terrain[i,j] := 0.97*Terrain[i-1,j-1]+0.03*random(ELEVATION_TERRAIN);
-            //Terrain[i,j] := Terrain[i-1,j-1];
+             if i <= j - k then begin Terrain[i,j] := PositionZSurTriangle(pA, pD, pC, p); {DessinerRepere(p.x, p.y, Terrain[i,j]+2);} end
+             else begin Terrain[i,j] := PositionZSurTriangle(pD, pB, pA, p); {DessinerRepere2(p.x, p.y, Terrain[i,j]+2);} end;
          end;
          inc(k);
+      end;
+
+      {Elevation du terrain sauf sur les bords qui doivent coller a la route}
+      for i := 1 to NB_SUB_TERRAIN-1 do
+      begin
+         for j := 1 to NB_SUB_TERRAIN-1 do
+         begin
+             Terrain[i,j] := 0.97*Terrain[i,j]+0.03*random(200);
+         end;
       end;
    end;
 end;
@@ -135,9 +144,9 @@ procedure Trottoir(a, b : integer);    // FIXME Trottoir pas Terrain
 begin
    with MaVille[a,b] do
    begin
-      Terrain[0,0]                               := Maville[a,b].Carrefour.TabPos[2].z;
-      Terrain[NB_SUB_TROTTOIR,0]                := Maville[a,b].Route0.TabPos[2].z;
-      Terrain[0,NB_SUB_TROTTOIR]                := Maville[a,b].Route1.TabPos[2].z;
+      Terrain[0,0]                             := Maville[a,b].Carrefour.TabPos[2].z;
+      Terrain[NB_SUB_TROTTOIR,0]               := Maville[a,b].Route0.TabPos[2].z;
+      Terrain[0,NB_SUB_TROTTOIR]               := Maville[a,b].Route1.TabPos[2].z;
       Terrain[NB_SUB_TROTTOIR,NB_SUB_TROTTOIR] := Maville[(a+1) mod NB_BLOC_MAX_X, (b+1) mod NB_BLOC_MAX_X].Carrefour.TabPos[2].z;
    end;
 end;

@@ -63,6 +63,7 @@ var
    procedure glKillWnd(Width, Height : Integer; Fullscreen : Boolean);
    Procedure glBindTexture(target: GLEnum; texture: GLuint); Stdcall; External 'OpenGL32.dll';
    procedure BuildFont( police : integer);
+   procedure InitialisationSupplementOpengl(params : T_Param);
 
 implementation
 uses USons;
@@ -151,43 +152,6 @@ begin
    glcullface(GL_FRONT);
    glEnable(GL_CULL_FACE);
 
-   if Params.fog then
-   begin
-      if Params.Nuit then
-      begin
-         FogCouleur_1[0] := 0.1;
-         FogCouleur_1[1] := 0.1;
-         FogCouleur_1[2] := 0.1;
-         FogCouleur_1[3] := 1.0;
-
-         glFogi( GL_FOG_START, 100);
-      end else
-      begin
-         FogCouleur_1[0] := 0.5;
-         FogCouleur_1[1] := 0.5;
-         FogCouleur_1[2] := 0.6;
-         FogCouleur_1[3] := 1.0;
-
-         glFogi( GL_FOG_START, 300);
-      end;
-      glFogi( GL_FOG_END, DISTANCE_CLIPPING);
-      glFogf( GL_FOG_MODE, GL_LINEAR);
-      glFogf( GL_FOG_DENSITY, 0.95 );
-      glEnable( GL_FOG );
-   end;
-
-   {Soleil}
-   if Params.Soleil then
-   begin
-      glLightfv(GL_LIGHT0, GL_AMBIENT, @LightAmbient);
-      glLightfv(GL_LIGHT0, GL_DIFFUSE, @LightDiffuse);
-      glLightfv(GL_LIGHT0, GL_POSITION,@LightPosition);
-
-      glEnable(GL_LIGHTING);
-      glEnable(GL_LIGHT0);
-   end;
-
-
    glHint(GL_PERSPECTIVE_CORRECTION_HINT,GL_NICEST);    // Really Nice Perspective Calculations
    glMatrixMode(GL_PROJECTION);                         // Select The Projection Matrix
    glLoadIdentity();                                    // Reset The Projection Matrix                                                  // Reset The Projection Matrix
@@ -202,6 +166,68 @@ begin
 end;
 //----------------------------------------------------------------------------//
 
+procedure InitialisationSupplementOpengl(params : T_Param);
+begin
+
+   if Params.Nuit then
+   begin
+      if Params.fog then
+      begin
+         FogCouleur_1[0] := 0.1;
+         FogCouleur_1[1] := 0.1;
+         FogCouleur_1[2] := 0.1;
+         FogCouleur_1[3] := 1.0;
+         glFogi(GL_FOG_START, 100);
+         glFogi(GL_FOG_END, DISTANCE_CLIPPING);
+         glFogf(GL_FOG_MODE, GL_LINEAR);
+         glFogf(GL_FOG_DENSITY, 0.95);
+         glEnable(GL_FOG);
+      end;
+
+      if Params.glLumiere then
+      begin
+         LightAmbient[0] := 0.0;
+         LightAmbient[1] := 0.0;
+         LightAmbient[2] := 1.0;
+         LightAmbient[3] := 1.0;
+
+         glLightfv(GL_LIGHT0, GL_AMBIENT, @LightAmbient);
+         glLightfv(GL_LIGHT0, GL_DIFFUSE, @LightDiffuse);
+         glLightfv(GL_LIGHT0, GL_POSITION,@LightPosition);
+         glEnable(GL_LIGHTING);
+         glEnable(GL_LIGHT0);
+      end;
+   end
+   else {jour}
+   begin
+      if Params.fog then
+      begin
+         FogCouleur_1[0] := 0.5;
+         FogCouleur_1[1] := 0.5;
+         FogCouleur_1[2] := 0.6;
+         FogCouleur_1[3] := 1.0;
+         glFogi(GL_FOG_START, 100);
+         glFogi(GL_FOG_END, DISTANCE_CLIPPING);
+         glFogf(GL_FOG_MODE, GL_LINEAR);
+         glFogf(GL_FOG_DENSITY, 0.95);
+         glEnable(GL_FOG);
+      end;
+
+      if Params.glLumiere then
+      begin
+         LightAmbient[0] := 0.8;
+         LightAmbient[1] := 0.8;
+         LightAmbient[2] := 0.8;
+         LightAmbient[3] := 1.0;
+
+         glLightfv(GL_LIGHT0, GL_AMBIENT, @LightAmbient);
+         glLightfv(GL_LIGHT0, GL_DIFFUSE, @LightDiffuse);
+         glLightfv(GL_LIGHT0, GL_POSITION,@LightPosition);
+         glEnable(GL_LIGHTING);
+         glEnable(GL_LIGHT0);
+      end;
+   end;
+end;
 
 function IntToStr(Num : Integer) : String;
 begin
@@ -251,7 +277,7 @@ end;
 //----------------------------------------------------------------------------//
 function WndProc(hWnd: HWND; Msg: UINT;  wParam: WPARAM;  lParam: LPARAM): LRESULT; stdcall;
 begin
-   Result := 0; 
+   Result := 0;
    case (Msg) of
       WM_CREATE:
          begin

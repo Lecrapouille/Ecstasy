@@ -121,6 +121,8 @@ begin
    {circulation}
    InitCirculation();
    loading(1);
+
+   InitialisationSupplementOpengl(Params);
 end;
 //----------------------------------------------------------------------------//
 

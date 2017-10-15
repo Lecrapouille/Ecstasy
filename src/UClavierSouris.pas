@@ -73,8 +73,7 @@ begin
    end;
 
    if Joueur.vitesse = 0 then Joueur.vitesse := VITESSE_MINIMALE;
-   for i:=0 to 255 do
-      Keysold[i]:=Keys[i];
+   for i := 0 to 255 do Keysold[i] := Keys[i];
    OldColliImmeuble := ColliImmeuble;
    OldColliVoiture  := ColliVoiture;
 end;

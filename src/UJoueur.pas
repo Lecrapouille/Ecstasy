@@ -53,6 +53,7 @@ public
    procedure AfficheTableauDeBord();
    procedure CollisionSurImmeubles();
    procedure CollisionSurVoitures();
+   procedure afficheVoiture();
 private
    procedure CreerTableauDeBord();
    procedure ActualiseCamera();
@@ -159,11 +160,6 @@ begin
    ActualiseDynamique({max(round(1 / (Param.PAST*nbframes)),1)});
    ActualiseCamera();
 
-   if (Camera.id <> 1) AND (Camera.id <> 2) then Affiche();
-
-   if (Camera.position.z < -19) then glFogfv(GL_FOG_COLOR, @FogCouleur_2)
-   else glFogfv( GL_FOG_COLOR, @FogCouleur_1);
-
    FaitDuBruit();
 end;
 
@@ -225,6 +221,44 @@ begin
              Camera.Orientation.y := 1;
              Camera.Orientation.z := 0;
           end;
+   end;
+end;
+
+{*******************************************************************************
+ *
+ *
+ *
+ *******************************************************************************}
+procedure TJoueur.afficheVoiture();
+begin
+   {On réénitialise la matrice modélisation-visualisation}
+   glMatrixMode(GL_MODELVIEW);
+   glLoadIdentity;
+   if (Camera.id = 1) OR (Camera.id = 2) then
+   begin
+      glrotated(RadToDeg(-Joueur.Tangage),1,0,0);
+      glrotated(RadToDeg(-Joueur.Roulis), 0,0,1);
+   end;
+   GluLookAt(Camera.Position.x,    Camera.Position.y,     Camera.Position.z,
+             Camera.Target.x,      Camera.Target.y,       Camera.Target.z,
+             Camera.Orientation.x, Camera.Orientation.y,  Camera.Orientation.z);
+
+   if (Camera.id = 1) then
+   begin
+      if Params.fog then glDisable(GL_FOG);
+      if Params.glLumiere then glDisable(GL_LIGHTING);
+      Joueur.AfficheTableauDeBord();
+      if Params.glLumiere then glEnable(GL_LIGHTING);
+      if Params.fog then glEnable(GL_FOG);
+   end;
+
+   if (Camera.id <> 1) AND (Camera.id <> 2) then Affiche();
+   Freine := false;
+
+   if Params.fog then
+   begin
+      if (Camera.position.z < -19) then glFogfv(GL_FOG_COLOR, @FogCouleur_2)
+      else glFogfv( GL_FOG_COLOR, @FogCouleur_1);
    end;
 end;
 

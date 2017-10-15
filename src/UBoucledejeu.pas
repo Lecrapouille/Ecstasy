@@ -44,6 +44,27 @@ function WinMain(hInstance : HINST; hPrevInstance : HINST;
 implementation
 uses Forms,UInterfa;
 
+procedure Meteo();
+begin
+   if not(params.fog) then
+   begin
+      if Params.Nuit then glClearColor(0.0,0.0,0.0,1)
+      else glClearColor(0.5,0.5,0.6,1)
+   end
+   else if Camera.position.z < -19 then
+   begin
+      glFogfv( GL_FOG_COLOR, @FogCouleur_2);
+      glDisable(GL_CULL_FACE);
+      glClearColor(FogCouleur_2[0], FogCouleur_2[1], FogCouleur_2[2], FogCouleur_2[3]);
+   end else
+   begin
+      glFogfv( GL_FOG_COLOR, @FogCouleur_1);
+      glClearColor(FogCouleur_1[0], FogCouleur_1[1], FogCouleur_1[2], FogCouleur_1[3]);
+   end;
+   Systeme.Actualise(Systeme.ListeParticule);
+   if Params.Pluie then Pluie.Actualise(Joueur.Position, Pluie.ListeParticule);
+end;
+
 {--------------------------------------------------------------------}
 {  Main message loop for the application                             }
 {--------------------------------------------------------------------}
@@ -85,6 +106,8 @@ begin
          end;
       end else
       begin
+         {Vidage du contenu situé à l'écran et fog}
+         glClear(GL_COLOR_BUFFER_BIT OR GL_DEPTH_BUFFER_BIT);
 
          {Calcul du pas en temps}
          LastTime := ElapsedTime;
@@ -92,57 +115,18 @@ begin
          ElapsedTime := (LastTime + ElapsedTime) DIV 2;
          deltaTime := ElapsedTime / 1000.0; // secondes
 
+         ActualiseVille();
+
          //definition des actions
          UtilisationDuClavier({Joueur,Camera,}Keys, finished);
          BougeSouris(XMouse, YMouse);
-
-         {Vidage du contenu situé à l'écran et fog}
-         glClear(GL_COLOR_BUFFER_BIT OR GL_DEPTH_BUFFER_BIT);
-         if not(params.fog) then
-         begin
-            if Params.Nuit then glClearColor(0.0,0.0,0.0,1)
-            else glClearColor(0.5,0.5,0.6,1)
-         end
-         else if Camera.position.z < -19 then
-         begin
-            glFogfv( GL_FOG_COLOR, @FogCouleur_2);
-            glDisable(GL_CULL_FACE);
-            glClearColor(FogCouleur_2[0], FogCouleur_2[1], FogCouleur_2[2], FogCouleur_2[3]);
-         end else
-         begin
-            glFogfv( GL_FOG_COLOR, @FogCouleur_1);
-            glClearColor(FogCouleur_1[0], FogCouleur_1[1], FogCouleur_1[2], FogCouleur_1[3]);
-         end;
-
-         {On réénitialise la matrice modélisation-visualisation}
-         glMatrixMode(GL_MODELVIEW);
-         glLoadIdentity;
-         if (Camera.id = 1) OR (Camera.id = 2) then
-         begin
-            //glpushMatrix();
-            glrotated(RadToDeg(-Joueur.Tangage),1,0,0);
-            glrotated(RadToDeg(-Joueur.Roulis), 0,0,1);
-         end;
-         GluLookAt(Camera.Position.x,    Camera.Position.y,     Camera.Position.z,
-                   Camera.Target.x,      Camera.Target.y,       Camera.Target.z,
-                   Camera.Orientation.x, Camera.Orientation.y,  Camera.Orientation.z);
-         //glpopMatrix();
-
-         {Frustum}
-         Myfrust.CalculateFrustum;
-
-         ActuCircuDirect();
-         ActuCircuIndirect();
          Joueur.Actualise();
 
+         Meteo();
          AfficheVille();
-         ActualiseLesFeux();
-
-         Systeme.Actualise(Systeme.ListeParticule);
-         if Params.Pluie then Pluie.Actualise(Joueur.Position, Pluie.ListeParticule);
-
-
-         if (Camera.id = 1) then Joueur.AfficheTableauDeBord();
+         Joueur.afficheVoiture();
+         {Frustum}
+         Myfrust.CalculateFrustum;
 
          {Force les FPS a 60 soit 1 image toutes les 16.66 ms}
          //while GetTickCount() - CurrentTime < MS_PAR_IMAGE do

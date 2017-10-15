@@ -86,11 +86,11 @@ TCirculation = class(Tobject)
    Queue : TPGoodies;
    destructor  DestroyCirculation();
    procedure   Affiche();
+   procedure   ActualiseIndirect(const i,j,QuelleRoute,QuelleVoie : integer);
+   procedure   ActualiseDirect(const i,j,QuelleRoute,QuelleVoie : integer);
 private
    function    SupprimeTete() : TPGoodies;
    constructor AjoutEnQueue(const voit : TPGoodies);
-   constructor ActuIndirect(const i,j,QuelleRoute,QuelleVoie : integer);
-   procedure   ActuDirect(const i,j,QuelleRoute,QuelleVoie : integer);
    procedure   Initialisation();
 end;
 
@@ -108,8 +108,6 @@ end;
 TTabCirculation = array[ROUTE_0..ROUTE_1,SENS_DIRECT..SENS_INDIRECT,VOIE_LENTE..VOIE_RAPIDE] of TCirculation;
 
 procedure InitCirculation();
-procedure ActuCircuDirect();
-procedure ActuCircuIndirect();
 
 implementation
 uses UAltitude, UCaractere, ULancement, UVille;
@@ -262,7 +260,7 @@ end;
  * Actualisation de la circulation sur les routes a sens direct
  *
  *******************************************************************************}
-procedure TCirculation.ActuDirect(const i,j,QuelleRoute,QuelleVoie : integer);
+procedure TCirculation.ActualiseDirect(const i,j,QuelleRoute,QuelleVoie : integer);
 var Voit,Temp,Voit1,tuture : TPGoodies;
 ieme,jeme : integer;
 Posi : TVecteur;
@@ -345,7 +343,7 @@ end;
  *  Actualisation de la circulation sur les routes a sens indirect
  *
  *******************************************************************************}
-constructor TCirculation.ActuIndirect(const i,j,QuelleRoute,QuelleVoie : integer);
+procedure TCirculation.ActualiseIndirect(const i,j,QuelleRoute,QuelleVoie : integer);
 var Voit,Temp,Voit1,tuture : TPGoodies;
 ieme,jeme : integer;
 Posi : TVecteur;
@@ -642,47 +640,6 @@ begin
             Temp^.Prec := NIL;
             MaVille[i,j].TabCirculation[ROUTE_1,SENS_INDIRECT,VOIE_RAPIDE].AjoutEnQueue(Temp);
          end;
-      end;
-   end;
-end;
-
-{*******************************************************************************
- *
- *
- *
- *******************************************************************************}
-procedure ActuCircuDirect();
-var i,j : integer;
-begin
-   for i := NB_BLOC_MAX_X-1 downto 0 do
-   begin
-      for j := 0 to NB_BLOC_MAX_Y-1 do
-      begin
-         MaVille[i,j].TabCirculation[ROUTE_0,SENS_DIRECT,VOIE_LENTE].ActuDirect(i,j,ROUTE_0,VOIE_LENTE);
-         MaVille[i,j].TabCirculation[ROUTE_1,SENS_DIRECT,VOIE_LENTE].ActuDirect(i,j,ROUTE_1,VOIE_LENTE);
-         MaVille[i,j].TabCirculation[ROUTE_0,SENS_DIRECT,VOIE_RAPIDE].ActuDirect(i,j,ROUTE_0,VOIE_RAPIDE);
-         MaVille[i,j].TabCirculation[ROUTE_1,SENS_DIRECT,VOIE_RAPIDE].ActuDirect(i,j,ROUTE_1,VOIE_RAPIDE);
-      end;
-   end;
-end;
-
-
-{*******************************************************************************
- *
- *
- *
- *******************************************************************************}
-procedure ActuCircuIndirect();
-var i,j : integer;
-begin
-   for i := 0 to NB_BLOC_MAX_X-1 do
-   begin
-      for j := 0 to NB_BLOC_MAX_Y-1 do
-      begin
-         MaVille[i,j].TabCirculation[ROUTE_0,SENS_INDIRECT,VOIE_LENTE].ActuIndirect(i,j,ROUTE_0,VOIE_LENTE);
-         MaVille[i,j].TabCirculation[ROUTE_1,SENS_INDIRECT,VOIE_LENTE].ActuIndirect(i,j,ROUTE_1,VOIE_LENTE);
-         MaVille[i,j].TabCirculation[ROUTE_0,SENS_INDIRECT,VOIE_RAPIDE].ActuIndirect(i,j,ROUTE_0,VOIE_RAPIDE);
-         MaVille[i,j].TabCirculation[ROUTE_1,SENS_INDIRECT,VOIE_RAPIDE].ActuIndirect(i,j,ROUTE_1,VOIE_RAPIDE);
       end;
    end;
 end;

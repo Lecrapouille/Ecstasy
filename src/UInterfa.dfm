@@ -1,6 +1,6 @@
 object Form1: TForm1
-  Left = 689
-  Top = 174
+  Left = 714
+  Top = 222
   Anchors = [akRight, akBottom]
   BorderIcons = []
   BorderStyle = bsToolWindow
@@ -82,7 +82,7 @@ object Form1: TForm1
     Top = 0
     Width = 457
     Height = 409
-    ActivePage = TabSheet3
+    ActivePage = TabSheet1
     TabOrder = 2
     object TabSheet1: TTabSheet
       Caption = '&Configuration du joueur'
@@ -99,7 +99,7 @@ object Form1: TForm1
         Width = 433
         Height = 21
         DragMode = dmAutomatic
-        ItemHeight = 0
+        ItemHeight = 13
         TabOrder = 0
         Text = 'ComboBox3'
         OnChange = ComboBox3Change
@@ -192,81 +192,34 @@ object Form1: TForm1
           OnClick = CheckBox1Click
         end
       end
-      object GroupBox3: TGroupBox
-        Left = 200
-        Top = 224
-        Width = 249
-        Height = 105
-        Caption = 'Lumières'
-        Enabled = False
-        TabOrder = 1
-        object Label3: TLabel
-          Left = 8
-          Top = 80
-          Width = 154
-          Height = 13
-          Caption = 'énorment la vitesse du jeu.'
-        end
-        object Label5: TLabel
-          Left = 8
-          Top = 64
-          Width = 203
-          Height = 13
-          Caption = 'Attention : les lumières ralentissent '
-        end
-        object CheckBox4: TCheckBox
-          Left = 8
-          Top = 40
-          Width = 169
-          Height = 17
-          Caption = 'Lumière du soleil activée'
-          TabOrder = 0
-          OnClick = CheckBox4Click
-        end
-        object CheckBox5: TCheckBox
-          Left = 8
-          Top = 16
-          Width = 169
-          Height = 17
-          Caption = 'Phares du joueur activés'
-          TabOrder = 1
-        end
-      end
       object GroupBox8: TGroupBox
         Left = 200
         Top = 8
         Width = 241
-        Height = 113
+        Height = 89
         Caption = 'Atmosphère  '
-        TabOrder = 2
-        object Label35: TLabel
-          Left = 64
-          Top = 17
-          Width = 36
-          Height = 13
-          Caption = 'activé'
-        end
+        TabOrder = 1
         object CheckBox3: TCheckBox
           Left = 8
           Top = 16
-          Width = 57
+          Width = 113
           Height = 17
-          Caption = 'Orage'
+          Caption = 'Orage désactivé'
           TabOrder = 0
           OnClick = CheckBox3Click
         end
         object CheckBox2: TCheckBox
           Left = 8
-          Top = 64
+          Top = 32
           Width = 129
           Height = 17
-          Caption = 'Brume activée'
+          Caption = 'Brume désactivée'
           TabOrder = 1
           OnClick = CheckBox2Click
         end
         object CheckBox11: TCheckBox
           Left = 8
-          Top = 88
+          Top = 48
           Width = 97
           Height = 17
           Caption = 'Nuit'
@@ -274,22 +227,40 @@ object Form1: TForm1
           OnClick = CheckBox11Click
         end
         object CheckBox12: TCheckBox
-          Left = 8
-          Top = 40
-          Width = 129
+          Left = 120
+          Top = 16
+          Width = 113
           Height = 17
           Caption = 'Pluie désactivée'
           TabOrder = 3
           OnClick = CheckBox12Click
+        end
+        object CheckBox4: TCheckBox
+          Left = 56
+          Top = 48
+          Width = 153
+          Height = 17
+          Caption = 'Lumière désactivée'
+          TabOrder = 4
+          OnClick = CheckBox4Click
+        end
+        object CheckBox5: TCheckBox
+          Left = 8
+          Top = 64
+          Width = 217
+          Height = 17
+          Caption = 'Phares des voitures désactivés'
+          TabOrder = 5
+          OnClick = CheckBox5Click
         end
       end
       object GroupBox5: TGroupBox
         Left = 8
         Top = 152
         Width = 185
-        Height = 225
+        Height = 185
         Caption = 'Ville '
-        TabOrder = 3
+        TabOrder = 2
         object Label8: TLabel
           Left = 7
           Top = 40
@@ -299,14 +270,14 @@ object Form1: TForm1
         end
         object Label27: TLabel
           Left = 7
-          Top = 96
+          Top = 88
           Width = 141
           Height = 13
           Caption = 'Altitude max des collines'
         end
         object Label6: TLabel
           Left = 8
-          Top = 152
+          Top = 136
           Width = 137
           Height = 13
           Caption = 'Pourcentage de terrains'
@@ -338,7 +309,7 @@ object Form1: TForm1
         end
         object TrackBar3: TTrackBar
           Left = 8
-          Top = 112
+          Top = 104
           Width = 129
           Height = 33
           Max = 150
@@ -354,7 +325,7 @@ object Form1: TForm1
         end
         object Edit15: TEdit
           Left = 136
-          Top = 112
+          Top = 104
           Width = 41
           Height = 21
           ReadOnly = True
@@ -363,9 +334,9 @@ object Form1: TForm1
         end
         object ScrollBar2: TScrollBar
           Left = 16
-          Top = 176
+          Top = 160
           Width = 113
-          Height = 16
+          Height = 17
           PageSize = 0
           SmallChange = 10
           TabOrder = 4
@@ -373,7 +344,7 @@ object Form1: TForm1
         end
         object Edit1: TEdit
           Left = 136
-          Top = 168
+          Top = 152
           Width = 41
           Height = 21
           TabOrder = 5
@@ -393,11 +364,11 @@ object Form1: TForm1
       end
       object GroupBox10: TGroupBox
         Left = 200
-        Top = 336
-        Width = 249
+        Top = 104
+        Width = 241
         Height = 41
         Caption = 'Sons'
-        TabOrder = 4
+        TabOrder = 3
         object CheckBox6: TCheckBox
           Left = 8
           Top = 16
@@ -410,11 +381,11 @@ object Form1: TForm1
       end
       object GroupBox7: TGroupBox
         Left = 200
-        Top = 128
+        Top = 152
         Width = 249
         Height = 89
         Caption = 'Densité de la circulation '
-        TabOrder = 5
+        TabOrder = 4
         object Label1: TLabel
           Left = 8
           Top = 48

@@ -27,10 +27,10 @@ uses UTypege,
      URepere,
      Opengl;
 
-procedure CreationVille();
-Procedure AfficheVille();
 procedure InitParametreMaison();
-procedure ActualiseLesFeux();
+procedure CreationVille();
+procedure ActualiseVille();
+Procedure AfficheVille();
 Procedure DestroyVille();
 
 {*******************************************************************************
@@ -160,6 +160,8 @@ private
    constructor Creation(P : TVecteur; nh,nd,nb,ng,a,b,ran : integer);
    procedure Affiche(a,b : integer);
    procedure ActualiseFeu(i,j : integer);
+   procedure AfficheFleuve();
+   procedure AfficheFeuxTricolores(a,b : integer);
 end;
 
 {*******************************************************************************
@@ -425,7 +427,7 @@ begin
          begin
             nume := TireUnImmeuble();
             {if LongHaut-Long >= LONG_PLUS_GRAND_IMMEUBLE then nume := TireUnImmeuble(LONG_PLUS_GRAND_IMMEUBLE+1)
-            else nume := TireUnImmeuble(LongHaut-Long);}
+             else nume := TireUnImmeuble(LongHaut-Long);}
 
             Pos.x := pos.x+0.5*ParamMaison[nume].taille;
             pos.y := P.y+0.5*ParamMaison[nume].taille + LONG_TROTTOIR;
@@ -452,7 +454,7 @@ begin
          begin
             nume := TireUnImmeuble();
             {if LongGauche-Long >= LONG_PLUS_GRAND_IMMEUBLE then nume := TireUnImmeuble(LONG_PLUS_GRAND_IMMEUBLE+1)
-            else nume := TireUnImmeuble(LongGauche-Long);}
+             else nume := TireUnImmeuble(LongGauche-Long);}
             Pos.y := Pos.y+0.5*ParamMaison[nume].taille;
             pos.x := P.x+0.5*ParamMaison[nume].taille + LONG_TROTTOIR;
             pos.z := Min(Altitude(Pos.x-LONG_PLUS_GRAND_IMMEUBLE,Pos.y-0.5*ParamMaison[nume].taille),
@@ -476,7 +478,7 @@ begin
          begin
             nume := TireUnImmeuble();
             {if LongBas-Long >= LONG_PLUS_GRAND_IMMEUBLE then nume := TireUnImmeuble(LONG_PLUS_GRAND_IMMEUBLE+1)
-            else nume := TireUnImmeuble(LongBas-Long);}
+             else nume := TireUnImmeuble(LongBas-Long);}
             Pos.x := pos.x+0.5*ParamMaison[nume].taille;
             pos.y := 0.5*Bas[0].TailleY+Bas[0].Position.y-0.5*ParamMaison[nume].taille - 0*LONG_TROTTOIR;
             pos.z := Min(Altitude(Pos.x-0.5*ParamMaison[nume].taille,Pos.y+LONG_PLUS_GRAND_IMMEUBLE),
@@ -500,7 +502,7 @@ begin
          begin
             nume := TireUnImmeuble();
             {if LongDroit-Long >= LONG_PLUS_GRAND_IMMEUBLE then nume := TireUnImmeuble(LONG_PLUS_GRAND_IMMEUBLE+1)
-            else nume := TireUnImmeuble(LongDroit-Long);}
+             else nume := TireUnImmeuble(LongDroit-Long);}
             pos.x := 0.5*Droit[0].TailleX+Droit[0].Position.x-0.5*ParamMaison[nume].taille;
             Pos.y := Pos.y+0.5*ParamMaison[nume].taille;
             pos.z := Min(Altitude(Pos.x+LONG_PLUS_GRAND_IMMEUBLE,Pos.y-0.5*ParamMaison[nume].taille),
@@ -517,84 +519,92 @@ begin
    glEndList();
 end;
 
+{*******************************************************************************}
+procedure TBloc.AfficheFleuve();
+var dx,dy : real;
+begin
+   Decal_Texture_Eau := Decal_Texture_Eau + 0.01;
+   dx := (LONG_ROUTE_X+ESPACE_CAREFOUR)/2;
+   dy := (LONG_ROUTE_Y+ESPACE_CAREFOUR)/2;
+
+   //texture eau
+   glDisable(GL_CULL_FACE);
+   GlPushMatrix();
+   Gltranslated(Carrefour.TabPos[2].x+LONG_ROUTE_X/2,Carrefour.TabPos[2].y+LONG_ROUTE_Y/2,-18);
+   GlEnable(GL_TEXTURE_2D);
+   Glcolor3f(1,1,1);
+   GlBindTexture(GL_TEXTURE_2D, Text_eau);
+   GlBegin(gl_triangles);
+   glTexCoord2f(1.0+Decal_Texture_Eau,  1.0+Decal_Texture_Eau); glVertex3f(-dx,-dy,1);
+   glTexCoord2f(1.0+Decal_Texture_Eau,  0.0);                   glVertex3f(-dx,dy,1);
+   glTexCoord2f(0.0,                    0.0);                   glVertex3f(dx,dy,1);
+
+   glTexCoord2f(0.0,                    0.0);                   glVertex3f(dx,dy,1);
+   glTexCoord2f(0.0,                    1.0+Decal_Texture_Eau); glVertex3f(dx,-dy,1);
+   glTexCoord2f(1.0+Decal_Texture_Eau,  1.0+Decal_Texture_Eau); glVertex3f(-dx,-dy,1);
+   GlEnd();
+   GlPopMatrix();
+   glEnable(GL_CULL_FACE);
+end;
+
+procedure TBloc.AfficheFeuxTricolores(a,b : integer);
+begin
+   glPushMatrix();
+   glDepthMask(GL_FALSE);
+   glDisable(GL_CULL_FACE);
+   Gltranslated(a*TAILLE_BLOC_X, b*TAILLE_BLOC_Y, MaVille[a,b].Carrefour.TabPos[0].z);
+
+   if Params.fog then glDisable(GL_FOG);
+   if Params.glLumiere then glDisable(GL_LIGHTING);
+   case MaVille[a,b].EtatFeux of
+      ETAT_FEUX_VERT_ROUGE :
+         begin
+            glcallList(TabPart[0]);  {1er  feu: vert}
+            glcallList(TabPart[3]);  {2eme feu: vert}
+            glcallList(TabPart[8]);  {3eme feu: rouge}
+            glcallList(TabPart[11]); {4eme feu: rouge}
+         end;
+      ETAT_FEUX_ORANGE_ROUGE :
+         begin
+            glcallList(TabPart[1]);  {1er  feu: orange}
+            glcallList(TabPart[4]);  {2eme feu: orange}
+            glcallList(TabPart[8]);  {3eme feu: rouge}
+            glcallList(TabPart[11]); {4eme feu: rouge}
+         end;
+      ETAT_FEUX_ROUGE_VERT :
+         begin
+            glcallList(TabPart[2]);  {1er  feu: rouge}
+            glcallList(TabPart[5]);  {2eme feu: rouge}
+            glcallList(TabPart[6]);  {3eme feu: vert}
+            glcallList(TabPart[9]);  {4eme feu: vert}
+         end;
+      ETAT_FEUX_ROUGE_ORANGE :
+         begin
+            glcallList(TabPart[2]);  {1er  feu: rouge}
+            glcallList(TabPart[5]);  {2eme feu: rouge}
+            glcallList(TabPart[7]);  {3eme feu: orange}
+            glcallList(TabPart[10]); {4eme feu: orange}
+         end;
+   end;
+   if Params.glLumiere then glEnable(GL_LIGHTING);
+   if Params.fog then glEnable(GL_FOG);
+
+   glDepthMask(GL_TRUE);
+   glEnable(GL_CULL_FACE);
+   GLPopMatrix();
+end;
 
 {*******************************************************************************}
 procedure TBloc.Affiche(a,b : integer);
-var dx,dy : real;
 begin
    if MyFrust.RectangleInFrustum(Maville[a,b].Carrefour.TabPos[0],
                                  Maville[a,b].Route1.TabPos[1],
                                  Maville[a,b].Route0.TabPos[3])
    then
    begin
+      {dessinerRepere(Carrefour.TabPos[2].x, Carrefour.TabPos[2].y, Carrefour.TabPos[2].z);}
       glCallList(Route_Liste_Affichage);
-      if b <> RANGEE_DU_FLEUVE then
-      begin
-         glCallList(Maison_Liste_Affichage);
-         // Debug
-         {dessinerRepere(Carrefour.TabPos[2].x, Carrefour.TabPos[2].y, Carrefour.TabPos[2].z);}
-      end
-      else
-      begin
-         Decal_Texture_Eau := Decal_Texture_Eau + 0.01;
-         dx := (LONG_ROUTE_X+ESPACE_CAREFOUR)/2;
-         dy := (LONG_ROUTE_Y+ESPACE_CAREFOUR)/2;
-
-         //texture eau
-         glDisable(GL_CULL_FACE);
-         GlPushMatrix();
-         Gltranslated(Carrefour.TabPos[2].x+LONG_ROUTE_X/2,Carrefour.TabPos[2].y+LONG_ROUTE_Y/2,-18);
-         GlEnable(GL_TEXTURE_2D);
-         Glcolor3f(1,1,1);
-         GlBindTexture(GL_TEXTURE_2D, Text_eau);
-         GlBegin(gl_triangles);
-         glTexCoord2f(1.0+Decal_Texture_Eau,  1.0+Decal_Texture_Eau); glVertex3f(-dx,-dy,1);
-         glTexCoord2f(1.0+Decal_Texture_Eau,  0.0);                   glVertex3f(-dx,dy,1);
-         glTexCoord2f(0.0,                    0.0);                   glVertex3f(dx,dy,1);
-
-         glTexCoord2f(0.0,                    0.0);                   glVertex3f(dx,dy,1);
-         glTexCoord2f(0.0,                    1.0+Decal_Texture_Eau); glVertex3f(dx,-dy,1);
-         glTexCoord2f(1.0+Decal_Texture_Eau,  1.0+Decal_Texture_Eau); glVertex3f(-dx,-dy,1);
-         GlEnd();
-         GlPopMatrix();
-         glEnable(GL_CULL_FACE);
-      end;
-
-      glPushMatrix();
-      glDepthMask(GL_FALSE);
-      glDisable(GL_CULL_FACE);
-      Gltranslated(a*TAILLE_BLOC_X, b*TAILLE_BLOC_Y, Carrefour.TabPos[0].z);
-
-      case EtatFeux of
-         ETAT_FEUX_VERT_ROUGE : begin
-                glcallList(TabPart[0]);  {1er  feu: vert}
-                glcallList(TabPart[3]);  {2eme feu: vert}
-                glcallList(TabPart[8]);  {3eme feu: rouge}
-                glcallList(TabPart[11]); {4eme feu: rouge}
-             end;
-         ETAT_FEUX_ORANGE_ROUGE : begin
-                glcallList(TabPart[1]);  {1er  feu: orange}
-                glcallList(TabPart[4]);  {2eme feu: orange}
-                glcallList(TabPart[8]);  {3eme feu: rouge}
-                glcallList(TabPart[11]); {4eme feu: rouge}
-             end;
-         ETAT_FEUX_ROUGE_VERT : begin
-                glcallList(TabPart[2]);  {1er  feu: rouge}
-                glcallList(TabPart[5]);  {2eme feu: rouge}
-                glcallList(TabPart[6]);  {3eme feu: vert}
-                glcallList(TabPart[9]);  {4eme feu: vert}
-             end;
-         ETAT_FEUX_ROUGE_ORANGE : begin
-                glcallList(TabPart[2]);  {1er  feu: rouge}
-                glcallList(TabPart[5]);  {2eme feu: rouge}
-                glcallList(TabPart[7]);  {3eme feu: orange}
-                glcallList(TabPart[10]); {4eme feu: orange}
-             end;
-      end;
-
-      glDepthMask(GL_TRUE);
-      glEnable(GL_CULL_FACE);
-      GLPopMatrix();
+      if b = RANGEE_DU_FLEUVE then afficheFleuve() else glCallList(Maison_Liste_Affichage);
 
       TabCirculation[ROUTE_0,SENS_DIRECT,VOIE_LENTE].Affiche();
       TabCirculation[ROUTE_0,SENS_DIRECT,VOIE_RAPIDE].Affiche();
@@ -605,6 +615,8 @@ begin
       TabCirculation[ROUTE_1,SENS_DIRECT,VOIE_RAPIDE].Affiche();
       TabCirculation[ROUTE_1,SENS_INDIRECT,VOIE_LENTE].Affiche();
       TabCirculation[ROUTE_1,SENS_INDIRECT,VOIE_RAPIDE].Affiche();
+
+      AfficheFeuxTricolores(a,b);
    end;
 end;
 
@@ -614,18 +626,17 @@ var
    timing: Longword;
 begin
    {Actualisation de l'etat des feux}
-      timing := ElapsedTime - TimerFeux;
-      if timing < Duree_feu_vert then EtatFeux := ETAT_FEUX_VERT_ROUGE {1er feu: vert -- 3eme feu: rouge}
-      else if timing < (Duree_feu_vert + Duree_feu_orange) then EtatFeux := ETAT_FEUX_ORANGE_ROUGE {1er feu: orange -- 3eme feu: rouge}
-      else if timing < (Duree_feu_vert + Duree_feu_orange + Duree_feu_rouge) then EtatFeux := ETAT_FEUX_ROUGE_VERT {1er feu: rouge -- 3eme feu: vert}
-      else EtatFeux := ETAT_FEUX_ROUGE_ORANGE; {1er  feu: rouge -- 3eme feu: orange}
+   timing := ElapsedTime - TimerFeux;
+   if timing < Duree_feu_vert then EtatFeux := ETAT_FEUX_VERT_ROUGE {1er feu: vert -- 3eme feu: rouge}
+   else if timing < (Duree_feu_vert + Duree_feu_orange) then EtatFeux := ETAT_FEUX_ORANGE_ROUGE {1er feu: orange -- 3eme feu: rouge}
+   else if timing < (Duree_feu_vert + Duree_feu_orange + Duree_feu_rouge) then EtatFeux := ETAT_FEUX_ROUGE_VERT {1er feu: rouge -- 3eme feu: vert}
+   else EtatFeux := ETAT_FEUX_ROUGE_ORANGE; {1er  feu: rouge -- 3eme feu: orange}
 
-      if timing > Duree_cycle then
-      begin
-         TimerFeux := ElapsedTime;
-      end;
+   if timing > Duree_cycle then
+   begin
+      TimerFeux := ElapsedTime;
+   end;
 end;
-
 
 {************************** TROUTE *********************************************}
 constructor TRoute.Create(A,B,C,D : Tvecteur; ident : integer);
@@ -742,7 +753,7 @@ begin
          {Premiere Route}
          A0.x := i*TAILLE_BLOC_X+ESPACE_CAREFOUR; A0.y := j*TAILLE_BLOC_Y; A0.z := TabCarrefour[i,j,0].z;
          B0.x := A0.x; B0.y := A0.y+ESPACE_CAREFOUR; B0.z := A0.z;
-         C0.x := A0.x+TAILLE_BLOC_X-ESPACE_CAREFOUR; C0.y := B0.y; C0.z := TabCarrefour[(i+1) mod NB_BLOC_MAX_X ,j,0].z;
+         C0.x := A0.x+TAILLE_BLOC_X-ESPACE_CAREFOUR; C0.y := B0.y; C0.z := TabCarrefour[(i+1) mod NB_BLOC_MAX_X,j,0].z;
          D0.x := C0.x; D0.y := A0.y; D0.z := C0.z;
 
          {Deuxieme Route}
@@ -763,9 +774,9 @@ begin
    end;
 
    {Construction du bloc de batimments}
-   for i := 0 to NB_BLOC_MAX_X-1 do
+   for i := 0 to (NB_BLOC_MAX_X-1) do
    begin
-      for j := 0 to NB_BLOC_MAX_Y-1 do
+      for j := 0 to (NB_BLOC_MAX_Y-1) do
       begin
          //Position des blocs
          P.x := ESPACE_CAREFOUR+i*TAILLE_BLOC_X;
@@ -780,7 +791,6 @@ begin
       end;
    end;
 end;
-
 
 Procedure DestroyVille();
 var i,j : integer;
@@ -806,7 +816,7 @@ begin
 end;
 
 {*******************************************************************************}
-procedure ActualiseLesFeux();
+procedure ActualiseVille();
 var i,j : integer;
 begin
    for i := 0 to (NB_BLOC_MAX_X-1) do
@@ -814,6 +824,14 @@ begin
       for j := 0 to (NB_BLOC_MAX_Y-1) do
       begin
          MaVille[i,j].ActualiseFeu(i,j);
+         MaVille[i,j].TabCirculation[ROUTE_0,SENS_DIRECT,VOIE_LENTE].ActualiseDirect(i,j,ROUTE_0,VOIE_LENTE);
+         MaVille[i,j].TabCirculation[ROUTE_1,SENS_DIRECT,VOIE_LENTE].ActualiseDirect(i,j,ROUTE_1,VOIE_LENTE);
+         MaVille[i,j].TabCirculation[ROUTE_0,SENS_DIRECT,VOIE_RAPIDE].ActualiseDirect(i,j,ROUTE_0,VOIE_RAPIDE);
+         MaVille[i,j].TabCirculation[ROUTE_1,SENS_DIRECT,VOIE_RAPIDE].ActualiseDirect(i,j,ROUTE_1,VOIE_RAPIDE);
+         MaVille[i,j].TabCirculation[ROUTE_0,SENS_INDIRECT,VOIE_LENTE].ActualiseIndirect(i,j,ROUTE_0,VOIE_LENTE);
+         MaVille[i,j].TabCirculation[ROUTE_1,SENS_INDIRECT,VOIE_LENTE].ActualiseIndirect(i,j,ROUTE_1,VOIE_LENTE);
+         MaVille[i,j].TabCirculation[ROUTE_0,SENS_INDIRECT,VOIE_RAPIDE].ActualiseIndirect(i,j,ROUTE_0,VOIE_RAPIDE);
+         MaVille[i,j].TabCirculation[ROUTE_1,SENS_INDIRECT,VOIE_RAPIDE].ActualiseIndirect(i,j,ROUTE_1,VOIE_RAPIDE);
       end;
    end;
 end;

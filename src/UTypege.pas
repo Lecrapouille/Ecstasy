@@ -128,7 +128,7 @@ T_param = record
    Height : Integer;
    PixelDepth : Integer;
    fog : boolean;
-   Soleil : boolean;
+   glLumiere : boolean;
    Nuit : boolean;
    Pluie : boolean;
    Altitude : integer;

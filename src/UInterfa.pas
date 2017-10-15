@@ -48,17 +48,13 @@ type
       ComboBox2: TComboBox;
       CheckBox1: TCheckBox;
       TabSheet4: TTabSheet;
-      GroupBox3: TGroupBox;
       GroupBox8: TGroupBox;
-      Label35: TLabel;
       CheckBox3: TCheckBox;
       GroupBox5: TGroupBox;
       TrackBar1: TTrackBar;
       Label8: TLabel;
       Edit10: TEdit;
       CheckBox2: TCheckBox;
-      CheckBox4: TCheckBox;
-      CheckBox5: TCheckBox;
       Label27: TLabel;
       TrackBar3: TTrackBar;
       Edit15: TEdit;
@@ -73,13 +69,13 @@ type
       Edit3: TEdit;
       Label1: TLabel;
       Label2: TLabel;
-      Label3: TLabel;
       ScrollBar2: TScrollBar;
       Edit1: TEdit;
-      Label5: TLabel;
       Label6: TLabel;
     Memo1: TMemo;
     CheckBox7: TCheckBox;
+    CheckBox4: TCheckBox;
+    CheckBox5: TCheckBox;
       procedure Button2Click(Sender: TObject);
       procedure Button1Click(Sender: TObject);
       procedure FormCreate(Sender: TObject);
@@ -100,6 +96,7 @@ type
       procedure ScrollBar2Change(Sender: TObject);
       procedure CheckBox6Click(Sender: TObject);
     procedure CheckBox7Click(Sender: TObject);
+    procedure CheckBox5Click(Sender: TObject);
    public
       procedure ChargerVoiture();
    private
@@ -268,7 +265,7 @@ begin
       if CheckBox12.Checked then CheckBox12.Caption := 'Pluie activée'
       else CheckBox12.Caption := 'Pluie desactivée';
 
-      CheckBox4.checked := Params.Soleil;
+      CheckBox4.checked := Params.glLumiere;
       CheckBox2.checked := Params.fog;
 
 
@@ -279,13 +276,9 @@ begin
       CheckBox1.Checked := params.FullScreen;
 
       CheckBox2.Checked := params.fog;
-      if CheckBox2.Checked then CheckBox2.Caption := 'Brume activée'
-      else CheckBox2.Caption := 'Brume desactivée';
 
       ComboBox3Change(sender);
 
-      if CheckBox3.Checked then Label35.Caption := 'activé'
-      else Label35.Caption := 'desactivé';
       Edit10.Text := inttostr(params.Altitude);
       TrackBar1.Position := params.Altitude;
       RANDOM_TERRAIN := params.Altitude;
@@ -410,14 +403,14 @@ procedure TForm1.CheckBox2Click(Sender: TObject);
 begin
    params.fog := CheckBox2.Checked;
    if CheckBox2.checked then CheckBox2.Caption := 'Brume activée' else
-      CheckBox2.Caption := 'Brume desactivée'
+      CheckBox2.Caption := 'Brume désactivée'
 end;
 
 procedure TForm1.CheckBox3Click(Sender: TObject);
 begin
    //param.Orage := CheckBox3.Checked;
-   if CheckBox3.Checked then Label35.Caption := 'activé'
-   else Label35.Caption := 'desactivé'
+   if CheckBox3.Checked then CheckBox3.Caption := 'Orage activé'
+   else CheckBox3.Caption := 'Orage désactivé'
 end;
 
 procedure TForm1.Edit13Change(Sender: TObject);
@@ -480,9 +473,9 @@ end;
 
 procedure TForm1.CheckBox4Click(Sender: TObject);
 begin
-   Params.Soleil := CheckBox4.checked;
-   if CheckBox4.checked then CheckBox4.Caption := 'Lumière du soleil activée'
-   else CheckBox4.Caption := 'Lumière du soleil désactivée';
+   Params.glLumiere := CheckBox4.checked;
+   if CheckBox4.checked then CheckBox4.Caption := 'Lumière activée'
+   else CheckBox4.Caption := 'Lumière désactivée';
 end;
 
 procedure TForm1.CheckBox11Click(Sender: TObject);

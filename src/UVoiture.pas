@@ -21,11 +21,18 @@ uses UMath,
      Ufrustum,
      UCaractere,
      Sysutils,
+     UTextures,
      URepere;
+
+var
+  FeuArriere: Gluint;
+
+procedure ChargementFeuArriere();
 
 {*******************************************************************************}
 Type TVoiture = class(TObject)
 public
+   Freine : boolean;
    Theta        : real;                  // Angle du volant pour faire tourner les 2 roues de devant
    Position     : Tvecteur;              // Position de la carcasse (X,Y,Z)
    OldPosition  : Tvecteur;              // Ancienne position de la carcasse
@@ -94,6 +101,7 @@ begin
    theta := 0;
    Vitesse := VITESSE_MINIMALE;
    RoueRot := 0.0;
+   Freine := False;
 
    with Param do
    begin
@@ -132,6 +140,8 @@ begin
    glRotated(RadToDeg(Direction), 0.0, 0.0, 1.0 );
    glrotated(RadToDeg(-Tangage),0,1,0);
    glrotated(RadToDeg(-Roulis),1,0,0);
+
+   {Carcasse}
    glCallList(TabRepertVoit.elt[id].GLCarcasse.liste);
 
    {Roue avant gauche}
@@ -165,7 +175,28 @@ begin
    glrotated(RoueRot,0,1,0);
    glCallList(TabRepertVoit.elt[id].GLRoue.liste);
    glPopMatrix();
-   glPopMatrix();end;
+
+   if Params.LumieresActivees then
+   begin
+      if Params.glLumiere then glDisable(GL_LIGHTING);
+      {Feu arriere gauche}
+      glpushMatrix();
+      gltranslated(-Param.Arriere-2, Param.Gauche-0.5, RoueDG+1);
+      if Params.Nuit then glCallList(FeuArriere);
+      if Freine then glCallList(FeuArriere);
+      glPopMatrix();
+
+      {Feu arriere droite}
+      glpushMatrix();
+      gltranslated(-Param.Arriere-2, -Param.Gauche+0.5, RoueDD+1);
+      if Params.Nuit then glCallList(FeuArriere);
+      if Freine then glCallList(FeuArriere);
+      glPopMatrix();
+      if Params.glLumiere then glEnable(GL_LIGHTING);
+   end;
+
+   glPopMatrix();
+end;
 
 {*******************************************************************************
  *
@@ -349,6 +380,22 @@ begin
       if (resultat)>0 then result := resultat*REAC_SOL
       else result := 0;
    end;
+end;
+
+procedure ChargementFeuArriere();
+var TabTexture : TTabTexture;
+begin
+   TabTexture.long := 0;
+   TextureBlending('data\textures\particule.bmp',TabTexture,0,0,0,8,1,0,0);
+   if (glIsList(FeuArriere)) then glDeleteLists(FeuArriere,1);
+   FeuArriere := glGenLists(1);
+   glNewList(FeuArriere,GL_COMPILE);
+   glpushMatrix();
+   glscalef(0.5,0.5,0.5);
+   glrotated(90,0,1,0);
+   glcallList(TabTexture.elt[0]);
+   glPopMatrix();
+   GlEndList();
 end;
 
 end.

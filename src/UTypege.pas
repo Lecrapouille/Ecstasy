@@ -135,6 +135,7 @@ T_param = record
    circu : byte;
    ProportionTerrain : integer; // Proportion nb de terrains par rapport aux immeubles
    CarrefourAmericain : boolean; // Style americain ou Europen (= feux apres ou avant le carrefour)
+   LumieresActivees: boolean;
 end;
 //////////////////////////////////
 pVertex = ^TVertex;
@@ -192,11 +193,6 @@ TTriplet = record  //Pour des triplets de donnees
 end;
 
 TTabImeublesObjt = array[0..NB_TYPE_MAISON] of Tobjet;
-
-TTabTexture = record
-   elt : array[0..MAX_PARTICULE_TEXTURE] of Gluint;
-   long : integer;
-end;
 
 TParamVoit = object
    VitesseMax : real;

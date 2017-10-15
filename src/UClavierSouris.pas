@@ -54,11 +54,13 @@ begin
       if keys[VK_LEFT]  then Joueur.Theta := Min(Joueur.Theta+0.06,0.75);
       if keys[VK_UP]    then
       begin
+         Joueur.Freine := false;
          if Joueur.MarcheArriere then Joueur.vitesse := Max(Joueur.vitesse-2.5,-60)
          else Joueur.vitesse := Min(Joueur.vitesse+10,Joueur.Param.VitesseMax)
       end;
       if keys[VK_DOWN]  then
       begin
+         if keysold[VK_DOWN] then Joueur.Freine := true;
          if Joueur.MarcheArriere then Joueur.vitesse := Min(Joueur.vitesse+2.5,VITESSE_MINIMALE)
          else Joueur.vitesse := Max(Joueur.vitesse-10,VITESSE_MINIMALE);
       end;

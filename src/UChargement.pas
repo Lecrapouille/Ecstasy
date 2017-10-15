@@ -33,7 +33,7 @@ USES
 procedure Chargement(var Keys : array of boolean);
 
 implementation
-uses UCaractere, ULancement;
+uses UCaractere, ULancement, UVoiture;
 
 //----------------------------------------------------------------------------//
 procedure ChargementDesTexture();
@@ -62,6 +62,7 @@ begin
       loaderAse(GetCurrentDir+'\data\Voitures\'+ TabRepertVoit.elt[i].Nom + '\Carcasse.ASE', @TabRepertVoit.elt[i-1].GLCarcasse, FALSE);
       loaderAse(GetCurrentDir+'\data\Voitures\'+ TabRepertVoit.elt[i].Nom + '\Roue.ASE', @TabRepertVoit.elt[i-1].GLRoue, FALSE);
    end;
+   ChargementFeuArriere();
    Loading(1);
 end;
 

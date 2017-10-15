@@ -27,15 +27,69 @@ interface
 uses
    Windows, OpenGL, Graphics, Classes, JPEG, SysUtils;
 
+type TTabTexture = record
+   elt : array[0..10] of Gluint;
+   long : integer;
+end;
+
 function LoadTexture(Filename: String; var Texture: GLuint; LoadFromRes : Boolean): Boolean;
+procedure TextureBlending(Chemin : string;
+                          var TabTexture : TTabTexture;
+                          x,y,z : real;  // position
+                          ech : integer; // echelle
+                          c1,c2,c3 : byte); // couleur
 
 implementation
 
-
 function gluBuild2DMipmaps(Target: GLenum; Components, Width, Height: GLint; Format, atype: GLenum; Data: Pointer): GLint; stdcall; external glu32;
 procedure glGenTextures(n: GLsizei; var textures: GLuint); stdcall; external opengl32;
-procedure glBindTexture(target: GLenum; texture: GLuint); stdcall; external opengl32;
+Procedure glBindTexture(target: GLEnum; texture: GLuint); Stdcall; External 'OpenGL32.dll';
 
+{*******************************************************************************
+ *
+ *                             TEXTURE + BLENDING
+ *
+ *   parametres :
+ *      Chemin : l'endroit ou se trouve la texture
+ *      var TabTexture : Tableau pouvant contenir plusieurs textures
+ *      x,y,z : position de la texture
+ *      ech :  echelle  de la texture
+ *      c1,c2,c3 : couleur Rouge, Verte, Bleue
+ *
+ *******************************************************************************}
+procedure TextureBlending(Chemin : string;
+                          var TabTexture : TTabTexture;
+                          x,y,z : real;  // position
+                          ech : integer; // echelle
+                          c1,c2,c3 : byte); // couleur
+var numero : gluint;
+begin
+   LoadTexture(Chemin, numero, false);
+   if (glIsList(TabTexture.elt[TabTexture.long])) then glDeleteLists(TabTexture.elt[TabTexture.long],1);
+   TabTexture.elt[TabTexture.long] := glGenLists(1);
+   glNewList(TabTexture.elt[TabTexture.long],GL_COMPILE);
+   glEnable(GL_BLEND);
+   glDepthMask(GL_FALSE);
+   glEnable(GL_TEXTURE_2D);
+   glBindTexture(GL_TEXTURE_2D, numero);
+
+   glPushMatrix();
+   glTranslatef(x,y,z);
+   glcolor4f(c1,c2,c3,1);
+   glBegin(GL_QUADS);
+   glTexCoord2f(0, 0);  glVertex3f(-1*ech,-1*ech, 0);
+   glTexCoord2f(1, 0);  glVertex3f( 1*ech,-1*ech, 0);
+   glTexCoord2f(1, 1);  glVertex3f( 1*ech, 1*ech, 0);
+   glTexCoord2f(0, 1);  glVertex3f(-1*ech, 1*ech, 0);
+   glEnd();
+   glPopMatrix();
+
+   glDepthMask(GL_TRUE);
+   glDisable(GL_BLEND);
+   glDisable(GL_TEXTURE_2D);
+   glEndList();
+   TabTexture.long := TabTexture.long+1;
+end;
 
 {------------------------------------------------------------------}
 {  Swap bitmap format from BGR to RGB                              }

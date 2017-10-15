@@ -517,4 +517,11 @@ begin
    else CheckBox7.Caption := 'Carrefour style européen';
 end;
 
+procedure TForm1.CheckBox5Click(Sender: TObject);
+begin
+   Params.LumieresActivees := CheckBox5.Checked;
+   if CheckBox5.Checked then CheckBox5.Caption := 'Phares des voitures activés'
+   else CheckBox5.Caption := 'Phares des voitures désactivés';
+end;
+
 end.

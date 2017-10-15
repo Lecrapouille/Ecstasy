@@ -136,15 +136,11 @@ begin
    glcullface(GL_FRONT);
    PerspectiveMode;
    glpopMatrix();
-   if MarcheArriere then
-   begin
-      GLDisable(GL_DEPTH_TEST);
-      GLTexte(200*Params.Width/1024,640*Params.Height/768,1,0,0,'R');
-      GLEnable(GL_DEPTH_TEST);
-   end;
 
    GLDisable(GL_DEPTH_TEST);
    GLTexte(250*Params.Width/1024,640*Params.Height/768,1,0,0,Inttostr(Trunc(Vitesse/2)));
+   if MarcheArriere then GLTexte(200*Params.Width/1024,640*Params.Height/768,1,0,0,'R');
+   if Freine then GLTexte(200*Params.Width/1024 + Params.Police,640*Params.Height/768,1,0,0,'B');
    GLEnable(GL_DEPTH_TEST);
 end;
 

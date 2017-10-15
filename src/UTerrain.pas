@@ -30,7 +30,7 @@ ELEVATION_TERRAIN = 50;
 
 procedure CreerTrottoir(a,b : byte);
 procedure CreerTerrain(a,b : byte);
-function AltitudeDuTerrain(x,y : real) : real;
+function AltitudeDuTerrain(a, b : integer; x,y : real) : real;
 
 implementation
 uses       UVille;
@@ -39,37 +39,14 @@ Procedure glBindTexture(target: GLEnum;
                         texture: GLuint);
 Stdcall; External 'OpenGL32.dll';
 
-function AltitudeDuTerrain(x,y : real) : real;
-var
-   a, b : integer;
-   pA, pB, pC, pD, p : Tvecteur;
-begin
-   {a := trunc(x / LONG_ROUTE_X) mod NB_SUB_TERRAIN;
-   b := trunc(y / LONG_ROUTE_Y) mod NB_SUB_TERRAIN;
-
-   pA := Maville[a,b].Carrefour.TabPos[2];
-   pB := Maville[a,b].Route0.TabPos[2];
-   pC := Maville[a,b].Route1.TabPos[2];
-   pD := Maville[(a+1) mod NB_BLOC_MAX_X, (b+1) mod NB_BLOC_MAX_X].Carrefour.TabPos[2];
-
-   p.x := x;
-   p.y := y;
-  if PointDansTriangle(pA, pB, pC, p) then
-     p.z := PositionZSurTriangle(pA, pB, pC, p)
-  else
-     p.z := PositionZSurTriangle(pB, pD, pC, p);
-
-     result := p.z;} result := 0;
-end;
-
 procedure TriangleDebug(pA, pB, pC : Tvecteur);
 begin
    glBegin(GL_LINE_LOOP);
    glLineWidth(4.0);
    glcolor3f(0.5,0.5,0.5);
-   glVertex3f(pA.x,pA.y,pA.z+1.5);
-   glVertex3f(pB.x,pB.y,pB.z+1.5);
-   glVertex3f(pC.x,pC.y,pC.z+1.5);
+   glVertex3f(pA.x,pA.y,pA.z+0.1);
+   glVertex3f(pB.x,pB.y,pB.z+0.1);
+   glVertex3f(pC.x,pC.y,pC.z+0.1);
    glEnd();
 end;
 
@@ -78,10 +55,68 @@ begin
    glBegin(GL_LINE_LOOP);
    glLineWidth(4.0);
    glcolor3f(0.75,0.75,0.0);
-   glVertex3f(pA.x,pA.y,pA.z+1.5);
-   glVertex3f(pB.x,pB.y,pB.z+1.5);
-   glVertex3f(pC.x,pC.y,pC.z+1.5);
+   glVertex3f(pA.x,pA.y,pA.z+0.1);
+   glVertex3f(pB.x,pB.y,pB.z+0.1);
+   glVertex3f(pC.x,pC.y,pC.z+0.1);
    glEnd();
+end;
+
+function RealMod(x, y : extended) : extended;
+begin
+   Result := x - y * Trunc(x/y);
+end;
+
+function AltitudeDuTerrain(a, b : integer; x,y : real) : real;
+var
+   gridX, gridY : integer;
+   sX, sY, xCoord, yCoord : real;
+   pA, pB, pC, p : Tvecteur;
+begin
+   with MaVille[a,b] do
+   begin
+     {Taille d'une case}
+     sX := LONG_ROUTE_X / (NB_SUB_TERRAIN - 1*0);
+     sY := LONG_ROUTE_Y / (NB_SUB_TERRAIN - 1*0);
+
+     {Position dans la grille}
+     gridX := floor((x - Carrefour.TabPos[2].x) / sX);
+     gridY := floor((y - Carrefour.TabPos[2].y) / sY);
+
+     {Distinction entre les deux triangles}
+     xCoord := RealMod(x - Carrefour.TabPos[2].x, sX) / sX;
+     yCoord := RealMod(y - Carrefour.TabPos[2].y, sY) / sY;
+
+     pB.x := Carrefour.TabPos[2].x + (1 + gridX) * sX;
+     pB.y := Carrefour.TabPos[2].y + gridY * sY;
+     pB.z := Terrain[gridX + 1, gridY];
+
+     pC.x := Carrefour.TabPos[2].x + gridX * sX;
+     pC.y := Carrefour.TabPos[2].y + (1 + gridY) * sY;
+     pC.z := Terrain[gridX, gridY + 1];
+
+     if xCoord <= (1 - yCoord) then
+     begin
+       pA.x := Carrefour.TabPos[2].x + gridX * sX;
+       pA.y := Carrefour.TabPos[2].y + gridY * sY;
+       pA.z := Terrain[gridX, gridY];
+
+       TriangleDebug(pB, pC, pA);
+     end
+     else
+     begin
+       pA.x := Carrefour.TabPos[2].x + (1 + gridX) * sX;
+       pA.y := Carrefour.TabPos[2].y + (1 + gridY) * sY;
+       pA.z := Terrain[gridX + 1, gridY + 1];
+
+       TriangleDebug2(pB, pC, pA);
+     end;
+
+     {Interpolation de la hauteur}
+     p.x := x;
+     p.y := y;
+     p.z := PositionZSurTriangle(pA, pB, pC, p);
+     result := p.z;
+   end;
 end;
 
 procedure TerrainAleatoire(a, b : integer);
@@ -159,7 +194,7 @@ end;
 procedure ListeAffichageTerrain(a, b, subdivision : byte; texture: gluint);
 var i,j : integer;
 PasX,PasY : real;
-P1,P2,P3,P4 : TVecteur;
+pA,pB,pC,pD : TVecteur;
 begin
    PasX := LONG_ROUTE_X/subdivision;
    PasY := LONG_ROUTE_Y/subdivision;
@@ -182,30 +217,30 @@ begin
    for i :=0 to (NB_SUB_TERRAIN-1) do
       for j :=0 to (NB_SUB_TERRAIN-1) do
       begin
-         P1.x := -1+i*pasX;
-         P1.y := -1+j*pasY;
-         P1.z := Maville[a,b].Terrain[i,j];
+         pA.x := i*pasX;
+         pA.y := j*pasY;
+         pA.z := Maville[a,b].Terrain[i,j];
 
-         P2.x := -1+(i+1)*pasX;
-         P2.y := -1+j*pasY;
-         P2.z := Maville[a,b].Terrain[i+1,j];
+         pB.x := (i+1)*pasX;
+         pB.y := j*pasY;
+         pB.z := Maville[a,b].Terrain[i+1,j];
 
-         P3.x := -1+(i+1)*pasX;
-         P3.y := -1+(j+1)*pasY;
-         P3.z := Maville[a,b].Terrain[i+1,j+1];
+         pD.x := (i+1)*pasX;
+         pD.y := (j+1)*pasY;
+         pD.z := Maville[a,b].Terrain[i+1,j+1];
 
-         P4.x := -1+i*pasX;
-         P4.y := -1+(j+1)*pasY;
-         P4.z := Maville[a,b].Terrain[i,j+1];
+         pC.x := i*pasX;
+         pC.y := (j+1)*pasY;
+         pC.z := Maville[a,b].Terrain[i,j+1];
 
          glBegin(GL_Triangles);
-         glTexCoord2f(0,0); glVertex3f(P1.x,P1.y,P1.z);
-         glTexCoord2f(0,1); glVertex3f(P2.x,P2.y,P2.z);
-         glTexCoord2f(1,1); glVertex3f(P3.x,P3.y,P3.z);
+         glTexCoord2f(0,0); glVertex3f(pA.x,pA.y,pA.z);
+         glTexCoord2f(0,1); glVertex3f(pB.x,pB.y,pB.z);
+         glTexCoord2f(1,1); glVertex3f(pC.x,pC.y,pC.z);
 
-         glTexCoord2f(0,0); glVertex3f(P1.x,P1.y,P1.z);
-         glTexCoord2f(1,1); glVertex3f(P3.x,P3.y,P3.z);
-         glTexCoord2f(1,0); glVertex3f(P4.x,P4.y,P4.z);
+         glTexCoord2f(0,0); glVertex3f(pB.x,pB.y,pB.z);
+         glTexCoord2f(1,1); glVertex3f(pD.x,pD.y,pD.z);
+         glTexCoord2f(1,0); glVertex3f(pC.x,pC.y,pC.z);
          glend();
       end;
    glDisable(GL_TEXTURE_2D);

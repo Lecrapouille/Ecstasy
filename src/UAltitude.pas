@@ -55,7 +55,7 @@ begin
          LECARREFOUR : Pos.z := Carrefour.TabPos[0].z;
          MAISONS : if Resultat.y = RANGEE_DU_FLEUVE then Pos.z := PROFONDEUR_FLEUVE  // tombe dans l'eau
          else if TypeDuBloc = EST_UN_BLOC then Pos.z := 0  // dans les immeubles
-         else Pos.z := AltitudeDuTerrain(x,y);
+         else Pos.z := AltitudeDuTerrain(Resultat.x,Resultat.y,x,y);
       end;
    end;
    result := Pos.z;

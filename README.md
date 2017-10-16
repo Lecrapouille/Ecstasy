@@ -6,7 +6,7 @@ Ecstasy was one of our first team projects (and game), so sorry this is not an o
 
 ### Wanted
 
-I'm looking for Delphi developers. I'm curious to check if Ecstasy can work on recent Windows (>= 7) and therefore if the project can compile with a more recent Delphi.
+I'm looking for Delphi developers. ~~I'm curious to check if Ecstasy can work on recent Windows (>= 7) and therefore if the project can compile with a more recent Delphi.~~ Update: thank to [dslutej](https://github.com/dslutej) the game is compiling on Windows 10 (64-bits) and Delphi 10.2.1. See [here](https://github.com/Lecrapouille/Ecstasy/issues/4) for more information. 
 
 ### Screenshot
 
@@ -23,6 +23,7 @@ I'm looking for Delphi developers. I'm curious to check if Ecstasy can work on r
 Note: In 2017, for the fun, I currently fixing lot of bugs and finishing some features.
 
 Not implemented:
+* english language (sorry it's was, at begining, a student project). It will take too much time for translating the code.
 * missing a fixed frame rate (will be fixed in 2017).
 * ~~off-road partially implemented (will be fixed in 2017).~~
 * simple optim to avoid game slowing down on hudge traffic jam. (will be fixed in 2017).
@@ -49,10 +50,18 @@ Not implemented:
 
 ### Diving inside the code
 
-The city is just a grid of zones (2D matrix). Corners of the city are linked. That is why the city is infinite and we can see it, it lives on a torus world.
+The city is just a grid of urban zones (aka 2D matrix). City size if finite but bounds are connected, that is why the city is finaly infinite. As mathematical point of view, you are driving on a torus world. The city matrix looks like this:
+```
+  +-------------+--------------+-----+
+  | block[0,0]  |  block[1,0]  | ... |
+  +-------------+--------------+-----+
+  | block[1,0]  |  block[1,1]  | ... |
+  +-------------+--------------+-----+
+  |     ...     |      ...     | ... |
+  +-------------+--------------+-----+
+```
 
-A block is another kind of matrix: a rectangle made of two roads (horizontally and vertically), a cross-road, in the remaining space, there either buildings or a river or terrains (off-road). A road is a 4-ways road: direct (low and fast) and indirect (low and fast) Let see:
-one of the blocks: 
+A block (aka urban zone) is another kind of matrix: a rectangle made of two roads (horizontally and vertically), a cross-road with traffic lights, and in the remaining space there either buildings or a river or an off-road terrain. A road is a 4-ways road: direct way (low and fast ways) and indirect (low and fast). Let see one block: 
 ```
       +---------+----------------------------+           ^ X
       |0 cross 1|0    road #1               1|           |
@@ -68,22 +77,13 @@ one of the blocks:
       |3       2|                            |
       +---------+----------------------------+
 ```
-Numbers 0 .. 3 indicates vertices order. Roads and crossroads are just 2 triangles. You can display the word axis (dessinerRepere(x,y,z). The X-axis is red and thr Y-axis is green. The Z-axis is blue and its direction is up.
+Numbers 0 .. 3 indicates the vertices order. Roads and crossroads are just made with 2 OpenGL triangles. Use theses informations for getting cars altitude and in which part they are driving (which roads).
 
-We give a random altitude to all crossroads (crossroad have all its vertices on the same altitude). Like this roads have a known slope. The off-road terrain is made of a matrix of rectangles sub-divided into two triangles (like any game with a height-map). The pavement of buildings is made of two triangles (that is enough good visualy and simple). It's now very easy to compute the altitude anywhere on the city.
+You can display the word axis wit the dessinerRepere(x,y,z) procedure. The X-axis is red, the Y-axis is green and the Z-axis is blue (and its direction is up).
 
-The city matrix looks like this:
-```
-  +--------------+--------------+-----+
-  | blocks[0,0]  |  block[1,0]  | ... |
-  +--------------+--------------+-----+
-  | blocks[1,0]  |  block[1,1]  | ... |
-  +--------------+--------------+-----+
-  |     ...      |      ...     | ... |
-  +--------------+--------------+-----+
-```
+We give a random altitude to all crossroads (crossroad have all its vertices on the same altitude). Like this roads have a known slope. The off-road terrain is a matrix of rectangles sub-divided into two triangles (like any game with a height-map). The pavement/sidewalk for buildings is made of two triangles (that is enough good visualy and simple). It's now very easy to compute the altitude anywhere on the city.
 
-A road looks like this (same behavior for road#0 and raod #1):
+A 4-ways road looks like the following (same behavior for road0 and road1):
 ```
   +--------------------------------------+
   |     <----      low way               |
@@ -96,4 +96,8 @@ A road looks like this (same behavior for road#0 and raod #1):
   +--------------------------------------+
 ```
 
-Traffic jam is just a dynalic list (linked-list) of vehicles. Each car know the velocity and position of the previous one. When a car changes of block (it was on the head of the linked-list) it's just detached form this list and placed on the queue of the list of the new block. The head car does not know information about the previous car (the last of the other block) but just know the state of the traffic light: it stops when passing from green to orange.
+The traffic jam is just a dynamic list (linked-list) of vehicles. Each car know the velocity and position of the previous one. When a car changes of block (it was on the head of the linked-list) it's just detached form this list and placed on the queue of the list of the new block. The head car does not know information about the previous car (the last of the other block) but just know the state of the traffic light: it stops when passing from green to orange.
+
+Car velocity is made of attractive and repulsive forces depending on the distance.
+
+The dynamic of the player car is explained [on my other github project](https://github.com/Lecrapouille/PrincipeMoindreAction). Traductions upon request (again ;)

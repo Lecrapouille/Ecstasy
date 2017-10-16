@@ -17,21 +17,20 @@ interface
 uses  Windows,
       math,
       OpenGL,
-      //      glaux,
       UTypege,
       UMath,
       Sysutils,
       URepere;
 
 CONST
-NB_SUB_TROTTOIR = 1;
-NB_SUB_TERRAIN = 16;
-ELEVATION_TERRAIN = 50;
+   NB_SUB_TROTTOIR = 1;
+   NB_SUB_TERRAIN = 16;
+   ELEVATION_TERRAIN = 50;
 
-procedure CreerTrottoir(a,b : byte);
-procedure CreerTerrain(a,b : byte);
-function AltitudeDuTerrain(a, b : integer; x,y : real) : real;
-function AltitudeDuTrottoir(a, b : integer; x,y : real) : real;
+   procedure CreerTrottoir(a,b : byte);
+   procedure CreerTerrain(a,b : byte);
+   function AltitudeDuTerrain(a, b : integer; x,y : real) : real;
+   function AltitudeDuTrottoir(a, b : integer; x,y : real) : real;
 
 implementation
 uses       UVille;
@@ -75,48 +74,48 @@ var
 begin
    with MaVille[a,b] do
    begin
-     {Taille d'une case}
-     sX := LONG_ROUTE_X / (NB_SUB_TROTTOIR - 1*0);
-     sY := LONG_ROUTE_Y / (NB_SUB_TROTTOIR - 1*0);
+      {Taille d'une case}
+      sX := LONG_ROUTE_X / (NB_SUB_TROTTOIR - 1*0);
+      sY := LONG_ROUTE_Y / (NB_SUB_TROTTOIR - 1*0);
 
-     {Position dans la grille}
-     gridX := floor((x - Carrefour.TabPos[2].x) / sX);
-     gridY := floor((y - Carrefour.TabPos[2].y) / sY);
+      {Position dans la grille}
+      gridX := floor((x - Carrefour.TabPos[2].x) / sX);
+      gridY := floor((y - Carrefour.TabPos[2].y) / sY);
 
-     {Distinction entre les deux triangles}
-     xCoord := RealMod(x - Carrefour.TabPos[2].x, sX) / sX;
-     yCoord := RealMod(y - Carrefour.TabPos[2].y, sY) / sY;
+      {Distinction entre les deux triangles}
+      xCoord := RealMod(x - Carrefour.TabPos[2].x, sX) / sX;
+      yCoord := RealMod(y - Carrefour.TabPos[2].y, sY) / sY;
 
-     pB.x := Carrefour.TabPos[2].x + (1 + gridX) * sX;
-     pB.y := Carrefour.TabPos[2].y + gridY * sY;
-     pB.z := Trottoir[gridX + 1, gridY];
+      pB.x := Carrefour.TabPos[2].x + (1 + gridX) * sX;
+      pB.y := Carrefour.TabPos[2].y + gridY * sY;
+      pB.z := Trottoir[gridX + 1, gridY];
 
-     pC.x := Carrefour.TabPos[2].x + gridX * sX;
-     pC.y := Carrefour.TabPos[2].y + (1 + gridY) * sY;
-     pC.z := Trottoir[gridX, gridY + 1];
+      pC.x := Carrefour.TabPos[2].x + gridX * sX;
+      pC.y := Carrefour.TabPos[2].y + (1 + gridY) * sY;
+      pC.z := Trottoir[gridX, gridY + 1];
 
-     if xCoord <= (1 - yCoord) then
-     begin
-       pA.x := Carrefour.TabPos[2].x + gridX * sX;
-       pA.y := Carrefour.TabPos[2].y + gridY * sY;
-       pA.z := Trottoir[gridX, gridY];
+      if xCoord <= (1 - yCoord) then
+      begin
+         pA.x := Carrefour.TabPos[2].x + gridX * sX;
+         pA.y := Carrefour.TabPos[2].y + gridY * sY;
+         pA.z := Trottoir[gridX, gridY];
 
-       TriangleDebug(pB, pC, pA);
-     end
-     else
-     begin
-       pA.x := Carrefour.TabPos[2].x + (1 + gridX) * sX;
-       pA.y := Carrefour.TabPos[2].y + (1 + gridY) * sY;
-       pA.z := Trottoir[gridX + 1, gridY + 1];
+         TriangleDebug(pB, pC, pA);
+      end
+      else
+      begin
+         pA.x := Carrefour.TabPos[2].x + (1 + gridX) * sX;
+         pA.y := Carrefour.TabPos[2].y + (1 + gridY) * sY;
+         pA.z := Trottoir[gridX + 1, gridY + 1];
 
-       TriangleDebug2(pB, pC, pA);
-     end;
+         TriangleDebug2(pB, pC, pA);
+      end;
 
-     {Interpolation de la hauteur}
-     p.x := x;
-     p.y := y;
-     p.z := PositionZSurTriangle(pA, pB, pC, p);
-     result := p.z;
+      {Interpolation de la hauteur}
+      p.x := x;
+      p.y := y;
+      p.z := PositionZSurTriangle(pA, pB, pC, p);
+      result := p.z;
    end;
 end;
 
@@ -128,54 +127,55 @@ var
 begin
    with MaVille[a,b] do
    begin
-     {Taille d'une case}
-     sX := LONG_ROUTE_X / (NB_SUB_TERRAIN - 1*0);
-     sY := LONG_ROUTE_Y / (NB_SUB_TERRAIN - 1*0);
+      {Taille d'une case}
+      sX := LONG_ROUTE_X / (NB_SUB_TERRAIN - 1*0);
+      sY := LONG_ROUTE_Y / (NB_SUB_TERRAIN - 1*0);
 
-     {Position dans la grille}
-     gridX := floor((x - Carrefour.TabPos[2].x) / sX);
-     gridY := floor((y - Carrefour.TabPos[2].y) / sY);
+      {Position dans la grille}
+      gridX := floor((x - Carrefour.TabPos[2].x) / sX);
+      gridY := floor((y - Carrefour.TabPos[2].y) / sY);
 
-     {Distinction entre les deux triangles}
-     xCoord := RealMod(x - Carrefour.TabPos[2].x, sX) / sX;
-     yCoord := RealMod(y - Carrefour.TabPos[2].y, sY) / sY;
+      {Distinction entre les deux triangles}
+      xCoord := RealMod(x - Carrefour.TabPos[2].x, sX) / sX;
+      yCoord := RealMod(y - Carrefour.TabPos[2].y, sY) / sY;
 
-     pB.x := Carrefour.TabPos[2].x + (1 + gridX) * sX;
-     pB.y := Carrefour.TabPos[2].y + gridY * sY;
-     pB.z := Terrain[gridX + 1, gridY];
+      pB.x := Carrefour.TabPos[2].x + (1 + gridX) * sX;
+      pB.y := Carrefour.TabPos[2].y + gridY * sY;
+      pB.z := Terrain[gridX + 1, gridY];
 
-     pC.x := Carrefour.TabPos[2].x + gridX * sX;
-     pC.y := Carrefour.TabPos[2].y + (1 + gridY) * sY;
-     pC.z := Terrain[gridX, gridY + 1];
+      pC.x := Carrefour.TabPos[2].x + gridX * sX;
+      pC.y := Carrefour.TabPos[2].y + (1 + gridY) * sY;
+      pC.z := Terrain[gridX, gridY + 1];
 
-     if xCoord <= (1 - yCoord) then
-     begin
-       pA.x := Carrefour.TabPos[2].x + gridX * sX;
-       pA.y := Carrefour.TabPos[2].y + gridY * sY;
-       pA.z := Terrain[gridX, gridY];
+      if xCoord <= (1 - yCoord) then
+      begin
+         pA.x := Carrefour.TabPos[2].x + gridX * sX;
+         pA.y := Carrefour.TabPos[2].y + gridY * sY;
+         pA.z := Terrain[gridX, gridY];
 
-       TriangleDebug(pB, pC, pA);
-     end
-     else
-     begin
-       pA.x := Carrefour.TabPos[2].x + (1 + gridX) * sX;
-       pA.y := Carrefour.TabPos[2].y + (1 + gridY) * sY;
-       pA.z := Terrain[gridX + 1, gridY + 1];
+         TriangleDebug(pB, pC, pA);
+      end
+      else
+      begin
+         pA.x := Carrefour.TabPos[2].x + (1 + gridX) * sX;
+         pA.y := Carrefour.TabPos[2].y + (1 + gridY) * sY;
+         pA.z := Terrain[gridX + 1, gridY + 1];
 
-       TriangleDebug2(pB, pC, pA);
-     end;
+         TriangleDebug2(pB, pC, pA);
+      end;
 
-     {Interpolation de la hauteur}
-     p.x := x;
-     p.y := y;
-     p.z := PositionZSurTriangle(pA, pB, pC, p);
-     result := p.z;
+      {Interpolation de la hauteur}
+      p.x := x;
+      p.y := y;
+      p.z := PositionZSurTriangle(pA, pB, pC, p);
+      result := p.z;
    end;
 end;
 
 procedure TerrainAleatoire(a, b : integer);
-var i, j, k : byte;
-pA, pB, pC, pD, p : Tvecteur;
+var
+   i, j, k : byte;
+   pA, pB, pC, pD, p : Tvecteur;
 begin
    with MaVille[a,b] do
    begin
@@ -185,15 +185,15 @@ begin
       pC := Maville[a,b].Route1.TabPos[2];
       pD := Maville[(a+1) mod NB_BLOC_MAX_X, (b+1) mod NB_BLOC_MAX_Y].Carrefour.TabPos[0];
 
-         {Sur les bords de la carte appliquer un modulo de la taille carte sur les distances}
-         if pA.x >= pD.x then
-         begin
-            pD.x := pD.x + TAILLE_MAP_X;
-         end;
-         if pA.y >= pD.y then
-         begin
-            pD.y := pD.y + TAILLE_MAP_Y;
-         end;
+      {Sur les bords de la carte appliquer un modulo de la taille carte sur les distances}
+      if pA.x >= pD.x then
+      begin
+         pD.x := pD.x + TAILLE_MAP_X;
+      end;
+      if pA.y >= pD.y then
+      begin
+         pD.y := pD.y + TAILLE_MAP_Y;
+      end;
 
       Terrain[0,0]                           := pA.z;
       Terrain[NB_SUB_TERRAIN,0]              := pB.z;
@@ -209,11 +209,11 @@ begin
          k := 0;
          for j := 0 to NB_SUB_TERRAIN do
          begin
-             p.x := pA.x + i * LONG_ROUTE_X / NB_SUB_TERRAIN;
-             p.y := pA.y + j * LONG_ROUTE_Y / NB_SUB_TERRAIN;
+            p.x := pA.x + i * LONG_ROUTE_X / NB_SUB_TERRAIN;
+            p.y := pA.y + j * LONG_ROUTE_Y / NB_SUB_TERRAIN;
 
-             if i <= j - k then begin Terrain[i,j] := PositionZSurTriangle(pA, pD, pC, p); {DessinerRepere(p.x, p.y, Terrain[i,j]+2);} end
-             else begin Terrain[i,j] := PositionZSurTriangle(pD, pB, pA, p); {DessinerRepere2(p.x, p.y, Terrain[i,j]+2);} end;
+            if i <= j - k then begin Terrain[i,j] := PositionZSurTriangle(pA, pD, pC, p); {DessinerRepere(p.x, p.y, Terrain[i,j]+2);} end
+            else begin Terrain[i,j] := PositionZSurTriangle(pD, pB, pA, p); {DessinerRepere2(p.x, p.y, Terrain[i,j]+2);} end;
          end;
          inc(k);
       end;
@@ -223,7 +223,7 @@ begin
       begin
          for j := 1 to NB_SUB_TERRAIN-1 do
          begin
-             Terrain[i,j] := 0.97*Terrain[i,j]+0.03*random(200);
+            Terrain[i,j] := 0.97*Terrain[i,j]+0.03*random(200);
          end;
       end;
    end;
@@ -246,20 +246,14 @@ end;
  *
  *******************************************************************************}
 procedure ListeAffichageTerrain(a, b, subdivision : byte; texture: gluint);
-var i,j : integer;
-PasX,PasY : real;
-pA,pB,pC,pD : TVecteur;
+var
+   i,j : integer;
+   PasX,PasY : real;
+   pA,pB,pC,pD : TVecteur;
 begin
    PasX := LONG_ROUTE_X/subdivision;
    PasY := LONG_ROUTE_Y/subdivision;
 
-   //if (glIsList(terrain)) then glDeleteLists(terrain,1);
-   //terrain := glGenLists(1);
-   //glNewList(terrain, GL_COMPILE);
-   //
-
-   //glPolygonMode(GL_FRONT, GL_LINE);
-   //glPolygonMode(GL_BACK, GL_LINE);
    GlPushMatrix();
 
    glcullface(GL_BACK);
@@ -301,9 +295,6 @@ begin
    glcullface(GL_FRONT);
 
    GlPopMatrix();
-   //glPolygonMode(GL_FRONT, GL_FILL);
-   //glPolygonMode(GL_BACK, GL_FILL);
-   // glEndList();
 end;
 
 {*******************************************************************************
@@ -312,9 +303,10 @@ end;
  *
  *******************************************************************************}
 procedure ListeAffichageTrottoir(a, b, subdivision : byte; texture: gluint);
-var i,j : integer;
-PasX,PasY : real;
-pA,pB,pC,pD : TVecteur;
+var
+   i,j : integer;
+   PasX,PasY : real;
+   pA,pB,pC,pD : TVecteur;
 begin
    PasX := LONG_ROUTE_X/subdivision;
    PasY := LONG_ROUTE_Y/subdivision;

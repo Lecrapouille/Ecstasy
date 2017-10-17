@@ -118,7 +118,7 @@ begin
       raise EWaveError.Create( 'Abnormal ''fmt'' size!' );
 
     // Read the 'fmt ' chunk into <pcmWaveFormat>.*/
-    if (mmioRead(mmIO, PChar(@WaveFormat), sizeof(TPCMWaveFormat)) <>
+    if (mmioRead(mmIO, PAnsiChar(@WaveFormat), sizeof(TPCMWaveFormat)) <>
       sizeof(TPCMWaveFormat)) then
       raise EWaveError.Create( 'Error reading ''fmt'' chunk!' );
 

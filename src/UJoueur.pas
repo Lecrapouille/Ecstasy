@@ -79,7 +79,7 @@ end;
 procedure TJoueur.CreerTableauDeBord();
 begin
    {Tableau de bord}
-   if (glIsList(TableauDeBord)) then glDeleteLists(TableauDeBord,1);
+   if (glIsList(TableauDeBord)=GL_TRUE) then glDeleteLists(TableauDeBord,1);
    TableauDeBord := glGenLists(1);
    glNewList(TableauDeBord,GL_COMPILE);
 
@@ -105,7 +105,7 @@ begin
    glEndList();
 
    {Volant}
-   if (glIsList(Volant)) then glDeleteLists(Volant,1);
+   if (glIsList(Volant)=GL_TRUE) then glDeleteLists(Volant,1);
    Volant := glGenLists(1);
    glNewList(Volant,GL_COMPILE);
 

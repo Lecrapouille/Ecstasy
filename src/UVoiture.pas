@@ -387,7 +387,7 @@ var TabTexture : TTabTexture;
 begin
    TabTexture.long := 0;
    TextureBlending('data\textures\particule.bmp',TabTexture,0,0,0,8,1,0,0);
-   if (glIsList(FeuArriere)) then glDeleteLists(FeuArriere,1);
+   if (glIsList(FeuArriere)=GL_TRUE) then glDeleteLists(FeuArriere,1);
    FeuArriere := glGenLists(1);
    glNewList(FeuArriere,GL_COMPILE);
    glpushMatrix();

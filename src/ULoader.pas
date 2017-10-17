@@ -543,7 +543,7 @@ end;
 procedure loaderAse(NomDossier : string; NomFich : string; obj : pobjet; ModeNuit : boolean);
 var NomComplet: String;
 begin
-   NomComplet := NomDossier + '/' + NomFich;
+   NomComplet := NomDossier + '\' + NomFich;
    if not(FileExists(NomComplet)) then
       ShowMessage(NomComplet + ' n''existe pas')
    else

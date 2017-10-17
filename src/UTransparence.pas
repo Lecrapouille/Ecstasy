@@ -32,7 +32,7 @@ Stdcall; External 'OpenGL32.dll';
 
 procedure LibererMasque;
 begin
-   if (glIsList(NouvelleListe)) then glDeleteLists(NouvelleListe,1);
+   if (glIsList(NouvelleListe)=GL_TRUE) then glDeleteLists(NouvelleListe,1);
 end;
 
 {-------------------------------------------------------------------------------

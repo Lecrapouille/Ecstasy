@@ -240,7 +240,7 @@ begin
    {Place les feux avant ou apres le carrefour}
    if Params.CarrefourAmericain then offsetFeux := ESPACE_CAREFOUR else offsetFeux := 0;
 
-   if (glIsList(Route_Liste_Affichage)) then glDeleteLists(Route_Liste_Affichage,1);
+   if (glIsList(Route_Liste_Affichage)=GL_TRUE) then glDeleteLists(Route_Liste_Affichage,1);
    Route_Liste_Affichage := glGenLists(1);
    glNewList(Route_Liste_Affichage,GL_COMPILE);
    Route0 := TRoute.Create(A0,B0,C0,D0,n0);
@@ -406,7 +406,7 @@ begin
    LongGauche := ng;
    LongDroit := nd;
 
-   if (glIsList(Maison_Liste_Affichage)) then glDeleteLists(Maison_Liste_Affichage,1);
+   if (glIsList(Maison_Liste_Affichage)=GL_TRUE) then glDeleteLists(Maison_Liste_Affichage,1);
    Maison_Liste_Affichage := glGenLists(1);
    glNewList(Maison_Liste_Affichage,GL_COMPILE);
    if b <> RANGEE_DU_FLEUVE then

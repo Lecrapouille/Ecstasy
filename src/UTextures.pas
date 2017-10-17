@@ -65,7 +65,7 @@ procedure TextureBlending(Chemin : string;
 var numero : gluint;
 begin
    LoadTexture(Chemin, numero, false);
-   if (glIsList(TabTexture.elt[TabTexture.long])) then glDeleteLists(TabTexture.elt[TabTexture.long],1);
+   if (glIsList(TabTexture.elt[TabTexture.long])=GL_TRUE ) then glDeleteLists(TabTexture.elt[TabTexture.long],1);
    TabTexture.elt[TabTexture.long] := glGenLists(1);
    glNewList(TabTexture.elt[TabTexture.long],GL_COMPILE);
    glEnable(GL_BLEND);

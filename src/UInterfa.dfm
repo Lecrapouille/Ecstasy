@@ -439,10 +439,4 @@ object Form1: TForm1
       end
     end
   end
-  object Timer1: TTimer
-    Enabled = False
-    Interval = 10
-    Left = 32
-    Top = 424
-  end
 end

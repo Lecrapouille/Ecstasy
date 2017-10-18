@@ -36,8 +36,6 @@ type
       Button1: TButton;
       Button2: TButton;
       Label12: TLabel;
-
-      Timer1: TTimer;
       PageControl1: TPageControl;
       TabSheet1: TTabSheet;
       TabSheet3: TTabSheet;

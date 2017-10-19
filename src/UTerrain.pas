@@ -75,8 +75,8 @@ begin
    with MaVille[a,b] do
    begin
       {Taille d'une case}
-      sX := LONG_ROUTE_X / (NB_SUB_TROTTOIR - 1*0);
-      sY := LONG_ROUTE_Y / (NB_SUB_TROTTOIR - 1*0);
+      sX := LONG_ROUTE_X / NB_SUB_TROTTOIR;
+      sY := LONG_ROUTE_Y / NB_SUB_TROTTOIR;
 
       {Position dans la grille}
       gridX := floor((x - Carrefour.TabPos[2].x) / sX);
@@ -100,7 +100,7 @@ begin
          pA.y := Carrefour.TabPos[2].y + gridY * sY;
          pA.z := Trottoir[gridX, gridY];
 
-         TriangleDebug(pB, pC, pA);
+         //TriangleDebug(pB, pC, pA);
       end
       else
       begin
@@ -108,7 +108,7 @@ begin
          pA.y := Carrefour.TabPos[2].y + (1 + gridY) * sY;
          pA.z := Trottoir[gridX + 1, gridY + 1];
 
-         TriangleDebug2(pB, pC, pA);
+         //TriangleDebug2(pB, pC, pA);
       end;
 
       {Interpolation de la hauteur}
@@ -128,8 +128,8 @@ begin
    with MaVille[a,b] do
    begin
       {Taille d'une case}
-      sX := LONG_ROUTE_X / (NB_SUB_TERRAIN - 1*0);
-      sY := LONG_ROUTE_Y / (NB_SUB_TERRAIN - 1*0);
+      sX := LONG_ROUTE_X / NB_SUB_TERRAIN;
+      sY := LONG_ROUTE_Y / NB_SUB_TERRAIN;
 
       {Position dans la grille}
       gridX := floor((x - Carrefour.TabPos[2].x) / sX);
@@ -153,7 +153,7 @@ begin
          pA.y := Carrefour.TabPos[2].y + gridY * sY;
          pA.z := Terrain[gridX, gridY];
 
-         TriangleDebug(pB, pC, pA);
+         //TriangleDebug(pB, pC, pA);
       end
       else
       begin
@@ -161,7 +161,7 @@ begin
          pA.y := Carrefour.TabPos[2].y + (1 + gridY) * sY;
          pA.z := Terrain[gridX + 1, gridY + 1];
 
-         TriangleDebug2(pB, pC, pA);
+         //TriangleDebug2(pB, pC, pA);
       end;
 
       {Interpolation de la hauteur}
@@ -199,9 +199,6 @@ begin
       Terrain[NB_SUB_TERRAIN,0]              := pB.z;
       Terrain[0,NB_SUB_TERRAIN]              := pC.z;
       Terrain[NB_SUB_TERRAIN,NB_SUB_TERRAIN] := pD.z;
-
-      //TriangleDebug2(pA, pD, pC);
-      //TriangleDebug(pD, pB, pA);
 
       {Creation de la grille: triangulation}
       for i := 0 to NB_SUB_TERRAIN do
@@ -245,14 +242,14 @@ end;
  *
  *
  *******************************************************************************}
-procedure ListeAffichageTerrain(a, b, subdivision : byte; texture: gluint);
+procedure ListeAffichageTerrain(a, b : byte; texture: gluint);
 var
    i,j : integer;
-   PasX,PasY : real;
+   PasX,PasY,oX,oY : real;
    pA,pB,pC,pD : TVecteur;
 begin
-   PasX := LONG_ROUTE_X/subdivision;
-   PasY := LONG_ROUTE_Y/subdivision;
+   PasX := LONG_ROUTE_X / NB_SUB_TERRAIN;
+   PasY := LONG_ROUTE_Y / NB_SUB_TERRAIN;
 
    GlPushMatrix();
 
@@ -260,25 +257,25 @@ begin
    glcolor3f(1,1,1);
    glEnable(GL_TEXTURE_2D);
    glBindTexture(GL_TEXTURE_2D, texture);
-   gltranslated(Maville[a,b].Carrefour.TabPos[0].x+ESPACE_CAREFOUR,
-                Maville[a,b].Carrefour.TabPos[0].y+ESPACE_CAREFOUR,0);
-   for i :=0 to (subdivision-1) do
-      for j :=0 to (subdivision-1) do
+   oX := Maville[a,b].Carrefour.TabPos[0].x + ESPACE_CAREFOUR;
+   oY := Maville[a,b].Carrefour.TabPos[0].y + ESPACE_CAREFOUR;
+   for i := 0 to (NB_SUB_TERRAIN-1) do
+      for j := 0 to (NB_SUB_TERRAIN-1) do
       begin
-         pA.x := i*pasX;
-         pA.y := j*pasY;
+         pA.x := oX + i * pasX;
+         pA.y := oY + j * pasY;
          pA.z := Maville[a,b].Terrain[i,j];
 
-         pB.x := (i+1)*pasX;
-         pB.y := j*pasY;
+         pB.x := oX + (i+1) * pasX;
+         pB.y := oY + j * pasY;
          pB.z := Maville[a,b].Terrain[i+1,j];
 
-         pD.x := (i+1)*pasX;
-         pD.y := (j+1)*pasY;
+         pD.x := oX + (i+1) * pasX;
+         pD.y := oY + (j+1) * pasY;
          pD.z := Maville[a,b].Terrain[i+1,j+1];
 
-         pC.x := i*pasX;
-         pC.y := (j+1)*pasY;
+         pC.x := oX + i * pasX;
+         pC.y := oY + (j+1) * pasY;
          pC.z := Maville[a,b].Terrain[i,j+1];
 
          glBegin(GL_Triangles);
@@ -302,14 +299,14 @@ end;
  *
  *
  *******************************************************************************}
-procedure ListeAffichageTrottoir(a, b, subdivision : byte; texture: gluint);
+procedure ListeAffichageTrottoir(a, b : byte; texture: gluint);
 var
    i,j : integer;
-   PasX,PasY : real;
+   PasX,PasY,oX,oY : real;
    pA,pB,pC,pD : TVecteur;
 begin
-   PasX := LONG_ROUTE_X/subdivision;
-   PasY := LONG_ROUTE_Y/subdivision;
+   PasX := LONG_ROUTE_X / NB_SUB_TROTTOIR;
+   PasY := LONG_ROUTE_Y / NB_SUB_TROTTOIR;
 
    GlPushMatrix();
 
@@ -317,25 +314,25 @@ begin
    glcolor3f(1,1,1);
    glEnable(GL_TEXTURE_2D);
    glBindTexture(GL_TEXTURE_2D, texture);
-   gltranslated(Maville[a,b].Carrefour.TabPos[0].x+ESPACE_CAREFOUR,
-                Maville[a,b].Carrefour.TabPos[0].y+ESPACE_CAREFOUR,0);
-   for i :=0 to (subdivision-1) do
-      for j :=0 to (subdivision-1) do
+   oX := Maville[a,b].Carrefour.TabPos[0].x + ESPACE_CAREFOUR;
+   oY := Maville[a,b].Carrefour.TabPos[0].y + ESPACE_CAREFOUR;
+   for i := 0 to (NB_SUB_TROTTOIR - 1) do
+      for j := 0 to (NB_SUB_TROTTOIR - 1) do
       begin
-         pA.x := i*pasX;
-         pA.y := j*pasY;
+         pA.x := oX + i * pasX;
+         pA.y := oY + j * pasY;
          pA.z := Maville[a,b].Trottoir[i,j];
 
-         pB.x := (i+1)*pasX;
-         pB.y := j*pasY;
+         pB.x := oX + (i+1) * pasX;
+         pB.y := oY + j * pasY;
          pB.z := Maville[a,b].Trottoir[i+1,j];
 
-         pD.x := (i+1)*pasX;
-         pD.y := (j+1)*pasY;
+         pD.x := oX + (i+1) * pasX;
+         pD.y := oY + (j+1) * pasY;
          pD.z := Maville[a,b].Trottoir[i+1,j+1];
 
-         pC.x := i*pasX;
-         pC.y := (j+1)*pasY;
+         pC.x := oX + i * pasX;
+         pC.y := oY + (j+1) * pasY;
          pC.z := Maville[a,b].Trottoir[i,j+1];
 
          glBegin(GL_Triangles);
@@ -362,13 +359,13 @@ end;
 procedure CreerTerrain(a,b : byte);
 begin
    TerrainAleatoire(a, b);
-   ListeAffichageTerrain(a, b, NB_SUB_TERRAIN, Text_sol);
+   ListeAffichageTerrain(a, b, Text_sol);
 end;
 
 procedure CreerTrottoir(a,b : byte);
 begin
    Trottoir(a, b);
-   ListeAffichageTrottoir(a, b, NB_SUB_TROTTOIR, Text_pont);
+   ListeAffichageTrottoir(a, b, Text_pont);
 end;
 
 end.

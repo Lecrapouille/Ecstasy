@@ -6,7 +6,7 @@ Ecstasy was one of our first team projects (and game), so sorry this is not an o
 
 ### Wanted
 
-I'm looking for Delphi developers. ~~I'm curious to check if Ecstasy can work on recent Windows (>= 7) and therefore if the project can compile with a more recent Delphi.~~ Update: thank to [dslutej](https://github.com/dslutej) the game is compiling on Windows 10 (64-bits) and Delphi 10.2.1. See [here](https://github.com/Lecrapouille/Ecstasy/issues/4) for more information. 
+I'm looking for Delphi developers. ~~I'm curious to check if Ecstasy can work on recent Windows (>= 7) and therefore if the project can compile with a more recent Delphi.~~ Update: thank to [dslutej](https://github.com/dslutej) the game is compiling on Windows 10 (64-bits) and Delphi 10.2.1. See [here](https://github.com/Lecrapouille/Ecstasy/issues/4) for more information.
 
 ### Screenshot
 
@@ -27,7 +27,7 @@ Not implemented:
 * missing a fixed frame rate (will be fixed in 2017).
 * ~~off-road partially implemented (will be fixed in 2017).~~
 * simple optim to avoid game slowing down on hudge traffic jam. (will be fixed in 2017).
-* no collision detection: cars and buildings (will be fixed in 2017 but just for buildings). 
+* no collision detection: cars and buildings (will be fixed in 2017 but just for buildings).
 * no IA (collision avoidance, IA cars do not turn; no police cars to catch the player).
 * city generation with a better procedural process.
 * More physics (like pumping effect on wheel depending on acceleration). (maybe will be added one day).
@@ -53,28 +53,28 @@ Not implemented:
 The city is just a grid of urban zones (aka 2D matrix). City size if finite but bounds are connected, that is why the city is finaly infinite. As mathematical point of view, you are driving on a torus world. The city matrix looks like this:
 ```
   +-------------+--------------+-----+
-  | block[0,0]  |  block[1,0]  | ... |
+  |    ...      |      ...     | ... |
   +-------------+--------------+-----+
   | block[1,0]  |  block[1,1]  | ... |
   +-------------+--------------+-----+
-  |     ...     |      ...     | ... |
+  | block[0,0]  |  block[1,0]  | ... |
   +-------------+--------------+-----+
 ```
 
-A block (aka urban zone) is another kind of matrix: a rectangle made of two roads (horizontally and vertically), a cross-road with traffic lights, and in the remaining space there either buildings or a river or an off-road terrain. A road is a 4-ways road: direct way (low and fast ways) and indirect (low and fast). Let see one block: 
+A block (aka urban zone) is another kind of matrix: a rectangle made of two roads (horizontally and vertically), a cross-road with traffic lights, and in the remaining space there either buildings or a river or an off-road terrain. A road is a 4-ways road: direct way (low and fast ways) and indirect (low and fast). Let see one block:
 ```
-      +---------+----------------------------+           ^ X
-      |0 cross 1|0    road #1               1|           |
-      |  road   |                            |           | red
-      |3       2|3                          2|   Y <-----+
-      +---------+----------------------------+       green
-      |0       1|                            | 
-      |    r    |          buildings         |
-      |    o    |             or             |
-      |    a    |            river           |
-      |    d    |             or             |
-      |   #0    |          off-road          | 
-      |3       2|                            |
+      +---------+----------------------------+            Z
+      |0 cross 1|0    road #1               1|             \
+      |  road   |                            |              \Blue
+      |3       2|3                          2|               \
+      +---------+----------------------------+               (+)------------> Y
+      |0       1|                            |                |             Green
+      |    r    |          buildings         |                |
+      |    o    |             or             |                |
+      |    a    |            river           |                |
+      |    d    |             or             |                v
+      |   #0    |          off-road          |               Red
+      |3       2|                            |                X
       +---------+----------------------------+
 ```
 Numbers 0 .. 3 indicates the vertices order. Roads and crossroads are just made with 2 OpenGL triangles. Use theses informations for getting cars altitude and in which part they are driving (which roads).

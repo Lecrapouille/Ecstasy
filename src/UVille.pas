@@ -371,19 +371,19 @@ end;
  *  Remarque : Pour afficher le repere --> glCallList(LeRepere).
  *
  *  Un bloc de la ville est consititue de la sorte :
- *                                                                    X
- *                   +----+--------------------+                      ^
- *                   |0ca1|0    route 1       1|                      | rouge
- *                   |3rr2|3                  2|                      |
- *                   +----+--------------------+              Y <-----+
- *                   |0r1 |                    |                  vert
- *                   | o  |                    |
- *                   | u  |   Le bloc de       |
- *                   | t  |     maisons        |
- *                   | e  |                    |
- *                   | 0  |                    |
- *                   |3  2|                    |
- *                   +----+--------------------+
+ *                                                         Z
+ *                   +----+--------------------+           \
+ *                   |0ca1|0    route 1       1|            \ Bleu
+ *                   |3rr2|3                  2|             \
+ *                   +----+--------------------+             (+)-----------> Y
+ *                   |0r1 |                    |              |             vert
+ *                   | o  |                    |              |
+ *                   | u  |   Le bloc de       |              |
+ *                   | t  |     maisons        |              |
+ *                   | e  |                    |              |
+ *                   | 0  |                    |             \|/
+ *                   |3  2|                    |              X
+ *                   +----+--------------------+            Rouge
  *
  * *****************************************************************************}
 function TireUnImmeuble({taille : integer}) : integer;

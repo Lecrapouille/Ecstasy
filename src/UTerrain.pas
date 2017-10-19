@@ -340,12 +340,12 @@ begin
 
          glBegin(GL_Triangles);
          glTexCoord2f(0,0); glVertex3f(pA.x,pA.y,pA.z);
-         glTexCoord2f(0,1); glVertex3f(pB.x,pB.y,pB.z);
-         glTexCoord2f(1,1); glVertex3f(pC.x,pC.y,pC.z);
+         glTexCoord2f(0,20); glVertex3f(pB.x,pB.y,pB.z);
+         glTexCoord2f(20,20); glVertex3f(pC.x,pC.y,pC.z);
 
          glTexCoord2f(0,0); glVertex3f(pB.x,pB.y,pB.z);
-         glTexCoord2f(1,1); glVertex3f(pD.x,pD.y,pD.z);
-         glTexCoord2f(1,0); glVertex3f(pC.x,pC.y,pC.z);
+         glTexCoord2f(20,20); glVertex3f(pD.x,pD.y,pD.z);
+         glTexCoord2f(20,0); glVertex3f(pC.x,pC.y,pC.z);
          glend();
       end;
    glDisable(GL_TEXTURE_2D);

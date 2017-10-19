@@ -44,7 +44,7 @@ uses UVoiture,
  *              Met TETE ET QUEUE a NIL .
  *
  ******************************************************************************}
-Type TJoueur = class(TVoiture)
+Type TJoueur = class(TDynamiqueVoiture)
 public
    Volant,TableauDeBord : Gluint;
    MarcheArriere : boolean;
@@ -263,7 +263,7 @@ begin
 end;
 
 procedure TJoueur.CollisionSurVoitures();
-var couple : Tcouple; Voit : TPGoodies;
+var couple : Tcouple; Voit : TPVoiture;
 begin
    couple := QuellePartition(Position.x,Position.y);
    ColliVoiture := FALSE;

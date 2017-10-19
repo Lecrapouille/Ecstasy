@@ -30,31 +30,31 @@ var
 procedure ChargementFeuArriere();
 
 {*******************************************************************************}
-Type TVoiture = class(TObject)
+Type TDynamiqueVoiture = class(TObject)
 public
    Freine : boolean;
    Theta        : real;                  // Angle du volant pour faire tourner les 2 roues de devant
    Position     : Tvecteur;              // Position de la carcasse (X,Y,Z)
    OldPosition  : Tvecteur;              // Ancienne position de la carcasse
    Vitesse      : real;                  // vitesse
+   Vx           : real;                  // Composant de la vitesse sur l'axe X
+   Vy           : real;                  // Composant de la vitesse sur l'axe Y
    Param        : TParamVoiture;         // Parametres (Raideurs des ressorts ... )
    Tangage      : real;                  // Tangage de la voiture
-   OldTangage  : real;
+   OldTangage   : real;
    Roulis       : real;                  // Roulis
    Direction    : real;                  // Mvt horizontale de la voiture
-   RoueAG    : real;            // Altitude roue avant Gauche
-   RoueDG  : real;            // Altitude roue arriere Gauche
-   RoueAD    : real;            // Altitude roue avant
-   RoueDD  : real;            // Altitude roue arriere
-
-   OldRoulis   : real;
+   RoueAG       : real;                  // Altitude roue avant Gauche
+   RoueDG       : real;                  // Altitude roue arriere Gauche
+   RoueAD       : real;                  // Altitude roue avant
+   RoueDD       : real;                  // Altitude roue arriere
+   OldRoulis    : real;
    OldRoueAG    : real; // Ancienne altitude de la roue avant Gauche
-   OldRoueDG  : real; // Ancienne altitude de la roue arriere Gauche
+   OldRoueDG    : real; // Ancienne altitude de la roue arriere Gauche
    OldRoueAD    : real; // Ancienne altitude de la roue avant Droite
-   OldRoueDD  : real; // Ancienne altitude de la roue arriere Droite
-   id              : byte; // Numero d'indetification
-   RoueRot         : real; // Rotation de la roue
-
+   OldRoueDD    : real; // Ancienne altitude de la roue arriere Droite
+   id           : byte; // Numero d'indetification
+   RoueRot      : real; // Rotation de la roue
 
    constructor Create(x,y : real; ident : integer);
    procedure Actualise();
@@ -77,7 +77,7 @@ uses UJoueur, UAltitude, UVille;
  *  A MODIFIER ***********
  *
  *******************************************************************************}
-procedure TVoiture.Actualise();
+procedure TDynamiqueVoiture.Actualise();
 //var nbframes : integer;
 begin
    OldTheta := Theta;
@@ -90,7 +90,7 @@ end;
  *   Initialisation -- creation de la voiture
  *
  *******************************************************************************}
-constructor TVoiture.Create(x,y : real; ident : integer);
+constructor TDynamiqueVoiture.Create(x,y : real; ident : integer);
 begin
    Position.x := x;
    Position.y := y;
@@ -100,6 +100,8 @@ begin
    Param := TabRepertVoit.elt[ident+1];//tab;
    theta := 0;
    Vitesse := VITESSE_MINIMALE;
+   Vx := 0;
+   Vy := 0;
    RoueRot := 0.0;
    Freine := False;
 
@@ -133,7 +135,7 @@ end;
  *  Affichage de la voiture (roue + carcasse)
  *
  *******************************************************************************}
-procedure TVoiture.Affiche();
+procedure TDynamiqueVoiture.Affiche();
 begin
    glPushMatrix();
    gltranslated(Position.x, Position.y, Position.z + Param.Hauteur);
@@ -203,7 +205,7 @@ end;
  *   Actualisation de la dynamique
  *
  *******************************************************************************}
-procedure TVoiture.ActualiseDynamique({nbpas : integer});
+procedure TDynamiqueVoiture.ActualiseDynamique({nbpas : integer});
 var PPAS, Tang, AD, AG, DD, DG, roul,
 Carcasse, NextPositionX, NextPositionY : real; i : integer;
 F1,F2,F3 : real;
@@ -299,7 +301,7 @@ end;
  *  Retourne la reaction du sol sur la roue avant
  *
  *******************************************************************************}
-function TVoiture.ReactionSolRoueAD() : real;
+function TDynamiqueVoiture.ReactionSolRoueAD() : real;
 var resultat : real;
 begin
    with Param do
@@ -319,7 +321,7 @@ begin
 end;
 
 
-function TVoiture.ReactionSolRoueAG() : real;
+function TDynamiqueVoiture.ReactionSolRoueAG() : real;
 var resultat : real;
 begin
    with Param do
@@ -343,7 +345,7 @@ end;
  *  Retourne la reaction du sol sur la roue arriere
  *
  *******************************************************************************}
-function TVoiture.ReactionSolRoueDG() : real;
+function TDynamiqueVoiture.ReactionSolRoueDG() : real;
 var resultat : real;
 begin
    with Param do
@@ -363,7 +365,7 @@ begin
 end;
 
 
-function TVoiture.ReactionSolRoueDD() : real;
+function TDynamiqueVoiture.ReactionSolRoueDD() : real;
 var resultat : real;
 begin
    with Param do

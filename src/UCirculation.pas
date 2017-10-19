@@ -21,23 +21,20 @@ uses UVoiture,
      UTypege,
      math;
 
-{**************************  TPGoodies  ****************************************
+{**************************  TPVoiture  ****************************************
  *
- * Les Goodies sont les voitures neutres qui circulent dans la ville. Ils heritent
- * du type TVoiture, mais ils ont plus un pointeur sur le goody suivant car ils
- * sont du type Pointeur sur un Goody.
+ * Defini les voitures neutres qui circulent dans la ville. Ils heritent
+ * du type TDynamiqueVoiture, mais ils ont plus un pointeur sur la voiture
+ * suivante pour reguler leur vitesse.
  *
  *******************************************************************************}
-Type TPGoodies = ^TGoodies;
-TGoodies = class(TVoiture)
+Type TPVoiture = ^TVoiture;
+TVoiture = class(TDynamiqueVoiture)
 public
-   VitesseMaximale : real;
-   next : TPGoodies; {Pointeur sur la voiture suivante}
-   Prec : TPGoodies; {Pointeur sur la voiture precedente}
+   VitesseMaximale : real;   next : TPVoiture; {Pointeur sur la voiture suivante}
+   Prec : TPVoiture; {Pointeur sur la voiture precedente}
 private
    BlocX,BlocY : byte; {Les numeros du bloc auquel la voiture appartient}
-   Vx : real;   {Composant de la vitesse sur l'axe X}
-   Vy : real;   {Composant de la vitesse sur l'axe Y}
 
    constructor Create(const x,y : real; const LaRoute, LeSens, LaVoie, ident : byte);
    procedure ChgVitDirect(const i,j,QuelleRoute,QuelleVoie : byte; const Pos : TVecteur; Vit : real);
@@ -74,23 +71,23 @@ end;
  *               Ajout une nouvelle voiture (ancienne TETE de file) dans la file
  *               de voiture en derniere position (en QUEUE).
  *
- *  function  SupprimeTete() : TPGoodies;
- *               La voiture TETE est supprimee, sa suivante devient leader
+ *  function  SupprimeTete() : TPVoiture;
+ *               La voiture TETE est supprimee, la suivante devient leader.
  *               La voiture TETE est ajoutee dans une autre file grace a la
- *               procedure precedente.
- *               La fct retourne la voiture a supprimer.
+ *               procedure AjoutEnQueue().
+ *               La fct retourne la voiture supprimee.
  *
  *******************************************************************************}
 TCirculation = class(Tobject)
-   Tete : TPGoodies;
-   Queue : TPGoodies;
+   Tete : TPVoiture;
+   Queue : TPVoiture;
    destructor  DestroyCirculation();
    procedure   Affiche();
    procedure   ActualiseIndirect(const i,j,QuelleRoute,QuelleVoie : integer);
    procedure   ActualiseDirect(const i,j,QuelleRoute,QuelleVoie : integer);
 private
-   function    SupprimeTete() : TPGoodies;
-   constructor AjoutEnQueue(const voit : TPGoodies);
+   function    SupprimeTete() : TPVoiture;
+   constructor AjoutEnQueue(const voit : TPVoiture);
    procedure   Initialisation();
 end;
 
@@ -117,7 +114,7 @@ uses UAltitude, UCaractere, ULancement, UVille;
  * Creation -- initialisation de la voiture
  *
  *******************************************************************************}
-constructor TGoodies.Create(const x,y : real; const LaRoute, LeSens, LaVoie, ident : byte);
+constructor TVoiture.Create(const x,y : real; const LaRoute, LeSens, LaVoie, ident : byte);
 begin
    inherited Create(x,y,ident);
    BlocX := QuellePartition(Position.x,Position.y).x;
@@ -149,7 +146,7 @@ end;
  *     la position et la vitesse de la voiture precedente (Pos, Vit)
  *
  *******************************************************************************}
-procedure TGoodies.ChgVitDirect(const i,j,QuelleRoute,QuelleVoie : byte; const Pos : TVecteur; Vit : real);
+procedure TVoiture.ChgVitDirect(const i,j,QuelleRoute,QuelleVoie : byte; const Pos : TVecteur; Vit : real);
 var Dist,W : real;
 begin
    if QuelleRoute = ROUTE_1 then
@@ -205,7 +202,7 @@ end;
  *     la position et la vitesse de la voiture precedente (Pos, Vit)
  *
  *******************************************************************************}
-procedure TGoodies.ChgVitIndirect(const i,j,QuelleRoute,QuelleVoie : byte; const Pos : TVecteur; Vit : real);
+procedure TVoiture.ChgVitIndirect(const i,j,QuelleRoute,QuelleVoie : byte; const Pos : TVecteur; Vit : real);
 var Val,Dist,W : real;
 begin
    if QuelleRoute = ROUTE_1 then
@@ -261,7 +258,7 @@ end;
  *
  *******************************************************************************}
 procedure TCirculation.ActualiseDirect(const i,j,QuelleRoute,QuelleVoie : integer);
-var Voit,Temp,Voit1,tuture : TPGoodies;
+var Voit,Temp,Voit1,tuture : TPVoiture;
 ieme,jeme : integer;
 Posi : TVecteur;
 Couple : TCouple;
@@ -344,7 +341,7 @@ end;
  *
  *******************************************************************************}
 procedure TCirculation.ActualiseIndirect(const i,j,QuelleRoute,QuelleVoie : integer);
-var Voit,Temp,Voit1,tuture : TPGoodies;
+var Voit,Temp,Voit1,tuture : TPVoiture;
 ieme,jeme : integer;
 Posi : TVecteur;
 Couple : TCouple;
@@ -446,7 +443,7 @@ end;
  *
  *******************************************************************************}
 procedure TCirculation.Affiche();
-var temp : TPgoodies;
+var temp : TPVoiture;
 begin
    temp := Tete;
    while temp <> NIL do
@@ -463,7 +460,7 @@ end;
  *
  *******************************************************************************}
 destructor TCirculation.DestroyCirculation();
-//var T : TPgoodies;
+//var T : TPVoiture;
 begin
    {while Tete <> NIL do
     begin
@@ -480,7 +477,7 @@ end;
  *
  *
  *******************************************************************************}
-constructor TCirculation.AjoutEnQueue(const Voit : TPGoodies);
+constructor TCirculation.AjoutEnQueue(const Voit : TPVoiture);
 begin
    if (tete = NIL) then
    begin
@@ -500,8 +497,8 @@ end;
  *
  *
  *******************************************************************************}
-function TCirculation.SupprimeTete() : TPGoodies;
-var temp : TPGoodies;
+function TCirculation.SupprimeTete() : TPVoiture;
+var temp : TPVoiture;
 begin
    if Tete <> NIL then
    begin
@@ -527,7 +524,7 @@ end;
  *******************************************************************************}
 procedure InitCirculation();
 var i,j,k,l,m,nb : integer;
-Temp : TPGoodies;
+Temp : TPVoiture;
 begin
    ProgressBar.Etape := 4; Loading(0);
    for i := 0 to NB_BLOC_MAX_X-1 do //ieme ligne de la ville
@@ -562,7 +559,7 @@ begin
          begin
             //** ROUTE 0
             new(Temp);
-            Temp^ := TGoodies.Create(Maville[i,j].Carrefour.TabPos[3].x+LONG_ROUTE_X-60*nb,
+            Temp^ := TVoiture.Create(Maville[i,j].Carrefour.TabPos[3].x+LONG_ROUTE_X-60*nb,
                                      Maville[i,j].Carrefour.TabPos[3].y+7,
                                      ROUTE_0,SENS_DIRECT, VOIE_LENTE,
                                      random(TabRepertVoit.long));
@@ -572,7 +569,7 @@ begin
 
             //***
             new(Temp);
-            Temp^ := TGoodies.Create(Maville[i,j].Carrefour.TabPos[2].x+60*nb,
+            Temp^ := TVoiture.Create(Maville[i,j].Carrefour.TabPos[2].x+60*nb,
                                      Maville[i,j].Carrefour.TabPos[2].y-7,
                                      ROUTE_0,SENS_INDIRECT, VOIE_LENTE,
                                      random(TabRepertVoit.long));
@@ -581,7 +578,7 @@ begin
             MaVille[i,j].TabCirculation[ROUTE_0,SENS_INDIRECT,VOIE_LENTE].AjoutEnQueue(Temp);
             //** ROUTE 1
             new(Temp);
-            Temp^ := TGoodies.Create(Maville[i,j].Carrefour.TabPos[2].x-7,
+            Temp^ := TVoiture.Create(Maville[i,j].Carrefour.TabPos[2].x-7,
                                      Maville[i,j].Carrefour.TabPos[2].y+LONG_ROUTE_Y-60*nb,
                                      ROUTE_1,SENS_DIRECT, VOIE_LENTE,
                                      random(TabRepertVoit.long));
@@ -590,7 +587,7 @@ begin
             MaVille[i,j].TabCirculation[ROUTE_1,SENS_DIRECT,VOIE_LENTE].AjoutEnQueue(Temp);
             //***
             new(Temp);
-            Temp^ := TGoodies.Create(Maville[i,j].Carrefour.TabPos[1].x+7,
+            Temp^ := TVoiture.Create(Maville[i,j].Carrefour.TabPos[1].x+7,
                                      Maville[i,j].Carrefour.TabPos[1].y+60*nb,
                                      ROUTE_1,SENS_INDIRECT, VOIE_LENTE,
                                      random(TabRepertVoit.long));
@@ -605,7 +602,7 @@ begin
          begin
             //** ROUTE 0
             new(Temp);
-            Temp^ := TGoodies.Create(Maville[i,j].Carrefour.TabPos[3].x+LONG_ROUTE_X-60*nb,
+            Temp^ := TVoiture.Create(Maville[i,j].Carrefour.TabPos[3].x+LONG_ROUTE_X-60*nb,
                                      Maville[i,j].Carrefour.TabPos[3].y+18,
                                      ROUTE_0, SENS_DIRECT, VOIE_RAPIDE,
                                      random(TabRepertVoit.long));
@@ -614,7 +611,7 @@ begin
             MaVille[i,j].TabCirculation[ROUTE_0,SENS_DIRECT,VOIE_RAPIDE].AjoutEnQueue(Temp);
             //***
             new(Temp);
-            Temp^ := TGoodies.Create(Maville[i,j].Carrefour.TabPos[2].x+60*nb,
+            Temp^ := TVoiture.Create(Maville[i,j].Carrefour.TabPos[2].x+60*nb,
                                      Maville[i,j].Carrefour.TabPos[2].y-18,
                                      ROUTE_0, SENS_INDIRECT, VOIE_RAPIDE,
                                      random(TabRepertVoit.long));
@@ -623,7 +620,7 @@ begin
             MaVille[i,j].TabCirculation[ROUTE_0,SENS_INDIRECT,VOIE_RAPIDE].AjoutEnQueue(Temp);
             //** ROUTE 1
             new(Temp);
-            Temp^ := TGoodies.Create(Maville[i,j].Carrefour.TabPos[2].x-18,
+            Temp^ := TVoiture.Create(Maville[i,j].Carrefour.TabPos[2].x-18,
                                      Maville[i,j].Carrefour.TabPos[2].y+LONG_ROUTE_Y-60*nb,
                                      ROUTE_1, SENS_DIRECT, VOIE_RAPIDE,
                                      random(TabRepertVoit.long));
@@ -632,7 +629,7 @@ begin
             MaVille[i,j].TabCirculation[ROUTE_1,SENS_DIRECT,VOIE_RAPIDE].AjoutEnQueue(Temp);
             //***
             new(Temp);
-            Temp^ := TGoodies.Create(Maville[i,j].Carrefour.TabPos[1].x+18,
+            Temp^ := TVoiture.Create(Maville[i,j].Carrefour.TabPos[1].x+18,
                                      Maville[i,j].Carrefour.TabPos[1].y+60*nb,
                                      ROUTE_1, SENS_INDIRECT, VOIE_RAPIDE,
                                      random(TabRepertVoit.long));

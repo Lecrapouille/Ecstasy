@@ -25,7 +25,8 @@ CONST
    FPS_TIMER = 1;                     // Timer to calculate FPS
    IFPS_INTERVAL = 1000;
    FPS_INTERVAL = 1.0 * IFPS_INTERVAL; // Calculate FPS every 1000 ms
-   MS_PAR_IMAGE = 16; // 60 FPS = 16.6 ms arrondi a 17
+   FPS_DESIRES = 120; // Bloque le jeu a 120 FPS
+   MS_PAR_IMAGE = 1.0 / FPS_DESIRES;
 
    INFINI = 1000000;
 
@@ -257,7 +258,8 @@ var
 
    {FPS}
    FPSCount : integer = 0;
-   deltaTime : real;
+   deltaTime  : glFloat = 0;
+   LastUpdate : glFloat = 0;
    ElapsedTime : DWord;  // millisecondes
 
    {Parametres videos}

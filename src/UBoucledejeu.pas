@@ -37,9 +37,12 @@ USES
    ULancement,
    UTransparence;
 
-function WinMain(hInstance : HINST; hPrevInstance : HINST;
-                 lpCmdLine : PChar; nCmdShow : Integer;
-                 param : T_param) : Integer; stdcall;
+var
+   finished : Boolean;
+
+   function WinMain(hInstance : HINST; hPrevInstance : HINST;
+                    lpCmdLine : PChar; nCmdShow : Integer;
+                    param : T_param) : Integer; stdcall;
 
 implementation
 uses Forms,UInterfa;
@@ -65,6 +68,39 @@ begin
    if Params.Pluie then Pluie.Actualise(Joueur.Position, Pluie.ListeParticule);
 end;
 
+procedure BoucleDeJeu(Time: glFloat);
+var
+   Poll : glFloat;
+begin
+   Poll := Time - LastUpdate;
+   if Poll > MS_PAR_IMAGE then
+   begin
+      {Definition des actions}
+      UtilisationDuClavier({Joueur,Camera,}Keys, finished);
+      BougeSouris(XMouse, YMouse);
+
+      ActualiseVille();
+      Joueur.Actualise();
+      Myfrust.CalculateFrustum;
+
+      {Vidage du contenu situé à l'écran et fog}
+      glClear(GL_COLOR_BUFFER_BIT OR GL_DEPTH_BUFFER_BIT);
+
+      Meteo();
+      AfficheVille();
+      Joueur.afficheVoiture();
+
+      {OpenGL}
+      SwapBuffers(h_DC);
+
+      {FPS mis a jour dans ULancement.pas}
+      Inc(FPSCount);
+
+      deltaTime := Poll;
+      LastUpdate := Time;
+   end;
+end;
+
 {--------------------------------------------------------------------}
 {  Main message loop for the application                             }
 {--------------------------------------------------------------------}
@@ -73,7 +109,6 @@ function WinMain(hInstance : HINST; hPrevInstance : HINST;
                  param : T_param) : Integer; stdcall;
 var
    msg : TMsg;
-   finished : Boolean;
    i : integer;
    DemoStart, LastTime : DWord;  // millisecondes
 begin
@@ -106,37 +141,11 @@ begin
          end;
       end else
       begin
-         {Vidage du contenu situé à l'écran et fog}
-         glClear(GL_COLOR_BUFFER_BIT OR GL_DEPTH_BUFFER_BIT);
-
          {Calcul du pas en temps}
          LastTime := ElapsedTime;
          ElapsedTime := GetTickCount() - DemoStart;
          ElapsedTime := (LastTime + ElapsedTime) DIV 2;
-         deltaTime := ElapsedTime / 1000.0; // secondes
-
-         ActualiseVille();
-
-         //definition des actions
-         UtilisationDuClavier({Joueur,Camera,}Keys, finished);
-         BougeSouris(XMouse, YMouse);
-         Joueur.Actualise();
-
-         Meteo();
-         AfficheVille();
-         Joueur.afficheVoiture();
-         {Frustum}
-         Myfrust.CalculateFrustum;
-
-         {Force les FPS a 60 soit 1 image toutes les 16.66 ms}
-         //while GetTickCount() - CurrentTime < MS_PAR_IMAGE do
-         //begin end;
-
-         {FPS mis a jour dans ULancement.pas}
-         Inc(FPSCount);
-
-         {OpenGL}
-         SwapBuffers(h_DC);
+         BoucleDeJeu(ElapsedTime / 1000.0); // millisecondes --> secondes
       end;
    end;
    finished := False;

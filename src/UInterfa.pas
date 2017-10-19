@@ -144,13 +144,18 @@ procedure TForm1.Button1Click(Sender: TObject);
 begin
    sauvegarder();
    Form1.FormStyle := fsNormal;
-   // Joueur := TJoueur.Create(40,40,1);
-   if (DISTANCE_CLIPPING <= ALTITUDE_MAX_CAMERA) then MessageBox(0, 'Erreur', 'DISTANCE_CLIPPING <= ALTITUDE_MAX_CAMERA', MB_OK And MB_ICONWARNING )
+   if (NB_QUARTIER_A_AFFICHER > NB_BLOC_MAX_X) OR
+      (NB_QUARTIER_A_AFFICHER > NB_BLOC_MAX_Y)
+   then MessageBox(0, 'Erreur', 'NB_QUARTIER_A_AFFICHER > NB_BLOC_MAX_X ou NB_BLOC_MAX_Y', MB_OK And MB_ICONWARNING);
+
+   if DISTANCE_CLIPPING <= ALTITUDE_MAX_CAMERA
+   then MessageBox(0, 'Erreur', 'DISTANCE_CLIPPING <= ALTITUDE_MAX_CAMERA', MB_OK And MB_ICONWARNING);
+
+   if (LONG_ROUTE_X_DESIREE mod LONG_PLUS_GRAND_IMMEUBLE <> 0) OR
+      (LONG_ROUTE_Y_DESIREE mod LONG_PLUS_GRAND_IMMEUBLE <> 0)
+   then MessageBox(0, 'LONG_ROUTE_X_DESIREE mod LONG_PLUS_GRAND_IMMEUBLE <> 0', 'LONG_ROUTE_Y_DESIREE mod LONG_PLUS_GRAND_IMMEUBLE <> 0', MB_OK And MB_ICONWARNING )
    else
-      if (LONG_ROUTE_X_DESIREE mod LONG_PLUS_GRAND_IMMEUBLE <> 0) OR (LONG_ROUTE_Y_DESIREE mod LONG_PLUS_GRAND_IMMEUBLE <> 0) then
-         MessageBox(0, 'LONG_ROUTE_X_DESIREE mod LONG_PLUS_GRAND_IMMEUBLE <> 0', 'LONG_ROUTE_Y_DESIREE mod LONG_PLUS_GRAND_IMMEUBLE <> 0', MB_OK And MB_ICONWARNING )
-      else
-         WinMain(hInstance, hPrevInst, CmdLine, CmdShow, params)
+        WinMain(hInstance, hPrevInst, CmdLine, CmdShow, params)
 end;
 
 procedure TForm1.FormCreate(Sender: TObject);

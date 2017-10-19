@@ -52,13 +52,13 @@ Not implemented:
 
 The city is just a grid of urban zones (aka 2D matrix). City size if finite but bounds are connected, that is why the city is finaly infinite. As mathematical point of view, you are driving on a torus world. The city matrix looks like this:
 ```
-  +-------------+--------------+-----+
-  |    ...      |      ...     | ... |
-  +-------------+--------------+-----+
-  | block[1,0]  |  block[1,1]  | ... |
-  +-------------+--------------+-----+
-  | block[0,0]  |  block[1,0]  | ... |
-  +-------------+--------------+-----+
+  +-------------+--------------+-----+      Y
+  |    ...      |      ...     | ... |      ^
+  +-------------+--------------+-----+      | green
+  | block[1,0]  |  block[1,1]  | ... |      |
+  +-------------+--------------+-----+      |
+  | block[0,0]  |  block[1,0]  | ... |      |   red
+  +-------------+--------------+-----+     (+)--------> X
 ```
 
 A block (aka urban zone) is another kind of matrix: a rectangle made of two roads (horizontally and vertically), a cross-road with traffic lights, and in the remaining space there either buildings or a river or an off-road terrain. A road is a 4-ways road: direct way (low and fast ways) and indirect (low and fast). Let see one block:
@@ -83,15 +83,15 @@ You can display the word axis wit the dessinerRepere(x,y,z) procedure. The X-axi
 
 We give a random altitude to all crossroads (crossroad have all its vertices on the same altitude). Like this roads have a known slope. The off-road terrain is a matrix of rectangles sub-divided into two triangles (like any game with a height-map). The pavement/sidewalk for buildings is made of two triangles (that is enough good visualy and simple). It's now very easy to compute the altitude anywhere on the city.
 
-A 4-ways road looks like the following (same behavior for road0 and road1):
+A 4-ways road looks like the following (same behavior for road 0 and road 1):
 ```
   +--------------------------------------+
   |     <----      low way               |
-  +--  --  --  --  --  --  --  --  --  --+ direct way
+  +--  --  --  --  --  --  --  --  --  --+ right side
   |     <----     fast way               |
   +======================================+
   |     ---->      low way               |
-  +--  --  --  --  --  --  --  --  --  --+ indirect way
+  +--  --  --  --  --  --  --  --  --  --+ left side
   |     ---->     fast way               |
   +--------------------------------------+
 ```
@@ -101,3 +101,29 @@ The traffic jam is just a dynamic list (linked-list) of vehicles. Each car know 
 Car velocity is made of attractive and repulsive forces depending on the distance.
 
 The dynamic of the player car is explained [on my other github project](https://github.com/Lecrapouille/PrincipeMoindreAction). Traductions upon request (again ;)
+
+Translation for files and what they do:
+* UAltitude.pas: Compute altitude of the road, off-road terrains, indicates in which road or block is a car.
+* UBadies.pas: no yet implemented but was for car with IA: cops cars for example.
+* UBoucledejeu.pas: (= Game Loop) Entry point for the game logic and game displaying, Time step computation.
+* UCaratere.pas: routine for displaying text on the screen (for debug or displaying player states, for example).
+* UChargement.pas (= Loading): load everything (car, textures, sounds).
+* UCirculation.pas (= Traffic jam) manage cars: velocity, behavior for stop on cross roads.
+* ClavierSouris.pas (= Keyboard inputs and mouse logic) for controling the player car (velocity and wheel direction).
+* UFeux.pas (= light traffic) Load the traffic lights textures.
+* UFrustrum.pas: player camera view.
+* UInterface.pas: main window.
+* UIntro.pas: not implemented (introduction video)
+* UJoueur.pas (= player) Car player.
+* ULancement.pas: display the boot screen.
+* ULoader.pas: 3D model loader.
+* UMath.pas: very basic vector operations.
+* UParticles.pas: particle effects.
+* URepere.pas (= axis) for debug and camera projection.
+* USons.pas: sounds.
+* UTerrain.pas: off-road terrain generation.
+* UTextures.pas: load BMP, TGA and JPG files for textures.
+* UTransparence.pas: texture transparency.
+* UTypege.pas: Global variables.
+* UVille.pas (= city) generate the city and manage the traffic lights.
+* UVoiture.pas: car dynamics.

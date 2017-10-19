@@ -158,10 +158,10 @@ private
                          A2,B2,C2,D2 : TVecteur; n2 : integer;
                          AffPont : boolean);
    constructor Creation(P : TVecteur; nh,nd,nb,ng,a,b,ran : integer);
-   procedure Affiche(a,b : integer);
-   procedure ActualiseFeu(i,j : integer);
+   procedure Affiche(a,b : byte);
+   procedure ActualiseFeu(i,j : byte);
    procedure AfficheFleuve();
-   procedure AfficheFeuxTricolores(a,b : integer);
+   procedure AfficheFeuxTricolores(a,b : byte);
 end;
 
 {*******************************************************************************
@@ -547,7 +547,7 @@ begin
    glEnable(GL_CULL_FACE);
 end;
 
-procedure TBloc.AfficheFeuxTricolores(a,b : integer);
+procedure TBloc.AfficheFeuxTricolores(a, b : byte);
 begin
    glPushMatrix();
    glDepthMask(GL_FALSE);
@@ -595,9 +595,9 @@ begin
 end;
 
 {*******************************************************************************}
-procedure TBloc.Affiche(a,b : integer);
+procedure TBloc.Affiche(a,b : byte);
 begin
-   if MyFrust.RectangleInFrustum(Maville[a,b].Carrefour.TabPos[0],
+   if MyFrust.RectangleInFrustum(Maville[a,b].Carrefour.TabPos[0], 
                                  Maville[a,b].Route1.TabPos[1],
                                  Maville[a,b].Route0.TabPos[3])
    then
@@ -621,7 +621,7 @@ begin
 end;
 
 {************************ FEU TRICOLORE ****************************************}
-procedure TBloc.ActualiseFeu(i,j : integer);
+procedure TBloc.ActualiseFeu(i,j : byte);
 var
    timing: Longword;
 begin
@@ -836,99 +836,32 @@ begin
    end;
 end;
 
-Procedure AfficheVille();   // FIXME: bug modulo n'affiche pas tous les blocs
-var i,j,ii,jj,iii,jjj : integer; Couple : TCouple;
+Procedure AfficheVille();
+var
+    i,j,ii,jj,iii,jjj : integer; Couple : TCouple;
 begin
-   //******METTRE FRUSTUM SUR LE PLAN PAS UN CUBE
-   Couple := QuellePartition(Joueur.Position.x,Joueur.Position.y);
-   for i := 0 to NB_QUARTIER_A_AFFICHER do
+   Couple := QuellePartition(Joueur.Position.x, Joueur.Position.y);
+   for i := -NB_QUARTIER_A_AFFICHER to NB_QUARTIER_A_AFFICHER do
    begin
-      for j := 0 to NB_QUARTIER_A_AFFICHER do
+      for j := -NB_QUARTIER_A_AFFICHER to NB_QUARTIER_A_AFFICHER do
       begin
-         ii := (Couple.x-1+i);
-         jj := (Couple.y-1+j);
+         ii := Couple.x + i;
+         jj := Couple.y + j;
 
-         if (ii < 0) then
-         begin
-            if (jj < 0) then
-            begin  //QQ
-               iii := ii + NB_BLOC_MAX_X;
-               jjj := jj + NB_BLOC_MAX_Y;
-               glpushmatrix();
-               gltranslated(-TAILLE_MAP_X,-TAILLE_MAP_Y,0);
-               Maville[iii,jjj].Affiche(iii,jjj);
-               glpopMatrix();
-            end else
-               if (jj < NB_BLOC_MAX_Y) then
-               begin  //QQ
-                  iii := ii + NB_BLOC_MAX_X;
-                  glpushmatrix();
-                  gltranslated(-TAILLE_MAP_X,0,0);
-                  Maville[iii,jj].Affiche(iii,jj);
-                  glpopMatrix();
-               end else
-                  if (jj >= NB_BLOC_MAX_Y) then
-                  begin  //QQ
-                     iii := ii + NB_BLOC_MAX_X;
-                     jjj := jj - NB_BLOC_MAX_Y;
-                     glpushmatrix();
-                     gltranslated(-TAILLE_MAP_X,TAILLE_MAP_Y,0);
-                     Maville[iii,jjj].Affiche(iii,jjj);
-                     glpopMatrix();
-                  end;
-         end else
-            if (ii < NB_BLOC_MAX_X) then
-            begin
-               if (jj < 0) then
-               begin  //QQ
-                  jjj := jj+ NB_BLOC_MAX_Y;
-                  glpushmatrix();
-                  gltranslated(0,-TAILLE_MAP_Y,0);
-                  Maville[ii,jjj].Affiche(ii,jjj);
-                  glpopMatrix();
-               end else
-                  if (jj < NB_BLOC_MAX_Y) then
-                  begin
-                     Maville[ii,jj].Affiche(ii,jj);
-                  end else
-                     if (jj >= NB_BLOC_MAX_Y) then
-                     begin
-                        jjj := jj-NB_BLOC_MAX_Y;
-                        glpushmatrix();
-                        gltranslated(0,TAILLE_MAP_Y,0);
-                        Maville[ii,jjj].Affiche(ii,jjj);
-                        glpopMatrix();
-                     end;
-            end else
-               if (ii >= NB_BLOC_MAX_X) then
-               begin
-                  if (jj < 0) then
-                  begin //QQ
-                     iii := ii - NB_BLOC_MAX_X;
-                     jjj := jj + NB_BLOC_MAX_Y;
-                     glpushmatrix();
-                     gltranslated(TAILLE_MAP_X,-TAILLE_MAP_Y,0);
-                     Maville[iii,jjj].Affiche(iii,jjj);
-                     glpopMatrix();
-                  end else
-                     if (jj < NB_BLOC_MAX_Y) then
-                     begin
-                        iii := ii-NB_BLOC_MAX_X;
-                        glpushmatrix();
-                        gltranslated(TAILLE_MAP_X,0,0);
-                        Maville[iii,jj].Affiche(iii,jj);
-                        glpopMatrix();
-                     end else
-                        if (jj >= NB_BLOC_MAX_Y) then
-                        begin
-                           iii := ii-NB_BLOC_MAX_X;
-                           jjj := jj-NB_BLOC_MAX_Y;
-                           glpushmatrix();
-                           GLtranslated(TAILLE_MAP_X,TAILLE_MAP_Y,0);
-                           Maville[iii,jjj].Affiche(iii,jjj);
-                           glpopMatrix();
-                        end;
-               end;
+         iii := ii;
+         if ii >= NB_BLOC_MAX_X then iii := ii - NB_BLOC_MAX_X
+         else if ii < 0 then iii := ii + NB_BLOC_MAX_X;
+
+         jjj := jj;
+         if jj >= NB_BLOC_MAX_Y then jjj := jj - NB_BLOC_MAX_Y
+         else if jj < 0 then jjj := jj + NB_BLOC_MAX_Y;
+
+         glpushmatrix();
+            gltranslated((ii - iii) * TAILLE_BLOC_X,
+                         (jj - jjj) * TAILLE_BLOC_Y,
+                         0);
+            Maville[iii,jjj].Affiche(iii,jjj);
+         glpopMatrix();
       end;
    end;
 end;

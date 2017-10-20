@@ -126,6 +126,7 @@ begin
 
    DemoStart := GetTickCount();
    ElapsedTime := 0;
+   LastUpdate := 0;
 
    {Boucle principale du jeu}
    while not finished do

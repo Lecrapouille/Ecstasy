@@ -82,7 +82,7 @@ TCirculation = class(Tobject)
    Tete : TPVoiture;
    Queue : TPVoiture;
    destructor  DestroyCirculation();
-   procedure   Affiche();
+   procedure   Affiche(Tx, Ty : real);
    procedure   ActualiseIndirect(const i,j,QuelleRoute,QuelleVoie : integer);
    procedure   ActualiseDirect(const i,j,QuelleRoute,QuelleVoie : integer);
 private
@@ -442,13 +442,15 @@ end;
  *
  *
  *******************************************************************************}
-procedure TCirculation.Affiche();
+procedure TCirculation.Affiche(Tx, Ty : real);
 var temp : TPVoiture;
 begin
    temp := Tete;
    while temp <> NIL do
    begin
-      if MyFrust.SphereInFrustum(Temp^.Position.x,Temp^.Position.y,Temp^.Position.z,LONG_VOIT div 2)
+      if MyFrust.SphereInFrustum(Temp^.Position.x + Tx,
+                                 Temp^.Position.y + Ty,
+                                 Temp^.Position.z,LONG_VOIT div 2)
       then Temp^.Affiche();
       Temp := Temp^.next;
    end;

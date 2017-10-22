@@ -145,6 +145,7 @@ public
    Terrain : array[0..NB_SUB_TERRAIN,0..NB_SUB_TERRAIN] of real;
    Trottoir : array[0..NB_SUB_TROTTOIR,0..NB_SUB_TROTTOIR] of real;
 private
+   Tx, Ty : real;
    Decal_Texture_Eau : real; // pour l'eau
    Maison_Liste_Affichage,
    Route_Liste_Affichage : gluint;
@@ -237,6 +238,9 @@ procedure TBloc.CreateRoute(A0,B0,C0,D0 : TVecteur; n0 : integer;
 var dx,dy : real;
 offsetFeux: real;
 begin
+   Tx := 0.0;
+   Ty := 0.0;
+
    {Place les feux avant ou apres le carrefour}
    if Params.CarrefourAmericain then offsetFeux := ESPACE_CAREFOUR else offsetFeux := 0;
 
@@ -597,26 +601,30 @@ end;
 {*******************************************************************************}
 procedure TBloc.Affiche(a,b : byte);
 begin
-   if MyFrust.RectangleInFrustum(Maville[a,b].Carrefour.TabPos[0], 
-                                 Maville[a,b].Route1.TabPos[1],
-                                 Maville[a,b].Route0.TabPos[3])
-   then
+   with Maville[a,b] do
    begin
-      {dessinerRepere(Carrefour.TabPos[2].x, Carrefour.TabPos[2].y, Carrefour.TabPos[2].z);}
-      glCallList(Route_Liste_Affichage);
-      if b = RANGEE_DU_FLEUVE then afficheFleuve() else glCallList(Maison_Liste_Affichage);
 
-      TabCirculation[ROUTE_0,SENS_DIRECT,VOIE_LENTE].Affiche();
-      TabCirculation[ROUTE_0,SENS_DIRECT,VOIE_RAPIDE].Affiche();
-      TabCirculation[ROUTE_0,SENS_INDIRECT,VOIE_LENTE].Affiche();
-      TabCirculation[ROUTE_0,SENS_INDIRECT,VOIE_RAPIDE].Affiche();
+      if MyFrust.RectangleInFrustum(Carrefour.TabPos[0],
+                                    Route1.TabPos[1],
+                                    Route0.TabPos[3])
+      then
+      begin
+         {dessinerRepere(Carrefour.TabPos[2].x, Carrefour.TabPos[2].y, Carrefour.TabPos[2].z);}
+         glCallList(Route_Liste_Affichage);
+         if b = RANGEE_DU_FLEUVE then afficheFleuve() else glCallList(Maison_Liste_Affichage);
 
-      TabCirculation[ROUTE_1,SENS_DIRECT,VOIE_LENTE].Affiche();
-      TabCirculation[ROUTE_1,SENS_DIRECT,VOIE_RAPIDE].Affiche();
-      TabCirculation[ROUTE_1,SENS_INDIRECT,VOIE_LENTE].Affiche();
-      TabCirculation[ROUTE_1,SENS_INDIRECT,VOIE_RAPIDE].Affiche();
+         TabCirculation[ROUTE_0,SENS_DIRECT,VOIE_LENTE].Affiche(Tx, Ty);
+         TabCirculation[ROUTE_0,SENS_DIRECT,VOIE_RAPIDE].Affiche(Tx, Ty);
+         TabCirculation[ROUTE_0,SENS_INDIRECT,VOIE_LENTE].Affiche(Tx, Ty);
+         TabCirculation[ROUTE_0,SENS_INDIRECT,VOIE_RAPIDE].Affiche(Tx, Ty);
 
-      AfficheFeuxTricolores(a,b);
+         TabCirculation[ROUTE_1,SENS_DIRECT,VOIE_LENTE].Affiche(Tx, Ty);
+         TabCirculation[ROUTE_1,SENS_DIRECT,VOIE_RAPIDE].Affiche(Tx, Ty);
+         TabCirculation[ROUTE_1,SENS_INDIRECT,VOIE_LENTE].Affiche(Tx, Ty);
+         TabCirculation[ROUTE_1,SENS_INDIRECT,VOIE_RAPIDE].Affiche(Tx, Ty);
+
+         AfficheFeuxTricolores(a,b);
+      end;
    end;
 end;
 
@@ -838,7 +846,8 @@ end;
 
 Procedure AfficheVille();
 var
-    i,j,ii,jj,iii,jjj : integer; Couple : TCouple;
+   i,j,ii,jj,iii,jjj : integer;
+   Couple : TCouple;
 begin
    Couple := QuellePartition(Joueur.Position.x, Joueur.Position.y);
    for i := -NB_QUARTIER_A_AFFICHER to NB_QUARTIER_A_AFFICHER do
@@ -856,11 +865,12 @@ begin
          if jj >= NB_BLOC_MAX_Y then jjj := jj - NB_BLOC_MAX_Y
          else if jj < 0 then jjj := jj + NB_BLOC_MAX_Y;
 
+         Maville[iii,jjj].Tx := (ii - iii) * TAILLE_BLOC_X;
+         Maville[iii,jjj].Ty := (jj - jjj) * TAILLE_BLOC_Y;
+
          glpushmatrix();
-            gltranslated((ii - iii) * TAILLE_BLOC_X,
-                         (jj - jjj) * TAILLE_BLOC_Y,
-                         0);
-            Maville[iii,jjj].Affiche(iii,jjj);
+             gltranslated(Maville[iii,jjj].Tx, Maville[iii,jjj].Ty, 0);
+             Maville[iii,jjj].Affiche(iii,jjj);
          glpopMatrix();
       end;
    end;

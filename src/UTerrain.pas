@@ -41,8 +41,8 @@ Stdcall; External 'OpenGL32.dll';
 
 procedure TriangleDebug(pA, pB, pC : Tvecteur);
 begin
-   glBegin(GL_LINE_LOOP);
    glLineWidth(4.0);
+   glBegin(GL_LINE_LOOP);
    glcolor3f(0.5,0.5,0.5);
    glVertex3f(pA.x,pA.y,pA.z+0.1);
    glVertex3f(pB.x,pB.y,pB.z+0.1);
@@ -52,8 +52,8 @@ end;
 
 procedure TriangleDebug2(pA, pB, pC : Tvecteur);
 begin
-   glBegin(GL_LINE_LOOP);
    glLineWidth(4.0);
+   glBegin(GL_LINE_LOOP);
    glcolor3f(0.75,0.75,0.0);
    glVertex3f(pA.x,pA.y,pA.z+0.1);
    glVertex3f(pB.x,pB.y,pB.z+0.1);
@@ -100,7 +100,7 @@ begin
          pA.y := Carrefour.TabPos[2].y + gridY * sY;
          pA.z := Trottoir[gridX, gridY];
 
-         //TriangleDebug(pB, pC, pA);
+         TriangleDebug(pB, pC, pA);
       end
       else
       begin
@@ -108,7 +108,7 @@ begin
          pA.y := Carrefour.TabPos[2].y + (1 + gridY) * sY;
          pA.z := Trottoir[gridX + 1, gridY + 1];
 
-         //TriangleDebug2(pB, pC, pA);
+         TriangleDebug2(pB, pC, pA);
       end;
 
       {Interpolation de la hauteur}
@@ -153,7 +153,7 @@ begin
          pA.y := Carrefour.TabPos[2].y + gridY * sY;
          pA.z := Terrain[gridX, gridY];
 
-         //TriangleDebug(pB, pC, pA);
+         TriangleDebug(pB, pC, pA);
       end
       else
       begin
@@ -161,7 +161,7 @@ begin
          pA.y := Carrefour.TabPos[2].y + (1 + gridY) * sY;
          pA.z := Terrain[gridX + 1, gridY + 1];
 
-         //TriangleDebug2(pB, pC, pA);
+         TriangleDebug2(pB, pC, pA);
       end;
 
       {Interpolation de la hauteur}

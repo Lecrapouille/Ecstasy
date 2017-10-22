@@ -75,20 +75,21 @@ begin
    Poll := Time - LastUpdate;
    if Poll > MS_PAR_IMAGE then
    begin
-      {Definition des actions}
-      UtilisationDuClavier({Joueur,Camera,}Keys, finished);
-      BougeSouris(XMouse, YMouse);
-
-      ActualiseVille();
-      Joueur.Actualise();
-      Myfrust.CalculateFrustum;
-
       {Vidage du contenu situé à l'écran et fog}
       glClear(GL_COLOR_BUFFER_BIT OR GL_DEPTH_BUFFER_BIT);
 
+      ActualiseVille();
+
+      {Definition des actions}
+      UtilisationDuClavier({Joueur,Camera,}Keys, finished);
+      BougeSouris(XMouse, YMouse);
+      Joueur.Actualise();
+
+      Joueur.afficheVoiture();
+      Myfrust.CalculateFrustum;
+
       Meteo();
       AfficheVille();
-      Joueur.afficheVoiture();
 
       {OpenGL}
       SwapBuffers(h_DC);

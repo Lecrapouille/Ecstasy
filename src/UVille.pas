@@ -159,7 +159,7 @@ private
                          AffPont : boolean);
    constructor Creation(P : TVecteur; nh,nd,nb,ng,a,b,ran : integer);
    procedure Affiche(a,b : byte);
-   procedure ActualiseFeu(i,j : byte);
+   procedure ActualiseFeu();
    procedure AfficheFleuve();
    procedure AfficheFeuxTricolores(a,b : byte);
 end;
@@ -169,7 +169,7 @@ end;
  *  Une ville est une matrice de blocs et de routes.
  *
  *******************************************************************************}
-TVille = array [0..NB_BLOC_MAX_X,0..NB_BLOC_MAX_Y] of TBloc;
+TVille = array [0 .. (NB_BLOC_MAX_X - 1), 0 .. (NB_BLOC_MAX_Y - 1)] of TBloc;
 
 var
    MaVille : TVille;
@@ -621,7 +621,7 @@ begin
 end;
 
 {************************ FEU TRICOLORE ****************************************}
-procedure TBloc.ActualiseFeu(i,j : byte);
+procedure TBloc.ActualiseFeu();
 var
    timing: Longword;
 begin
@@ -823,7 +823,7 @@ begin
    begin
       for j := 0 to (NB_BLOC_MAX_Y-1) do
       begin
-         MaVille[i,j].ActualiseFeu(i,j);
+         MaVille[i,j].ActualiseFeu();
          MaVille[i,j].TabCirculation[ROUTE_0,SENS_DIRECT,VOIE_LENTE].ActualiseDirect(i,j,ROUTE_0,VOIE_LENTE);
          MaVille[i,j].TabCirculation[ROUTE_1,SENS_DIRECT,VOIE_LENTE].ActualiseDirect(i,j,ROUTE_1,VOIE_LENTE);
          MaVille[i,j].TabCirculation[ROUTE_0,SENS_DIRECT,VOIE_RAPIDE].ActualiseDirect(i,j,ROUTE_0,VOIE_RAPIDE);

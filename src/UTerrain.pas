@@ -174,7 +174,7 @@ end;
 
 procedure TerrainAleatoire(a, b : integer);
 var
-   i, j, k : byte;
+   i, j : byte;
    pA, pB, pC, pD, p : Tvecteur;
 begin
    with MaVille[a,b] do
@@ -203,16 +203,14 @@ begin
       {Creation de la grille: triangulation}
       for i := 0 to NB_SUB_TERRAIN do
       begin
-         k := 0;
          for j := 0 to NB_SUB_TERRAIN do
          begin
             p.x := pA.x + i * LONG_ROUTE_X / NB_SUB_TERRAIN;
             p.y := pA.y + j * LONG_ROUTE_Y / NB_SUB_TERRAIN;
 
-            if i <= j - k then begin Terrain[i,j] := PositionZSurTriangle(pA, pD, pC, p); {DessinerRepere(p.x, p.y, Terrain[i,j]+2);} end
+            if i <= j then begin Terrain[i,j] := PositionZSurTriangle(pA, pD, pC, p); {DessinerRepere(p.x, p.y, Terrain[i,j]+2);} end
             else begin Terrain[i,j] := PositionZSurTriangle(pD, pB, pA, p); {DessinerRepere2(p.x, p.y, Terrain[i,j]+2);} end;
          end;
-         inc(k);
       end;
 
       {Elevation du terrain sauf sur les bords qui doivent coller a la route}

@@ -219,9 +219,9 @@ begin
          RoueRot := RoueRot+(PAST*Vitesse*2)/Param.Rayon;
 
          {dynamique}
-         F1 := (RAIDEUR*(RoueAD+RoueAG+RoueDG+RoueAD))/Masse_Voit;
-         F2 := (Avant*Avant*RAIDEUR*(RoueAD+RoueAG-RoueDG-RoueAD))/InertieTangage ;
-         F3 := (Gauche*Gauche*RAIDEUR*(RoueAD-RoueAG-RoueDG+RoueAD))/InertieRoulis;
+         F1 := (RAIDEUR*(RoueAD+RoueAG+RoueDG+RoueDD))/Masse_Voit;
+         F2 := (Avant*Avant*RAIDEUR*(RoueAD+RoueAG-RoueDG-RoueDD))/InertieTangage ;
+         F3 := (Gauche*Gauche*RAIDEUR*(RoueAD-RoueAG-RoueDG+RoueDD))/InertieRoulis;
 
          CosDirection := cos(Direction);
          SinDirection := sin(Direction);

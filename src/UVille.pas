@@ -148,7 +148,9 @@ private
    Tx, Ty : real;
    Decal_Texture_Eau : real; // pour l'eau
    Maison_Liste_Affichage,
-   Route_Liste_Affichage : gluint;
+   Route0_Liste_Affichage : gluint;
+   Route1_Liste_Affichage : gluint;
+   Carrefour_Liste_Affichage : gluint;
    Haut : array [0..NB_MAISON_MAX_X] of TMaison;
    Bas  : array [0..NB_MAISON_MAX_X] of TMaison;
    Gauche : array [0..NB_MAISON_MAX_Y] of TMaison;
@@ -240,21 +242,20 @@ offsetFeux: real;
 begin
    Tx := 0.0;
    Ty := 0.0;
+   dx := (LONG_ROUTE_X+ESPACE_CAREFOUR)/2;
+   dy := (LONG_ROUTE_Y+ESPACE_CAREFOUR)/2;
 
    {Place les feux avant ou apres le carrefour}
    if Params.CarrefourAmericain then offsetFeux := ESPACE_CAREFOUR else offsetFeux := 0;
 
-   if (glIsList(Route_Liste_Affichage)=GL_TRUE) then glDeleteLists(Route_Liste_Affichage,1);
-   Route_Liste_Affichage := glGenLists(1);
-   glNewList(Route_Liste_Affichage,GL_COMPILE);
-   Route0 := TRoute.Create(A0,B0,C0,D0,n0);
-   Route1 := TRoute.Create(A1,B1,C1,D1,n1);
+   {Carrefour}
+   if (glIsList(Carrefour_Liste_Affichage)=GL_TRUE) then glDeleteLists(Carrefour_Liste_Affichage,1);
+   Carrefour_Liste_Affichage := glGenLists(1);
+   glNewList(Carrefour_Liste_Affichage,GL_COMPILE);
+
    Carrefour := TRoute.Create(A2,B2,C2,D2,n2);
 
-   dx := (LONG_ROUTE_X+ESPACE_CAREFOUR)/2;
-   dy := (LONG_ROUTE_Y+ESPACE_CAREFOUR)/2;
-
-   {Feux tricolores}
+   {4 Feux tricolores}
    glpushmatrix();
    gltranslated(Carrefour.TabPos[3].x,Carrefour.TabPos[3].y+offsetFeux,Carrefour.TabPos[3].z);
    glscale(2.5,2.5,2.5);
@@ -281,9 +282,25 @@ begin
    glscale(2.5,2.5,2.5);
    glcalllist(feurouge_liste.liste);
    glpopmatrix();
+   glEndList();
 
+   {Route0}
+   if (glIsList(Route0_Liste_Affichage)=GL_TRUE) then glDeleteLists(Route0_Liste_Affichage,1);
+   Route0_Liste_Affichage := glGenLists(1);
+   glNewList(Route0_Liste_Affichage,GL_COMPILE);
+   Route0 := TRoute.Create(A0,B0,C0,D0,n0);
+   glEndList();
+
+   {Route1}
+   if (glIsList(Route1_Liste_Affichage)=GL_TRUE) then glDeleteLists(Route1_Liste_Affichage,1);
+   Route1_Liste_Affichage := glGenLists(1);
+   glNewList(Route1_Liste_Affichage,GL_COMPILE);
+   Route1 := TRoute.Create(A1,B1,C1,D1,n1);
+
+   {Fleuve}
    if (AffPont) then
    begin
+      {Pont}
       glPushMatrix();
       gltranslated(Carrefour.TabPos[1].x+ESPACE_CAREFOUR/2,Carrefour.TabPos[1].y+LONG_ROUTE_Y/2,-17.5);
       glrotated(90,0,0,1);
@@ -291,7 +308,7 @@ begin
       glcallList(pont_liste.liste);
       glpopMatrix();
 
-      //texture sol boueux
+      {Fond du fleuve}
       GlPushMatrix();
       Gltranslated(Carrefour.TabPos[2].x+LONG_ROUTE_X/2,Carrefour.TabPos[2].y+LONG_ROUTE_Y/2, PROFONDEUR_FLEUVE);
       GlEnable(GL_TEXTURE_2D);
@@ -301,7 +318,6 @@ begin
       glTexCoord2f(10.0, 10.0); glVertex3f(-dx,-dy,1);
       glTexCoord2f(10.0, 0.0); glVertex3f(-dx,dy,1);
       glTexCoord2f(0.0, 0.0); glVertex3f(dx,dy,1);
-
       glTexCoord2f(0.0, 0.0); glVertex3f(dx,dy,1);
       glTexCoord2f(0.0, 10.0); glVertex3f(dx,-dy,1);
       glTexCoord2f(10.0, 10.0); glVertex3f(-dx,-dy,1);
@@ -309,7 +325,7 @@ begin
       glDisable(GL_TEXTURE_2D);
       GlPopMatrix();
 
-      //berges numero 1
+      {Berges numero 1}
       GlPushMatrix();
       Gltranslated(Carrefour.TabPos[2].x+LONG_ROUTE_X/2,Carrefour.TabPos[2].y+LONG_ROUTE_Y,-15);
       GlEnable(GL_TEXTURE_2D);
@@ -319,7 +335,6 @@ begin
       glTexCoord2f(10.0, 1.0); glVertex3f(-dx,0,-15);
       glTexCoord2f(10.0, 0.0);  glVertex3f(-dx,0,15);
       glTexCoord2f(0.0, 0.0);   glVertex3f(dx,0,15);
-
       glTexCoord2f(0.0, 0.0);   glVertex3f(dx,0,15);
       glTexCoord2f(0.0, 1.0);  glVertex3f(dx,0,-15);
       glTexCoord2f(10.0, 1.0); glVertex3f(-dx,0,-15);
@@ -327,7 +342,7 @@ begin
       glDisable(GL_TEXTURE_2D);
       GlPopMatrix();
 
-      //berges numero 2
+      {Berges numero 2}
       GlPushMatrix();
       Gltranslated(Carrefour.TabPos[2].x+LONG_ROUTE_X/2,Carrefour.TabPos[2].y,-15);
       Glrotated(180,1,0,0);
@@ -338,14 +353,12 @@ begin
       glTexCoord2f(10.0, 1.0); glVertex3f(-dx,0,-15);
       glTexCoord2f(10.0, 0.0);  glVertex3f(-dx,0,15);
       glTexCoord2f(0.0, 0.0);   glVertex3f(dx,0,15);
-
       glTexCoord2f(0.0, 0.0);   glVertex3f(dx,0,15);
       glTexCoord2f(0.0, 1.0);  glVertex3f(dx,0,-15);
       glTexCoord2f(10.0, 1.0); glVertex3f(-dx,0,-15);
       GlEnd();
       glDisable(GL_TEXTURE_2D);
       GlPopMatrix();
-
    end;
    glEndList();
 end;
@@ -527,7 +540,7 @@ end;
 procedure TBloc.AfficheFleuve();
 var dx,dy : real;
 begin
-   Decal_Texture_Eau := Decal_Texture_Eau + 0.01;
+   Decal_Texture_Eau := Decal_Texture_Eau + 0.1 * deltaTime;
    dx := (LONG_ROUTE_X+ESPACE_CAREFOUR)/2;
    dy := (LONG_ROUTE_Y+ESPACE_CAREFOUR)/2;
 
@@ -539,13 +552,12 @@ begin
    Glcolor3f(1,1,1);
    GlBindTexture(GL_TEXTURE_2D, Text_eau);
    GlBegin(gl_triangles);
-   glTexCoord2f(1.0+Decal_Texture_Eau,  1.0+Decal_Texture_Eau); glVertex3f(-dx,-dy,1);
-   glTexCoord2f(1.0+Decal_Texture_Eau,  0.0);                   glVertex3f(-dx,dy,1);
-   glTexCoord2f(0.0,                    0.0);                   glVertex3f(dx,dy,1);
-
-   glTexCoord2f(0.0,                    0.0);                   glVertex3f(dx,dy,1);
-   glTexCoord2f(0.0,                    1.0+Decal_Texture_Eau); glVertex3f(dx,-dy,1);
-   glTexCoord2f(1.0+Decal_Texture_Eau,  1.0+Decal_Texture_Eau); glVertex3f(-dx,-dy,1);
+   glTexCoord2f(1.0+Decal_Texture_Eau,  1.0); glVertex3f(-dx,-dy,1);
+   glTexCoord2f(1.0+Decal_Texture_Eau,  0.0); glVertex3f(-dx,dy,1);
+   glTexCoord2f(0.0+Decal_Texture_Eau,  0.0); glVertex3f(dx,dy,1);
+   glTexCoord2f(0.0+Decal_Texture_Eau,  0.0); glVertex3f(dx,dy,1);
+   glTexCoord2f(0.0+Decal_Texture_Eau,  1.0); glVertex3f(dx,-dy,1);
+   glTexCoord2f(1.0+Decal_Texture_Eau,  1.0); glVertex3f(-dx,-dy,1);
    GlEnd();
    GlPopMatrix();
    glEnable(GL_CULL_FACE);
@@ -604,13 +616,15 @@ begin
    with Maville[a,b] do
    begin
 
-      if MyFrust.RectangleInFrustum(Carrefour.TabPos[0],
+      {if MyFrust.RectangleInFrustum(Carrefour.TabPos[0],
                                     Route1.TabPos[1],
                                     Route0.TabPos[3])
-      then
+      then}
       begin
          {dessinerRepere(Carrefour.TabPos[2].x, Carrefour.TabPos[2].y, Carrefour.TabPos[2].z);}
-         glCallList(Route_Liste_Affichage);
+         glCallList(Route0_Liste_Affichage);
+         glCallList(Route1_Liste_Affichage);
+         glCallList(Carrefour_Liste_Affichage);
          if b = RANGEE_DU_FLEUVE then afficheFleuve() else glCallList(Maison_Liste_Affichage);
 
          TabCirculation[ROUTE_0,SENS_DIRECT,VOIE_LENTE].Affiche(Tx, Ty);

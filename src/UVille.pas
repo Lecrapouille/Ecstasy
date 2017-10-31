@@ -145,6 +145,7 @@ public
    Terrain : array[0..NB_SUB_TERRAIN,0..NB_SUB_TERRAIN] of real;
    Trottoir : array[0..NB_SUB_TROTTOIR,0..NB_SUB_TROTTOIR] of real;
 private
+   Visible: boolean;
    Tx, Ty : real;
    Decal_Texture_Eau : real; // pour l'eau
    Maison_Liste_Affichage,
@@ -422,6 +423,7 @@ begin
    LongBas := nb;
    LongGauche := ng;
    LongDroit := nd;
+   Visible := false;
 
    if (glIsList(Maison_Liste_Affichage)=GL_TRUE) then glDeleteLists(Maison_Liste_Affichage,1);
    Maison_Liste_Affichage := glGenLists(1);
@@ -608,38 +610,6 @@ begin
    glDepthMask(GL_TRUE);
    glEnable(GL_CULL_FACE);
    GLPopMatrix();
-end;
-
-{*******************************************************************************}
-procedure TBloc.Affiche(a,b : byte);
-begin
-   with Maville[a,b] do
-   begin
-
-      {if MyFrust.RectangleInFrustum(Carrefour.TabPos[0],
-                                    Route1.TabPos[1],
-                                    Route0.TabPos[3])
-      then}
-      begin
-         {dessinerRepere(Carrefour.TabPos[2].x, Carrefour.TabPos[2].y, Carrefour.TabPos[2].z);}
-         glCallList(Route0_Liste_Affichage);
-         glCallList(Route1_Liste_Affichage);
-         glCallList(Carrefour_Liste_Affichage);
-         if b = RANGEE_DU_FLEUVE then afficheFleuve() else glCallList(Maison_Liste_Affichage);
-
-         TabCirculation[ROUTE_0,SENS_DIRECT,VOIE_LENTE].Affiche(Tx, Ty);
-         TabCirculation[ROUTE_0,SENS_DIRECT,VOIE_RAPIDE].Affiche(Tx, Ty);
-         TabCirculation[ROUTE_0,SENS_INDIRECT,VOIE_LENTE].Affiche(Tx, Ty);
-         TabCirculation[ROUTE_0,SENS_INDIRECT,VOIE_RAPIDE].Affiche(Tx, Ty);
-
-         TabCirculation[ROUTE_1,SENS_DIRECT,VOIE_LENTE].Affiche(Tx, Ty);
-         TabCirculation[ROUTE_1,SENS_DIRECT,VOIE_RAPIDE].Affiche(Tx, Ty);
-         TabCirculation[ROUTE_1,SENS_INDIRECT,VOIE_LENTE].Affiche(Tx, Ty);
-         TabCirculation[ROUTE_1,SENS_INDIRECT,VOIE_RAPIDE].Affiche(Tx, Ty);
-
-         AfficheFeuxTricolores(a,b);
-      end;
-   end;
 end;
 
 {************************ FEU TRICOLORE ****************************************}
@@ -845,15 +815,60 @@ begin
    begin
       for j := 0 to (NB_BLOC_MAX_Y-1) do
       begin
-         MaVille[i,j].ActualiseFeu();
-         MaVille[i,j].TabCirculation[ROUTE_0,SENS_DIRECT,VOIE_LENTE].ActualiseDirect(i,j,ROUTE_0,VOIE_LENTE);
-         MaVille[i,j].TabCirculation[ROUTE_1,SENS_DIRECT,VOIE_LENTE].ActualiseDirect(i,j,ROUTE_1,VOIE_LENTE);
-         MaVille[i,j].TabCirculation[ROUTE_0,SENS_DIRECT,VOIE_RAPIDE].ActualiseDirect(i,j,ROUTE_0,VOIE_RAPIDE);
-         MaVille[i,j].TabCirculation[ROUTE_1,SENS_DIRECT,VOIE_RAPIDE].ActualiseDirect(i,j,ROUTE_1,VOIE_RAPIDE);
-         MaVille[i,j].TabCirculation[ROUTE_0,SENS_INDIRECT,VOIE_LENTE].ActualiseIndirect(i,j,ROUTE_0,VOIE_LENTE);
-         MaVille[i,j].TabCirculation[ROUTE_1,SENS_INDIRECT,VOIE_LENTE].ActualiseIndirect(i,j,ROUTE_1,VOIE_LENTE);
-         MaVille[i,j].TabCirculation[ROUTE_0,SENS_INDIRECT,VOIE_RAPIDE].ActualiseIndirect(i,j,ROUTE_0,VOIE_RAPIDE);
-         MaVille[i,j].TabCirculation[ROUTE_1,SENS_INDIRECT,VOIE_RAPIDE].ActualiseIndirect(i,j,ROUTE_1,VOIE_RAPIDE);
+         //if MaVille[i,j].Visible then
+         begin
+            MaVille[i,j].ActualiseFeu();
+            MaVille[i,j].TabCirculation[ROUTE_0,SENS_DIRECT,VOIE_LENTE].ActualiseDirect(i,j,ROUTE_0,VOIE_LENTE);
+            MaVille[i,j].TabCirculation[ROUTE_1,SENS_DIRECT,VOIE_LENTE].ActualiseDirect(i,j,ROUTE_1,VOIE_LENTE);
+            MaVille[i,j].TabCirculation[ROUTE_0,SENS_DIRECT,VOIE_RAPIDE].ActualiseDirect(i,j,ROUTE_0,VOIE_RAPIDE);
+            MaVille[i,j].TabCirculation[ROUTE_1,SENS_DIRECT,VOIE_RAPIDE].ActualiseDirect(i,j,ROUTE_1,VOIE_RAPIDE);
+            MaVille[i,j].TabCirculation[ROUTE_0,SENS_INDIRECT,VOIE_LENTE].ActualiseIndirect(i,j,ROUTE_0,VOIE_LENTE);
+            MaVille[i,j].TabCirculation[ROUTE_1,SENS_INDIRECT,VOIE_LENTE].ActualiseIndirect(i,j,ROUTE_1,VOIE_LENTE);
+            MaVille[i,j].TabCirculation[ROUTE_0,SENS_INDIRECT,VOIE_RAPIDE].ActualiseIndirect(i,j,ROUTE_0,VOIE_RAPIDE);
+            MaVille[i,j].TabCirculation[ROUTE_1,SENS_INDIRECT,VOIE_RAPIDE].ActualiseIndirect(i,j,ROUTE_1,VOIE_RAPIDE);
+            MaVille[i,j].Visible := false;
+         end
+      end;
+   end;
+end;
+
+
+{*******************************************************************************}
+procedure TBloc.Affiche(a, b : byte);
+begin
+   with Maville[a,b] do
+   begin
+      Visible := MyFrust.BoxInFrustum(carrefour.TabPos[0], TAILLE_BLOC_X, TAILLE_BLOC_Y, tx, ty);
+      if Visible then
+      begin
+         if MyFrust.BoxInFrustum(carrefour.TabPos[0], ESPACE_CAREFOUR, ESPACE_CAREFOUR, tx, ty) then
+         begin
+            glCallList(Carrefour_Liste_Affichage);
+            AfficheFeuxTricolores(a,b);
+         end;
+
+         if MyFrust.BoxInFrustum(carrefour.TabPos[2], LONG_ROUTE_X_DESIREE, LONG_ROUTE_Y_DESIREE, tx, ty) then
+         begin
+            if b = RANGEE_DU_FLEUVE then afficheFleuve() else glCallList(Maison_Liste_Affichage);
+         end;
+
+         if MyFrust.BoxInFrustum(route1.TabPos[0], ESPACE_CAREFOUR, LONG_ROUTE_Y_DESIREE, tx, ty) then
+         begin
+            glCallList(Route1_Liste_Affichage);
+            TabCirculation[ROUTE_1,SENS_DIRECT,VOIE_LENTE].Affiche(Tx, Ty);
+            TabCirculation[ROUTE_1,SENS_DIRECT,VOIE_RAPIDE].Affiche(Tx, Ty);
+            TabCirculation[ROUTE_1,SENS_INDIRECT,VOIE_LENTE].Affiche(Tx, Ty);
+            TabCirculation[ROUTE_1,SENS_INDIRECT,VOIE_RAPIDE].Affiche(Tx, Ty);
+         end;
+
+         if MyFrust.BoxInFrustum(route0.TabPos[0], LONG_ROUTE_X_DESIREE, ESPACE_CAREFOUR,  tx, ty) then
+         begin
+            glCallList(Route0_Liste_Affichage);
+            TabCirculation[ROUTE_0,SENS_DIRECT,VOIE_LENTE].Affiche(Tx, Ty);
+            TabCirculation[ROUTE_0,SENS_DIRECT,VOIE_RAPIDE].Affiche(Tx, Ty);
+            TabCirculation[ROUTE_0,SENS_INDIRECT,VOIE_LENTE].Affiche(Tx, Ty);
+            TabCirculation[ROUTE_0,SENS_INDIRECT,VOIE_RAPIDE].Affiche(Tx, Ty);
+         end;
       end;
    end;
 end;

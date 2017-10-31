@@ -88,7 +88,6 @@ begin
 
       Joueur.Actualise();
       Joueur.afficheVoiture();
-      Myfrust.CalculateFrustum;
 
       {OpenGL}
       SwapBuffers(h_DC);

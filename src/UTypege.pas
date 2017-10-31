@@ -272,7 +272,7 @@ var
    Duree_feu_rouge,
    Duree_feu_orange,
    Duree_cycle : DWord;
-   TimerFeux : DWord;
+   TimerFeux : DWord = 0;
 
    Volant : gluint;
 

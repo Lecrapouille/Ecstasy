@@ -70,9 +70,9 @@ CONST
 
    // FEUX TRICOLORES
    HAUTEUR_FEU_TRICOLORE = 23.5;
-   TPS_FEU_VERT = 6000; // duree fu feu vert en millisecondes
-   TPS_FEU_ORANGE = 2000;
-   TPS_FEU_ROUGE = 6000;
+   TPS_FEU_VERT = 10000; // duree fu feu vert en millisecondes
+   TPS_FEU_ORANGE = 4000;
+   TPS_FEU_ROUGE = 10000;
    TPS_CYCLE = TPS_FEU_VERT + 2 * TPS_FEU_ORANGE + TPS_FEU_ROUGE;
    ETAT_FEUX_VERT_ROUGE = 0; {1er feu: vert -- 3eme feu: rouge}
    ETAT_FEUX_ORANGE_ROUGE = 1; {1er feu: orange -- 3eme feu: rouge}

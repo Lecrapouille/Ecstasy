@@ -26,6 +26,7 @@ uses UVoiture,
      URepere,
      UTransparence,
      UTextures,
+     UFrustum,
      UMath,
      math;
 
@@ -242,6 +243,7 @@ begin
    GluLookAt(Camera.Position.x,    Camera.Position.y,     Camera.Position.z,
              Camera.Target.x,      Camera.Target.y,       Camera.Target.z,
              Camera.Orientation.x, Camera.Orientation.y,  Camera.Orientation.z);
+   Myfrust.CalculateFrustum();
 
    if (Camera.id = 1) then
    begin

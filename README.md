@@ -45,7 +45,7 @@ Not implemented:
 * This project needs Borland Delphi 5. The main project is named `Ecstasy.dpr`. If you need Delphi5 for Windows XP (if people still use XP): send me an e-mail. You are welcome to check if this project works on different Windows and Delphi.
 * This is a french project (code + doc). Translations (even for the code source) upon request by e-mail.
 * More french documentation is given on my [webpage](http://q.quadrat.free.fr/ecstasy-fr.html) concerning how to add more cars in the game.
-* 3D models (car and buildings) are exported into ASE file format (use 3D Studio Max for example)
+* 3D models (car and buildings) are exported into ASE file format (use 3D Studio Max for example). You cann include your own models without compiling the project.
 * You will need the `data` directory near the `Ecstasy.exe` to be loaded.
 
 ### Diving inside the code
@@ -90,9 +90,9 @@ A 4-ways road looks like the following (same behavior for road 0 and road 1):
   +--  --  --  --  --  --  --  --  --  --+ right side
   |     <----     fast way               |
   +======================================+
-  |     ---->      low way               |
-  +--  --  --  --  --  --  --  --  --  --+ left side
   |     ---->     fast way               |
+  +--  --  --  --  --  --  --  --  --  --+ left side
+  |     ---->      low way               |
   +--------------------------------------+
 ```
 
@@ -100,7 +100,9 @@ The traffic jam is just a dynamic list (linked-list) of vehicles. Each car know 
 
 Car velocity is made of attractive and repulsive forces depending on the distance.
 
-The dynamic of the player car is explained [on my other github project](https://github.com/Lecrapouille/PrincipeMoindreAction). Traductions upon request (again ;)
+The dynamic of the player car is explained in french (I'll translate the document if someone wants it):
+* in the pdf project report placed inside the doc/ directory
+* or a copy [on my other github repo](https://github.com/Lecrapouille/MySlides/tree/master/PrincipeMoindreAction).
 
 Translation for files and what they do:
 * UAltitude.pas: Compute altitude of the road, off-road terrains, indicates in which road or block is a car.

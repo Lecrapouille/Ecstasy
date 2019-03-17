@@ -784,7 +784,7 @@ end;
 
 initialization
 begin
-  if not IsNTandDelphiRunning then
+  if IsNTandDelphiRunning then
   begin
     DSoundDLL := LoadLibrary('DSound.dll');
     DirectSoundCreate := GetProcAddress(DSoundDLL,'DirectSoundCreate');

@@ -53,6 +53,7 @@ var
   OSVersion  : TOSVersionInfo;
   ProgName   : array[0..255] of char;
 begin
+  Exit(True);
   OSVersion.dwOsVersionInfoSize := sizeof(OSVersion);
   GetVersionEx(OSVersion);
   ProgName[0] := #0;

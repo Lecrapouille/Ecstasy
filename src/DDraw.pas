@@ -106,7 +106,7 @@ const
  *==========================================================================*)
 
 var
-  NilGUID : TGUID absolute 0;
+  NilGUID : TGUID;
 
 
 type
@@ -169,11 +169,7 @@ type
 // Delphi 5 can't handle interface in variant records
 // so we have to use pointers instead (which can be type-casted into interfaces):
 
-{$IFDEF VER130}
-  PDirectDrawSurface = Pointer;              
-{$ELSE}
-  PDirectDrawSurface = IDirectDrawSurface;
-{$ENDIF}
+  PDirectDrawSurface = Pointer;
 
 (*
  * TDDBltFX
@@ -1248,7 +1244,7 @@ type
         lpDDSAttachedSurface: IDirectDrawSurface2) : HResult;
         {$IFDEF D2COM} virtual; stdcall; abstract; {$ELSE} stdcall; {$ENDIF}
     function EnumAttachedSurfaces (lpContext: Pointer;
-        lpEnumSurfacesCallback: TDDEnumSurfacesCallback) : HResult; 
+        lpEnumSurfacesCallback: TDDEnumSurfacesCallback) : HResult;
         {$IFDEF D2COM} virtual; stdcall; abstract; {$ELSE} stdcall; {$ENDIF}
     function EnumOverlayZOrders (dwFlags: DWORD; lpContext: Pointer;
         lpfnCallback: TDDEnumSurfacesCallback) : HResult;
@@ -1351,7 +1347,7 @@ type
         dwTrans: DWORD) : HResult;
         {$IFDEF D2COM} virtual; stdcall; abstract; {$ELSE} stdcall; {$ENDIF}
     function DeleteAttachedSurface (dwFlags: DWORD;
-        lpDDSAttachedSurface: IDirectDrawSurface3) : HResult; 
+        lpDDSAttachedSurface: IDirectDrawSurface3) : HResult;
         {$IFDEF D2COM} virtual; stdcall; abstract; {$ELSE} stdcall; {$ENDIF}
     function EnumAttachedSurfaces (lpContext: Pointer;
         lpEnumSurfacesCallback: TDDEnumSurfacesCallback) : HResult;
@@ -1407,7 +1403,7 @@ type
     function SetColorKey (dwFlags: DWORD; lpDDColorKey: PDDColorKey) :
         HResult;
         {$IFDEF D2COM} virtual; stdcall; abstract; {$ELSE} stdcall; {$ENDIF}
-    function SetOverlayPosition (lX, lY: LongInt) : HResult; 
+    function SetOverlayPosition (lX, lY: LongInt) : HResult;
         {$IFDEF D2COM} virtual; stdcall; abstract; {$ELSE} stdcall; {$ENDIF}
     function SetPalette (lpDDPalette: IDirectDrawPalette) : HResult;
         {$IFDEF D2COM} virtual; stdcall; abstract; {$ELSE} stdcall; {$ENDIF}
@@ -1461,7 +1457,7 @@ type
         dwTrans: DWORD) : HResult;
         {$IFDEF D2COM} virtual; stdcall; abstract; {$ELSE} stdcall; {$ENDIF}
     function DeleteAttachedSurface (dwFlags: DWORD;
-        lpDDSAttachedSurface: IDirectDrawSurface4) : HResult; 
+        lpDDSAttachedSurface: IDirectDrawSurface4) : HResult;
         {$IFDEF D2COM} virtual; stdcall; abstract; {$ELSE} stdcall; {$ENDIF}
     function EnumAttachedSurfaces (lpContext: Pointer;
         lpEnumSurfacesCallback: TDDEnumSurfacesCallback2) : HResult;
@@ -2388,9 +2384,9 @@ const
   DDFXALPHACAPS_BLTALPHAPIXELS            = $00000002;
 
 (*
- * Supports alpha information in the pixel format.  The bit depth of alpha 
- * information in the pixel format can be 1,2,4, or 8.  The alpha value 
- * becomes more transparent as the alpha value increases.  (0 is opaque.) 
+ * Supports alpha information in the pixel format.  The bit depth of alpha
+ * information in the pixel format can be 1,2,4, or 8.  The alpha value
+ * becomes more transparent as the alpha value increases.  (0 is opaque.)
  * This flag can only be set if DDCAPS_ALPHA is set.
  * For Blt.
  *)
@@ -2428,9 +2424,9 @@ const
   DDFXALPHACAPS_OVERLAYALPHAPIXELS        = $00000040;
 
 (*
- * Supports alpha information in the pixel format.  The bit depth of alpha 
- * information in the pixel format can be 1,2,4, or 8.  The alpha value 
- * becomes more transparent as the alpha value increases.  (0 is opaque.) 
+ * Supports alpha information in the pixel format.  The bit depth of alpha
+ * information in the pixel format can be 1,2,4, or 8.  The alpha value
+ * becomes more transparent as the alpha value increases.  (0 is opaque.)
  * This flag can only be set if DDCAPS_ALPHA is set.
  * For Overlays.
  *)
@@ -2445,7 +2441,7 @@ const
   DDFXALPHACAPS_OVERLAYALPHASURFACES      = $00000100;
 
 (*
- * The depth of the alpha channel data can range can be 1,2,4, or 8.  
+ * The depth of the alpha channel data can range can be 1,2,4, or 8.
  * The NEG suffix indicates that this alpha channel becomes more transparent
  * as the alpha value increases. (0 is opaque.)  This flag can only be set if
  * DDCAPS_ALPHA is set.
@@ -2506,7 +2502,7 @@ const
 
 (*
  * DirectDraw supports arbitrary shrinking of a surface along the
- * y axis (horizontal direction) for blts.  
+ * y axis (horizontal direction) for blts.
  *)
   DDFXCAPS_BLTSHRINKY             = $00001000;
 
@@ -2530,26 +2526,26 @@ const
 
 (*
  * DirectDraw supports arbitrary stretching of a surface along the
- * y axis (horizontal direction) for blts.  
+ * y axis (horizontal direction) for blts.
  *)
   DDFXCAPS_BLTSTRETCHY            = $00010000;
 
 (*
  * DirectDraw supports integer stretching (1x,2x,) of a surface
- * along the y axis (vertical direction) for blts.  
+ * along the y axis (vertical direction) for blts.
  *)
   DDFXCAPS_BLTSTRETCHYN           = $00020000;
 
 (*
- * Uses arithmetic operations to stretch and shrink surfaces during 
- * overlay rather than pixel doubling techniques.  Along the Y axis 
+ * Uses arithmetic operations to stretch and shrink surfaces during
+ * overlay rather than pixel doubling techniques.  Along the Y axis
  * for overlays.
  *)
   DDFXCAPS_OVERLAYARITHSTRETCHY   = $00040000;
 
 (*
- * Uses arithmetic operations to stretch surfaces during 
- * overlay rather than pixel doubling techniques.  Along the Y axis 
+ * Uses arithmetic operations to stretch surfaces during
+ * overlay rather than pixel doubling techniques.  Along the Y axis
  * for overlays. Only works for x1, x2, etc.
  *)
   DDFXCAPS_OVERLAYARITHSTRETCHYN  = $00000008;
@@ -2568,13 +2564,13 @@ const
 
 (*
  * DirectDraw supports arbitrary shrinking of a surface along the
- * y axis (horizontal direction) for overlays.  
+ * y axis (horizontal direction) for overlays.
  *)
   DDFXCAPS_OVERLAYSHRINKY         = $00200000;
 
 (*
  * DirectDraw supports integer shrinking (1x,2x,) of a surface
- * along the y axis (vertical direction) for overlays.  
+ * along the y axis (vertical direction) for overlays.
  *)
   DDFXCAPS_OVERLAYSHRINKYN        = $00400000;
 
@@ -2592,13 +2588,13 @@ const
 
 (*
  * DirectDraw supports arbitrary stretching of a surface along the
- * y axis (horizontal direction) for overlays.  
+ * y axis (horizontal direction) for overlays.
  *)
   DDFXCAPS_OVERLAYSTRETCHY        = $02000000;
 
 (*
  * DirectDraw supports integer stretching (1x,2x,) of a surface
- * along the y axis (vertical direction) for overlays.  
+ * along the y axis (vertical direction) for overlays.
  *)
   DDFXCAPS_OVERLAYSTRETCHYN       = $04000000;
 
@@ -2873,7 +2869,7 @@ const
  ****************************************************************************)
 
 (*
- * Supports transparent blting using a color key to identify the replaceable 
+ * Supports transparent blting using a color key to identify the replaceable
  * bits of the destination surface for RGB colors.
  *)
   DDCKEYCAPS_DESTBLT                      = $00000001;
@@ -3294,7 +3290,7 @@ const
 
 (*
  * Use the lpDDSAlphaSrc field in the TDDBltFX structure as the alpha channel
- * for the source for this blt. 
+ * for the source for this blt.
  *)
   DDBLT_ALPHASRCSURFACEOVERRIDE           = $00000100;
 
@@ -4603,7 +4599,7 @@ type
   TDDEnumCallbackExW = function (lpGUID: PGUID; lpDriverDescription: PWideChar;
       lpDriverName: PWideChar; lpContext: Pointer; Monitor: HMonitor) : BOOL;
       stdcall;
-      
+
 {$IFDEF UNICODE}
   TDDEnumCallbackEx = TDDEnumCallbackExW;
 {$ELSE}
@@ -4670,7 +4666,7 @@ implementation
 
 uses
   DXCommon;
-  
+
 function MAKEFOURCC(ch0, ch1, ch2, ch3: Char) : DWORD;
 begin
   Result := DWORD(byte(ch0) shl 0) or
@@ -4831,4 +4827,5 @@ begin
 end;
 
 end.
+
 

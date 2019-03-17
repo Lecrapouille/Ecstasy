@@ -284,6 +284,34 @@ var
    ColliVoiture,  OldColliVoiture  : boolean;
    OldTheta : real;
 
+function MyStrToFloat(sStringFloat: AnsiString): double; overload;
+
 implementation
+
+uses
+  System.SysUtils;
+
+{~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  safeFloat
+
+  Strips many bad characters from a string and returns it as a double.
+}
+function MyStrToFloat(sStringFloat: AnsiString): double;
+var
+  dReturn : double;
+begin
+  sStringFloat := stringReplace(sStringFloat, '%', '', [rfIgnoreCase, rfReplaceAll]);
+  sStringFloat := stringReplace(sStringFloat, '$', '', [rfIgnoreCase, rfReplaceAll]);
+  sStringFloat := stringReplace(sStringFloat, ' ', '', [rfIgnoreCase, rfReplaceAll]);
+  sStringFloat := stringReplace(sStringFloat, ',', '.', [rfIgnoreCase, rfReplaceAll]);
+  sStringFloat := stringReplace(sStringFloat, '.', '.', [rfIgnoreCase, rfReplaceAll]);
+  sStringFloat := stringReplace(sStringFloat, '.', FormatSettings.DecimalSeparator, [rfIgnoreCase, rfReplaceAll]);
+  try
+    dReturn := strToFloat(sStringFloat);
+  except
+    dReturn := 0;
+  end;
+  result := dReturn;
+end;
 
 end.

@@ -11,7 +11,7 @@ type
 	end;
 	PTAUX_RGBImageRec= ^TAUX_RGBImageRec;
 
-function auxDIBImageLoadA(const dibfile: PChar): PTAUX_RGBImageRec; stdcall;
+function auxDIBImageLoadA(const dibfile: PAnsiChar): PTAUX_RGBImageRec; stdcall;
 procedure auxWireSphere(value: GLdouble);stdcall;
 procedure auxSolidSphere(value: GLdouble);stdcall;
 procedure auxWireCube(value: GLdouble);stdcall;

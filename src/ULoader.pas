@@ -154,7 +154,7 @@ begin
             chaine := buffer[long-i] + chaine;
             i := i+1;
          end;
-         obj^.TextureQueue^.Transparency := StrToFloat(chaine);
+         obj^.TextureQueue^.Transparency := MyStrToFloat(chaine);
       end else
          if (recherche('*BITMAP ', buffer))then
          begin
@@ -194,7 +194,7 @@ begin
                   chaine := buffer[long-i] + chaine;
                   i := i+1;
                end;
-               obj^.TextureQueue^.Utiling := StrToFloat(chaine);
+               obj^.TextureQueue^.Utiling := MyStrToFloat(chaine);
             end else
                if recherche('*UVW_V_TILING ', buffer) then
                begin
@@ -207,7 +207,7 @@ begin
                      chaine := buffer[long-i] + chaine;
                      i := i+1;
                   end;
-                  obj^.TextureQueue^.Vtiling := StrToFloat(chaine);
+                  obj^.TextureQueue^.Vtiling := MyStrToFloat(chaine);
                   obj^.TextureQueue^.Next := AllocMem(SizeOf(TTexture));
                   obj^.TextureQueue := obj^.TextureQueue^.Next;
                end;
@@ -416,7 +416,7 @@ begin
          chaine := buffer[long-i] + chaine;
          i := i+1;
       end;
-      Camera.Position.z :=  StrToFloat(chaine);
+      Camera.Position.z :=  MyStrToFloat(chaine);
 
       //Camera.position.y
       long := length(buffer);
@@ -428,7 +428,7 @@ begin
          chaine := buffer[long-i] + chaine;
          i := i+1;
       end;
-      Camera.Position.y := StrToFloat(chaine);
+      Camera.Position.y := MyStrToFloat(chaine);
 
       //Camera.position.x
       long := length(buffer);
@@ -440,7 +440,7 @@ begin
          chaine := buffer[long-i] + chaine;
          i := i+1;
       end;
-      Camera.Position.x := StrToFloat(chaine);
+      Camera.Position.x := MyStrToFloat(chaine);
    end;
 
 
@@ -460,7 +460,7 @@ begin
          chaine := buffer[long-i] + chaine;
          i := i+1;
       end;
-      Camera.Target.z :=  StrToFloat(chaine);
+      Camera.Target.z :=  MyStrToFloat(chaine);
 
       //Camera.position.y
       long := length(buffer);
@@ -472,7 +472,7 @@ begin
          chaine := buffer[long-i] + chaine;
          i := i+1;
       end;
-      Camera.Target.y := StrToFloat(chaine);
+      Camera.Target.y := MyStrToFloat(chaine);
 
       //Camera.position.x
       long := length(buffer);
@@ -484,7 +484,7 @@ begin
          chaine := buffer[long-i] + chaine;
          i := i+1;
       end;
-      Camera.Target.x := StrToFloat(chaine);
+      Camera.Target.x := MyStrToFloat(chaine);
    end;
 
 end;

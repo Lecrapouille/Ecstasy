@@ -138,6 +138,7 @@ end;
  *******************************************************************************}
 TBloc = class(Tobject)
 public
+   Visible: boolean;
    Route0,Route1,Carrefour : TRoute;
    TabCirculation : TTabCirculation;
    EtatFeux : integer;
@@ -145,7 +146,6 @@ public
    Terrain : array[0..NB_SUB_TERRAIN,0..NB_SUB_TERRAIN] of real;
    Trottoir : array[0..NB_SUB_TROTTOIR,0..NB_SUB_TROTTOIR] of real;
 private
-   Visible: boolean;
    Tx, Ty : real;
    Decal_Texture_Eau : real; // pour l'eau
    Maison_Liste_Affichage,

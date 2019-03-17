@@ -48,7 +48,7 @@ begin
    {Creation d'une texture masque}
    If FileExists(CheminMasque) then
    begin
-      pTextures := auxDIBImageLoadA(PChar(CheminMasque));
+      pTextures := auxDIBImageLoadA(PAnsiChar(AnsiString(CheminMasque)));
       If Assigned(pTextures) then
       begin
          glGenTextures(1, @Masque);
@@ -68,7 +68,7 @@ begin
    {Creation d'une texture image}
    If FileExists(CheminImage) then
    begin
-      pTextures := auxDIBImageLoadA(PChar(CheminImage));
+      pTextures := auxDIBImageLoadA(PAnsiChar(AnsiString(CheminImage)));
       If Assigned(pTextures) then
       begin
          glGenTextures(1, @Image);

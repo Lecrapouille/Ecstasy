@@ -41,13 +41,16 @@ object Form1: TForm1
   OldCreateOrder = False
   Position = poDesktopCenter
   OnCreate = FormCreate
+  DesignSize = (
+    462
+    461)
   PixelsPerInch = 96
   TextHeight = 13
   object Label12: TLabel
     Left = 16
     Top = 168
-    Width = 65
-    Height = 13
+    Width = 91
+    Height = 14
     Caption = 'Mode de jeu :'
     Font.Charset = GB2312_CHARSET
     Font.Color = clWindowText
@@ -82,7 +85,7 @@ object Form1: TForm1
     Top = 0
     Width = 457
     Height = 409
-    ActivePage = TabSheet1
+    ActivePage = TabSheet3
     TabOrder = 2
     object TabSheet1: TTabSheet
       Caption = '&Configuration du joueur'
@@ -99,14 +102,13 @@ object Form1: TForm1
         Width = 433
         Height = 21
         DragMode = dmAutomatic
-        ItemHeight = 13
         TabOrder = 0
         Text = 'ComboBox3'
         OnChange = ComboBox3Change
       end
     end
     object TabSheet3: TTabSheet
-      Caption = '&Paramétrages du jeu'
+      Caption = '&Param'#233'trages du jeu'
       ImageIndex = 2
       object GroupBox4: TGroupBox
         Left = 8
@@ -126,7 +128,7 @@ object Form1: TForm1
           Top = 16
           Width = 69
           Height = 13
-          Caption = 'Résolution :'
+          Caption = 'R'#233'solution :'
         end
         object Label10: TLabel
           Left = 8
@@ -140,7 +142,6 @@ object Form1: TForm1
           Top = 32
           Width = 145
           Height = 21
-          ItemHeight = 13
           TabOrder = 0
           Text = '640 x 480'
           OnChange = ComboBox1Change
@@ -172,7 +173,6 @@ object Form1: TForm1
           Top = 80
           Width = 145
           Height = 21
-          ItemHeight = 13
           TabOrder = 1
           Text = '16'
           OnChange = ComboBox2Change
@@ -197,14 +197,14 @@ object Form1: TForm1
         Top = 8
         Width = 241
         Height = 89
-        Caption = 'Atmosphère  '
+        Caption = 'Atmosph'#232're  '
         TabOrder = 1
         object CheckBox3: TCheckBox
           Left = 8
           Top = 16
           Width = 113
           Height = 17
-          Caption = 'Orage désactivé'
+          Caption = 'Orage d'#233'sactiv'#233
           TabOrder = 0
           OnClick = CheckBox3Click
         end
@@ -213,7 +213,7 @@ object Form1: TForm1
           Top = 32
           Width = 129
           Height = 17
-          Caption = 'Brume désactivée'
+          Caption = 'Brume d'#233'sactiv'#233'e'
           TabOrder = 1
           OnClick = CheckBox2Click
         end
@@ -231,7 +231,7 @@ object Form1: TForm1
           Top = 16
           Width = 113
           Height = 17
-          Caption = 'Pluie désactivée'
+          Caption = 'Pluie d'#233'sactiv'#233'e'
           TabOrder = 3
           OnClick = CheckBox12Click
         end
@@ -240,7 +240,7 @@ object Form1: TForm1
           Top = 48
           Width = 153
           Height = 17
-          Caption = 'Lumière désactivée'
+          Caption = 'Lumi'#232're d'#233'sactiv'#233'e'
           TabOrder = 4
           OnClick = CheckBox4Click
         end
@@ -249,7 +249,7 @@ object Form1: TForm1
           Top = 64
           Width = 217
           Height = 17
-          Caption = 'Phares des voitures désactivés'
+          Caption = 'Phares des voitures d'#233'sactiv'#233's'
           TabOrder = 5
           OnClick = CheckBox5Click
         end
@@ -288,14 +288,8 @@ object Form1: TForm1
           Width = 129
           Height = 33
           Max = 100
-          Orientation = trHorizontal
           Frequency = 5
-          Position = 0
-          SelEnd = 0
-          SelStart = 0
           TabOrder = 0
-          TickMarks = tmBottomRight
-          TickStyle = tsAuto
           OnChange = TrackBar1Change
         end
         object Edit10: TEdit
@@ -313,14 +307,8 @@ object Form1: TForm1
           Width = 129
           Height = 33
           Max = 150
-          Orientation = trHorizontal
           Frequency = 10
-          Position = 0
-          SelEnd = 0
-          SelStart = 0
           TabOrder = 2
-          TickMarks = tmBottomRight
-          TickStyle = tsAuto
           OnChange = TrackBar1Change
         end
         object Edit15: TEdit
@@ -355,7 +343,7 @@ object Form1: TForm1
           Top = 16
           Width = 161
           Height = 17
-          Caption = 'Carrefour style américain'
+          Caption = 'Carrefour style am'#233'ricain'
           Checked = True
           State = cbChecked
           TabOrder = 6
@@ -374,7 +362,7 @@ object Form1: TForm1
           Top = 16
           Width = 97
           Height = 17
-          Caption = 'activés'
+          Caption = 'activ'#233's'
           TabOrder = 0
           OnClick = CheckBox6Click
         end
@@ -384,7 +372,7 @@ object Form1: TForm1
         Top = 152
         Width = 249
         Height = 89
-        Caption = 'Densité de la circulation '
+        Caption = 'Densit'#233' de la circulation '
         TabOrder = 4
         object Label1: TLabel
           Left = 8
@@ -398,7 +386,7 @@ object Form1: TForm1
           Top = 64
           Width = 234
           Height = 13
-          Caption = 'puissance de la machine doit être élevée'
+          Caption = 'puissance de la machine doit '#234'tre '#233'lev'#233'e'
         end
         object ScrollBar1: TScrollBar
           Left = 8

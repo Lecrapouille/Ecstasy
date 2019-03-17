@@ -331,8 +331,8 @@ var
   DirectSoundCaptureList: TList;
 
   procedure DSCheck( Value: HRESULT ); forward;
-  function DSEnumCallback( GUIDPtr: PGUID ; lpstrDescription: LPSTR ;
-      lpstrModule: LPSTR ; lpContext: Pointer ): BOOL ; stdcall; forward;
+  function DSEnumCallback( GUIDPtr: PGUID ; lpstrDescription: LPWSTR ;
+      lpstrModule: LPWSTR ; lpContext: Pointer ): BOOL ; stdcall; forward;
 
 
 
@@ -1341,8 +1341,8 @@ begin
 end;
 
 
-function DSEnumCallback( GUIDPtr: PGUID ; lpstrDescription: LPSTR ;
-  lpstrModule: LPSTR ; lpContext: Pointer ): BOOL ; stdcall;
+function DSEnumCallback( GUIDPtr: PGUID ; lpstrDescription: LPWSTR ;
+  lpstrModule: LPWSTR ; lpContext: Pointer ): BOOL ; stdcall;
 var
   d: TDSDevice;
 begin

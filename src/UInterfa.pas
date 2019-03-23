@@ -159,32 +159,40 @@ begin
 end;
 
 procedure TForm1.FormCreate(Sender: TObject);
-var sr : TSearchRec; i : integer; F : TextFile; chaine : string;
+var sr : TSearchRec; i : integer; F : TextFile; chaine : string; chemin : string;
 begin
    Form1.FormStyle := fsStayOnTop;
    PageControl1.ActivePage := TabSheet1;
-   {Chargement des voitures}
+   {Load cars}
    TabRepertVoit.long := 0;
-   FindFirst(GetCurrentDir+'\data\Voitures\*.*',faDirectory,sr);
-   {Recherche des repertoires}
-   while (FindNext(sr) = 0) AND ((sr.Attr AND faDirectory) = sr.Attr) AND
-            (TabRepertVoit.long < MAX_VOITURES) do
-   begin
-      if  (FileExists(GetCurrentDir+'\data\Voitures\'+sr.Name+'\info.txt'))
-          AND (FileExists(GetCurrentDir+'\data\Voitures\'+sr.Name+'\Carcasse.ASE'))
-          AND (FileExists(GetCurrentDir+'\data\Voitures\'+sr.Name+'\Roue.ASE'))
-          AND (FileExists(GetCurrentDir+'\data\Voitures\'+sr.Name+'\Photo.jpg'))
-      then begin
-         TabRepertVoit.long := TabRepertVoit.long+1;
-         TabRepertVoit.elt[TabRepertVoit.long].Nom := sr.Name;
-      end else
-         if (sr.Name <> '..') then
-            ShowMessage(sr.Name + ' ne sera pas prise dans le jeu : un fichier est manquant');
-   end;
+   chemin := GetCurrentDir + '\data\Voitures\';
+   if (FindFirst(chemin + '*.*', faAnyFile, sr) <> 0)
+   then begin
+      ShowMessage('Je n'ai pas trouvé le dossier ' + chemin);
+      Application.Terminate;
+   end
+   else
+     begin
+        {Look for directories}
+        while (FindNext(sr) = 0) AND ((sr.Attr AND faAnyFile) = sr.Attr) AND (TabRepertVoit.long < MAX_VOITURES) do
+        begin
+             if (FileExists(chemin + sr.Name + '\info.txt'))
+                 AND (FileExists(chemin + sr.Name + '\Carcasse.ASE'))
+                 AND (FileExists(chemin + sr.Name + '\Roue.ASE'))
+                 AND (FileExists(chemin + sr.Name + '\Photo.jpg'))
+             then begin
+                  TabRepertVoit.long := TabRepertVoit.long+1;
+                  TabRepertVoit.elt[TabRepertVoit.long].Nom := sr.Name;
+             end
+             else if (sr.Name <> '..')
+             then begin
+                  ShowMessage(sr.Name + ' ne sera pas prise dans le jeu : un fichier est manquant');
+             end
+        end
+     end;
    FindClose(sr);
 
-
-   {On ferme l'application s'il n'y a pas de voitures}
+   {Close the application if no cars has been loaded}
    if TabRepertVoit.long <= 0 then
    begin
       MessageBox(0, 'Il y a 0 voiture. Pas amusant pour jouer. Fermeture du programme',
@@ -197,7 +205,7 @@ begin
       for i := 1 to TabRepertVoit.long do
       begin
          Combobox3.Items.Add(TabRepertVoit.elt[i].Nom);
-         AssignFile(F, GetCurrentDir+'\data\Voitures\'+ TabRepertVoit.elt[i].Nom + '\info.txt');
+         AssignFile(F, chemin + TabRepertVoit.elt[i].Nom + '\info.txt');
          Reset(F);
          Readln(F, chaine); Readln(F, chaine); TabRepertVoit.elt[i].Hauteur := MyStrToFloat(chaine);
          Readln(F, chaine); Readln(F, chaine); TabRepertVoit.elt[i].Avant := abs(MyStrToFloat(chaine));
